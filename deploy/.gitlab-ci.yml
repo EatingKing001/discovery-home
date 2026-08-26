@@ -1,0 +1,17 @@
+variables:
+    SERVICE_NAME: discovery-home-new-fe
+    PROJECT: cloud
+    IMAGE_PULL_SECRET: regcred-vpc
+    DOCKERFILE: ./deploy/Dockerfile
+    DEPLOY_DIR: ./deploy
+    DEV_SGPU_VALUE_FILE: values/dev.yml
+
+    PROD_NAMESPACE: ai4s # cloud-prod/cloud
+
+    RUNNER_TAG: ecs # 或者aliyun
+
+include:
+  - project: devops/ci-templates
+    file: /templates/aliyun-aigc.yml
+  - project: devops/ci-templates
+    file: /templates/aliyun-ai4s-v2.yml

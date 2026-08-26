@@ -1,0 +1,21 @@
+container:
+  port: 80
+  resources:
+    requests:
+      cpu: 50m
+      memory: 200Mi
+    limits:
+      cpu: 1
+      memory: 1000Mi
+  env: {}
+
+service:
+  port: 8090
+
+ingress:
+  enabled: true
+  ingressClassName: nginx
+  domain: discovery-dev.intern-ai.org.cn
+  path: /home
+  https: true
+  secretName: generic-intern-ai.org.cn # when https=true, use this secret as tls 
