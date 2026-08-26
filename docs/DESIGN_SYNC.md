@@ -28,14 +28,15 @@
 
 ### `product/` 业务文件
 
-- `product/site-links.js` — 外链、下载 URL、协议、合作提交 API（`SiteLinkConfig`）
+- `product/site-links.js` — 外链、下载 URL、协议、合作提交 API、`basePath`（`SiteLinkConfig`；须与 `values/*.yml` ingress path 对齐，现 dev 为 `/home1`）
+- `product/base-path.js` — 子路径：无尾斜杠跳转、`<base>`、壳 iframe 绝对 `src`（仅壳 `index.html`）
 - `product/cooperation-submit.js` — 合作表单可插拔提交
 - `product/downloads.js` — Mac 下载 + 移动端 toast
 - `product/protocol-links.js` — Footer 协议外链注入
 - `product/cooperation-cta-hide.css` — 无 `cooperationSubmitUrl` 时隐藏申请合作 CTA；有接口后删除 CSS 与注入即可
 - `product/sync-from-design.ps1` — 设计同步 + HTML 注入
 
-说明：设计仓同步可能把设计版 `shared/js/site-links.js` 带回；正式 HTML **只引用** `product/site-links.js`，忽略设计版即可。
+说明：设计仓同步可能把设计版 `shared/js/site-links.js` 带回；正式 HTML **只引用** `product/site-links.js`，忽略设计版即可。本地根路径预览可将 `basePath` 临时设为 `""`。
 
 ## 正式仓应保留的 script 标签
 
@@ -45,6 +46,7 @@
 
 ```html
 <script src="product/site-links.js?v=…" defer></script>
+<script src="product/base-path.js?v=…" defer></script>
 <script src="shared/js/shell.js?v=…" defer></script>
 <script src="product/cooperation-submit.js?v=…" defer></script>
 ```
@@ -88,8 +90,8 @@ npx http-server -p 8023 -c-1
 
 ## 同步后检查清单
 
-1. **业务 script 是否仍指向 `product/`**，且位于设计 `shell.js` / `home.js` 的合理位置（site-links 在前，业务薄层在后）。
+1. **业务 script 是否仍指向 `product/`**，且位于设计 `shell.js` / `home.js` 的合理位置（site-links → base-path → shell，业务薄层在后）。
 2. **钩子是否改名**：`[data-cooperation-form]`、`[data-local-cooperation-form]`、`.footer-policy-link`、文案「平台服务协议」「个人信息保护政策」、Mac 卡 `article.download-card` 及副标题 `Intel x64` / `ARM64`、`.is-coming`。钩子变了就改 `product/`，不要改设计仓逻辑硬塞业务。
 3. **Toast 容器是否还在**：`#shell-toast`、`#home-local-cooperation-toast`。
-4. **`product/site-links.js` 是否仍为正式仓配置**（含 `downloads` / `protocols` / `cooperationSubmitUrl`）。
+4. **`product/site-links.js` 是否仍为正式仓配置**（含 `basePath` / `downloads` / `protocols` / `cooperationSubmitUrl`）；`basePath` 与部署 path 一致，壳是否仍引用 `product/base-path.js`。
 5. 本地起静态服务，抽测：Footer 协议新开页、Mac 卡点击（桌面/窄屏）、合作表单未配置时 toast「提交通道未配置」且 console 有 payload。

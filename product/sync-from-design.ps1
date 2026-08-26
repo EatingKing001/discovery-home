@@ -86,6 +86,16 @@ function Patch-IndexHtml([string]$Path) {
     else { $html = $next; $injected += "index.html → product/site-links.js" }
   }
 
+  if (-not (Has-Src $html "product/base-path.js")) {
+    $siteLinksRe = '(?m)^\s*<script\b[^>]*\bsrc\s*=\s*["''][^"'']*product/site-links\.js[^"'']*["''][^>]*>\s*</script>\s*$'
+    $next = Insert-AfterMatch $html "<script src=`"product/base-path.js?v=$BizVer`" defer></script>" $siteLinksRe
+    if ($null -eq $next) {
+      $next = Insert-BeforeMatch $html "<script src=`"product/base-path.js?v=$BizVer`" defer></script>" $shellRe
+    }
+    if ($null -eq $next) { Write-Warning "index.html：未找到 site-links.js / shell.js，无法注入 base-path.js" }
+    else { $html = $next; $injected += "index.html → product/base-path.js" }
+  }
+
   if (-not (Has-Src $html "product/cooperation-submit.js")) {
     $next = Insert-AfterMatch $html "<script src=`"product/cooperation-submit.js?v=$BizVer`" defer></script>" $shellRe
     if ($null -eq $next) { Write-Warning "index.html：未找到 shell.js，无法注入 cooperation-submit.js" }

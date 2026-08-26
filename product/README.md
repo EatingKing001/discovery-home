@@ -18,12 +18,23 @@
 
 | 文件 | 用途 |
 |------|------|
-| `site-links.js` | `SiteLinkConfig`（外链 / 下载 / 协议 / 合作 API） |
+| `site-links.js` | `SiteLinkConfig`（`basePath` / 外链 / 下载 / 协议 / 合作 API） |
+| `base-path.js` | 子路径挂载：无尾斜杠跳转、`<base>`、Home iframe 绝对 `src`（壳 `index.html`） |
 | `cooperation-submit.js` | 合作表单提交 |
 | `downloads.js` | Mac 下载 + 移动端 toast |
 | `protocol-links.js` | Footer 协议外链 |
 | `cooperation-cta-hide.css` | 无 `cooperationSubmitUrl` 时隐藏 logo 墙下申请合作 CTA；有接口后删除本文件及 HTML 注入即可 |
 | `sync-from-design.ps1` | 设计同步 + HTML 注入 |
+
+## 子路径 `basePath`
+
+`SiteLinkConfig.basePath`（无尾斜杠）须与 `values/*.yml` 的 `ingress.path` 对齐。当前 **dev** 为 `/home1`（见 `values/dev.yml`）。
+
+| 场景 | 做法 |
+|------|------|
+| 本地 `http-server` 根路径预览 | 临时把 `basePath` 改为 `""` |
+| 部署在 `/home1` | `basePath: "/home1"`（与 values path 一致） |
+| 改回生产 `/home` | 只改 `site-links.js` 的 `basePath` 及对应 `values` path |
 
 ## 钩子变更时
 

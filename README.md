@@ -24,7 +24,8 @@ npx http-server -p 8023 -c-1
 discovery-home-fe/
 ├── index.html                 # shell 入口
 ├── product/                   # 正式仓业务（禁止被设计同步覆盖）
-│   ├── site-links.js          # SiteLinkConfig
+│   ├── site-links.js          # SiteLinkConfig（含 basePath）
+│   ├── base-path.js           # 子路径跳转 / <base> / iframe 绝对 src
 │   ├── cooperation-submit.js
 │   ├── downloads.js
 │   ├── protocol-links.js
@@ -35,7 +36,7 @@ discovery-home-fe/
 └── tabs/home/                 # Home 视觉与展示数据（可覆盖）
 ```
 
-配置位见 `product/site-links.js`（下载 URL、合作提交 API 可先留空）。从设计仓同步：
+配置位见 `product/site-links.js`（`basePath` 与 values path 对齐；下载 URL、合作提交 API 可先留空）。从设计仓同步：
 
 ```powershell
 .\product\sync-from-design.ps1
