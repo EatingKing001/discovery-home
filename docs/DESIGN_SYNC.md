@@ -28,7 +28,7 @@
 
 ### `product/` 业务文件
 
-- `product/site-links.js` — 外链、下载 URL、协议、合作提交 API、`basePath`（`SiteLinkConfig`；须与 `values/*.yml` ingress path 对齐，现 dev 为 `/home1`）
+- `product/site-links.js` — 外链、下载 URL、协议、合作提交 API、`basePath`（`SiteLinkConfig`；须与 `values/*.yml` ingress path 对齐，现为 `/home`）
 - `product/base-path.js` — 子路径：无尾斜杠跳转、`<base>`、壳 iframe 绝对 `src`（仅壳 `index.html`）
 - `product/cooperation-submit.js` — 合作表单可插拔提交
 - `product/downloads.js` — Mac 下载 + 移动端 toast
