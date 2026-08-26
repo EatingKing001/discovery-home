@@ -1,59 +1,17 @@
 variables:
-  SERVICE_NAME: discovery-home-new-fe
-  PROJECT: cloud
-  IMAGE_PULL_SECRET: regcred-vpc
-  DOCKERFILE: ./deploy/Dockerfile
-  DEPLOY_DIR: ./deploy
-  DEV_SGPU_VALUE_FILE: values/dev.yml
-  # staging/release 的 value 文件名以 devops/ci-templates 默认为准（同组惯例一般为 values/release.yml）
-  PROD_VALUE_FILE: values/prod.yml
+    SERVICE_NAME: discovery-home-new-fe
+    PROJECT: cloud
+    IMAGE_PULL_SECRET: regcred-vpc
+    DOCKERFILE: ./deploy/Dockerfile
+    DEPLOY_DIR: ./deploy
+    DEV_SGPU_VALUE_FILE: values/dev.yml
 
-  PROD_NAMESPACE: ai4s
+    PROD_NAMESPACE: ai4s # cloud-prod/cloud
 
-  RUNNER_TAG: ecs # 或者aliyun
+    RUNNER_TAG: ecs # 或者aliyun
 
 include:
   - project: devops/ci-templates
     file: /templates/aliyun-aigc.yml
-
-build_image_prod_ai4s:
-  stage: build
-  image: eng-center-registry.cn-shanghai.cr.aliyuncs.com/public/docker-git:latest
-  before_script:
-    - echo $harbor_url_prod_vpc  $harbor_user $harbor_password
-    - docker login $harbor_url_prod_vpc -u $harbor_user -p $harbor_password
-    - git clone https://oauth2:${CI_USER_TOKEN}@gitlab.pjlab.org.cn/devops/ci-templates.git
-  script:
-    - docker build --add-host gitlab.pjlab.org.cn:172.16.0.74 . -f $DOCKERFILE -t $harbor_url_prod_vpc/$PROJECT/$SERVICE_NAME:prod-${CI_COMMIT_SHA:0:8} --build-arg npm_registry=$npm_registry_host --build-arg env=prod --build-arg deployDir=$DEPLOY_DIR  --build-arg CI_USER_TOKEN=$CI_USER_TOKEN
-    - docker push $harbor_url_prod_vpc/$PROJECT/$SERVICE_NAME:prod-${CI_COMMIT_SHA:0:8}
-    - docker rmi $harbor_url_prod_vpc/$PROJECT/$SERVICE_NAME:prod-${CI_COMMIT_SHA:0:8}
-  tags:
-    - ecs
-  only:
-    - main-new
-    - /^tag_prod_aliyun_[0-9].*$/
-
-deploy_in_prod_ai4s:
-  stage: k8s_deploy
-  needs: ["build_image_prod_ai4s"]
-  image: eng-center-registry.cn-shanghai.cr.aliyuncs.com/public/dtzar/helm-kubectl
-  before_script:
-    - git clone https://oauth2:${CI_USER_TOKEN}@gitlab.pjlab.org.cn/devops/ci-templates.git
-  script:
-    - echo "=============== 开始 k8s 部署任务 ==============="
-    - echo "helm --kubeconfig $kubeconfig_prod_cloud upgrade $SERVICE_NAME --install --dry-run ./ci-templates/chart  -f ./ci-templates/chart/values-prod.yaml -f $PROD_VALUE_FILE -n $PROD_NAMESPACE --set appName=$SERVICE_NAME --set env=prod --set image.repository=${harbor_url_prod_vpc} --set image.project=$PROJECT --set image.tag=prod-${CI_COMMIT_SHA:0:8} --set imagePullSecret=$IMAGE_PULL_SECRET --set owner=$OWNER --atomic --timeout $DEPLOY_TIMEOUT "
-    - helm --kubeconfig $kubeconfig_prod_cloud upgrade $SERVICE_NAME --install --dry-run ./ci-templates/chart  -f ./ci-templates/chart/values-prod.yaml -f $PROD_VALUE_FILE -n $PROD_NAMESPACE --set appName=$SERVICE_NAME --set env=prod --set image.repository=${harbor_url_prod_vpc} --set image.project=$PROJECT --set image.tag=prod-${CI_COMMIT_SHA:0:8} --set imagePullSecret=$IMAGE_PULL_SECRET --set owner=$OWNER --atomic --timeout $DEPLOY_TIMEOUT
-    - helm --kubeconfig $kubeconfig_prod_cloud upgrade $SERVICE_NAME --install ./ci-templates/chart  -f ./ci-templates/chart/values-prod.yaml -f $PROD_VALUE_FILE -n $PROD_NAMESPACE --set appName=$SERVICE_NAME --set env=prod --set image.repository=${harbor_url_prod_vpc} --set image.project=$PROJECT --set image.tag=prod-${CI_COMMIT_SHA:0:8} --set imagePullSecret=$IMAGE_PULL_SECRET --set owner=$OWNER --atomic --timeout $DEPLOY_TIMEOUT
-  after_script:
-    - >
-      if [ $CI_JOB_STATUS == 'success' ]; then
-        sh ./ci-templates/scripts/notify/notifySuccessFS.sh
-      else
-        sh ./ci-templates/scripts/notify/notifyFailFS.sh
-      fi
-  tags:
-    - $RUNNER_TAG
-  only:
-    - main-new
-    - /^tag_prod_aliyun_[0-9].*$/
-  when: manual
+  - project: devops/ci-templates
+    file: /templates/aliyun-ai4s-v2.yml
