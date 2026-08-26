@@ -14,7 +14,7 @@ service:
 
 ingress:
   enabled: true
-  domain: discovery-staging.intern-ai.org.cn
+  domain: discovery-home-staging.intern-ai.org.cn
   path: /home
   https: true
   secretName: generic-intern-ai.org.cn

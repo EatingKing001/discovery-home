@@ -5,9 +5,9 @@
 ## 分支 ↔ values ↔ 域名
 
 ```
-develop              → values/dev.yml     → discovery-dev.intern-ai.org.cn/home
-release              → values/release.yml → discovery-staging.intern-ai.org.cn/home
-main-new / tag_prod_* → values/prod.yml   → discovery.intern-ai.org.cn/home
+develop              → values/dev.yml     → discovery-home-dev.intern-ai.org.cn/home
+release              → values/release.yml → discovery-home-staging.intern-ai.org.cn/home
+main-new / tag_prod_* → values/prod.yml   → discovery-home.intern-ai.org.cn/home
 ```
 
 生产 CI（本文件显式 job）仅触发：`main-new`、`/^tag_prod_aliyun_[0-9].*$/`。
@@ -23,5 +23,5 @@ main-new / tag_prod_* → values/prod.yml   → discovery.intern-ai.org.cn/home
 
 ## 说明
 
-- 三环境均使用 `path: /home`（与生产一致；host/dataset 在同域名下用各自 path）。
-- 域名与 host/dataset 平台一致，与 SCP 的 `scphub-*` 独立域名不同。
+- 三环境均使用 `path: /home`。
+- 本服务使用独立的 `discovery-home-*` 域名，与 host/dataset 平台域名分离。

@@ -28,13 +28,12 @@
 
 ## 子路径 `basePath`
 
-`SiteLinkConfig.basePath`（无尾斜杠）须与 `values/*.yml` 的 `ingress.path` 对齐。当前 **dev** 为 `/home1`（见 `values/dev.yml`）。
+`SiteLinkConfig.basePath`（无尾斜杠）须与 `values/*.yml` 的 `ingress.path` 对齐。三环境均为 `/home`。
 
 | 场景 | 做法 |
 |------|------|
 | 本地 `http-server` 根路径预览 | 临时把 `basePath` 改为 `""` |
-| 部署在 `/home1` | `basePath: "/home1"`（与 values path 一致） |
-| 改回生产 `/home` | 只改 `site-links.js` 的 `basePath` 及对应 `values` path |
+| 部署在 `/home` | `basePath: "/home"`（与 values path 一致） |
 
 ## 钩子变更时
 

@@ -2,7 +2,7 @@
   "use strict";
 
   var config = window.SiteLinkConfig || {};
-  var basePath = typeof config.basePath === "string" ? config.basePath : "/home1";
+  var basePath = typeof config.basePath === "string" ? config.basePath : "/home";
 
   if (!basePath) {
     return;
