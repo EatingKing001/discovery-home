@@ -99,9 +99,16 @@ function Patch-IndexHtml([string]$Path) {
 function Patch-HomeHtml([string]$Path) {
   $html = Remove-OldBizScripts (Read-Utf8 $Path)
   $injected = @()
+  $homeCssRe = '(?m)^\s*<link\b[^>]*\bhref\s*=\s*["''][^"'']*home\.css[^"'']*["''][^>]*>\s*$'
   $earlyRe = '(?m)^\s*<script\b[^>]*\bsrc\s*=\s*["''](?:data/[^"'']+|home\.js)[^"'']*["''][^>]*>\s*</script>\s*$'
   $homeRe = '(?m)^\s*<script\b[^>]*\bsrc\s*=\s*["''][^"'']*home\.js[^"'']*["''][^>]*>\s*</script>\s*$'
   $productBizRe = '(?m)^\s*<script\b[^>]*\bsrc\s*=\s*["''][^"'']*product/(?:protocol-links|downloads|cooperation-submit)\.js[^"'']*["''][^>]*>\s*</script>\s*$'
+
+  if (-not (Has-Src $html "product/cooperation-cta-hide.css")) {
+    $next = Insert-AfterMatch $html "<link rel=`"stylesheet`" href=`"../../product/cooperation-cta-hide.css?v=$BizVer`">" $homeCssRe
+    if ($null -eq $next) { Write-Warning "tabs/home/index.html：未找到 home.css，无法注入 cooperation-cta-hide.css" }
+    else { $html = $next; $injected += "tabs/home/index.html → product/cooperation-cta-hide.css" }
+  }
 
   if (-not (Has-Src $html "product/site-links.js")) {
     $next = Insert-BeforeMatch $html "<script src=`"../../product/site-links.js?v=$BizVer`" defer></script>" $earlyRe
@@ -181,10 +188,10 @@ Write-Host ""
 Write-Host "已同步设计文件（tabs/home、shared、design-system、index.html）。"
 Write-Host "未覆盖：product/、docs/、README.md"
 if ($allInjected.Count -gt 0) {
-  Write-Host "已注入 product script："
+  Write-Host "已注入 product 资源："
   $allInjected | ForEach-Object { Write-Host "  - $_" }
 } else {
-  Write-Host "已注入：无新增（HTML 中已有正确 product script，幂等跳过）。"
+  Write-Host "已注入：无新增（HTML 中已有正确 product 资源，幂等跳过）。"
 }
 Write-Host ""
 Write-Host "预览："

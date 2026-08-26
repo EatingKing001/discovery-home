@@ -32,6 +32,7 @@
 - `product/cooperation-submit.js` — 合作表单可插拔提交
 - `product/downloads.js` — Mac 下载 + 移动端 toast
 - `product/protocol-links.js` — Footer 协议外链注入
+- `product/cooperation-cta-hide.css` — 无 `cooperationSubmitUrl` 时隐藏申请合作 CTA；有接口后删除 CSS 与注入即可
 - `product/sync-from-design.ps1` — 设计同步 + HTML 注入
 
 说明：设计仓同步可能把设计版 `shared/js/site-links.js` 带回；正式 HTML **只引用** `product/site-links.js`，忽略设计版即可。
@@ -51,6 +52,8 @@
 **`tabs/home/index.html`：**
 
 ```html
+<link rel="stylesheet" href="home.css?v=…">
+<link rel="stylesheet" href="../../product/cooperation-cta-hide.css?v=…">
 <script src="../../product/site-links.js?v=…" defer></script>
 <!-- data/*.js + home.js 保持设计侧顺序 -->
 <script src="home.js?v=…" defer></script>
@@ -73,7 +76,7 @@
 1. robocopy 覆盖 `tabs\home`、`shared`、`design-system`
 2. Copy-Item 覆盖根 `index.html`
 3. **不**覆盖 `product/`、`docs/`、根 `README.md`
-4. 向 `index.html` / `tabs/home/index.html` 注入 product script；移除旧的 `shared/js/site-links.js`、`shared/js/business/*` 引用
+4. 向 `index.html` / `tabs/home/index.html` 注入 product script / stylesheet；移除旧的 `shared/js/site-links.js`、`shared/js/business/*` 引用
 
 预览：
 

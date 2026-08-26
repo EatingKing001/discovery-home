@@ -11,6 +11,28 @@
     return String(protocols[key] || "").trim();
   }
 
+  function openProtocol(href) {
+    window.open(href, "_blank", "noopener,noreferrer");
+  }
+
+  function bindSpanAsLink(node, href) {
+    if (node.dataset.protocolBound === "1") return;
+    node.dataset.protocolBound = "1";
+    node.setAttribute("role", "link");
+    node.tabIndex = 0;
+
+    node.addEventListener("click", function () {
+      openProtocol(href);
+    });
+
+    node.addEventListener("keydown", function (event) {
+      if (event.key === "Enter" || event.key === " ") {
+        if (event.key === " ") event.preventDefault();
+        openProtocol(href);
+      }
+    });
+  }
+
   function upgradePolicyNode(node) {
     const label = (node.textContent || "").trim();
     const key = LABEL_TO_KEY[label];
@@ -28,13 +50,7 @@
       return;
     }
 
-    const anchor = document.createElement("a");
-    anchor.className = node.className;
-    anchor.href = href;
-    anchor.target = "_blank";
-    anchor.rel = "noopener noreferrer";
-    anchor.textContent = label;
-    node.replaceWith(anchor);
+    bindSpanAsLink(node, href);
   }
 
   function init() {

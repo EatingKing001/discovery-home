@@ -12,9 +12,9 @@
 .\product\sync-from-design.ps1 -Source "C:\path\to\inkstone-website"
 ```
 
-脚本会 robocopy 覆盖 `tabs/home`、`shared`、`design-system`，复制 `index.html`，并自动向 HTML 注入下方 script。`product/`、`docs/`、根 `README.md` 不会被覆盖。
+脚本会 robocopy 覆盖 `tabs/home`、`shared`、`design-system`，复制 `index.html`，并自动向 HTML 注入下方 script / stylesheet。`product/`、`docs/`、根 `README.md` 不会被覆盖。
 
-## Script 列表
+## Script / CSS 列表
 
 | 文件 | 用途 |
 |------|------|
@@ -22,6 +22,7 @@
 | `cooperation-submit.js` | 合作表单提交 |
 | `downloads.js` | Mac 下载 + 移动端 toast |
 | `protocol-links.js` | Footer 协议外链 |
+| `cooperation-cta-hide.css` | 无 `cooperationSubmitUrl` 时隐藏 logo 墙下申请合作 CTA；有接口后删除本文件及 HTML 注入即可 |
 | `sync-from-design.ps1` | 设计同步 + HTML 注入 |
 
 ## 钩子变更时
