@@ -18,10 +18,10 @@
 
 | 文件 | 用途 |
 |------|------|
-| `site-links.js` | `SiteLinkConfig`（`basePath` / 外链 / 下载 / 协议 / 合作 API） |
+| `site-links.js` | `SiteLinkConfig`（`basePath` / 外链 / 下载频道 / 协议 / 合作 API） |
 | `base-path.js` | 子路径挂载：无尾斜杠跳转、`<base>`、Home iframe 绝对 `src`（壳 `index.html`） |
 | `cooperation-submit.js` | 合作表单提交 |
-| `downloads.js` | Mac 下载 + 移动端 toast |
+| `downloads.js` | Mac 下载：按频道拉 OSS `release-manifest` 取 dmg；移动端 toast |
 | `protocol-links.js` | Footer 协议外链 |
 | `cooperation-cta-hide.css` | 无 `cooperationSubmitUrl` 时隐藏 logo 墙下申请合作 CTA；有接口后删除本文件及 HTML 注入即可 |
 | `sync-from-design.ps1` | 设计同步 + HTML 注入 |
