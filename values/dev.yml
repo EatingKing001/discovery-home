@@ -16,6 +16,6 @@ ingress:
   enabled: true
   ingressClassName: nginx
   domain: discovery-dev.intern-ai.org.cn
-  path: /home
+  path: /home1
   https: true
   secretName: generic-intern-ai.org.cn # when https=true, use this secret as tls 
