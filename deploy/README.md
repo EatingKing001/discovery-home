@@ -23,5 +23,5 @@ main-new / tag_prod_* → values/prod.yml   → discovery-home.intern-ai.org.cn/
 
 ## 说明
 
-- 三环境均使用 `path: /home`。
+- 三环境均使用 `path: /home`；容器内 nginx（`deploy/nginx/conf.d/default.conf`）负责剥 `/home` 前缀访问静态根，Ingress 无需 rewrite。
 - 本服务使用独立的 `discovery-home-*` 域名，与 host/dataset 平台域名分离。
