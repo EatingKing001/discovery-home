@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
   从设计仓同步视觉文件，并自动向 HTML 注入 product/ 业务脚本。
 
