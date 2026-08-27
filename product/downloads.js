@@ -36,7 +36,7 @@
   }
 
   function archFolder(key) {
-    if (key === "mac-intel") return "mac_intel";
+    if (key === "mac-intel") return "mac_x64";
     if (key === "mac-arm") return "mac_arm";
     return "";
   }
