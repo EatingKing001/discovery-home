@@ -98,6 +98,14 @@ function Patch-BaseHref {
   return @{ Html = $html; Injected = @($msg) }
 }
 
+# tabs/home 使用 ../../ 相对路径，须相对文档 URL（/home/tabs/home/）解析。
+# 注入 <base href="/home/"> 会使 ../../shared/... 错误解析为 /shared/...（iframe 404）。
+function Remove-BaseHref {
+  param([string]$Html)
+  if ($Html -notmatch '(?is)<base\b') { return $Html }
+  return [regex]::Replace($Html, '(?m)^\s*<base\b[^>]*>\s*\r?\n?', '')
+}
+
 function Patch-IndexHtml([string]$Path) {
   $html = Remove-OldBizScripts (Read-Utf8 $Path)
   $injected = @()
@@ -135,9 +143,9 @@ function Patch-IndexHtml([string]$Path) {
 function Patch-HomeHtml([string]$Path) {
   $html = Remove-OldBizScripts (Read-Utf8 $Path)
   $injected = @()
-  $basePatch = Patch-BaseHref $html "tabs/home/index.html"
-  $html = $basePatch.Html
-  $injected += $basePatch.Injected
+  $before = $html
+  $html = Remove-BaseHref $html
+  if ($html -ne $before) { $injected += "tabs/home/index.html → 移除 <base>（保留文档 URL 相对路径）" }
   $homeCssRe = '(?m)^\s*<link\b[^>]*\bhref\s*=\s*["''][^"'']*home\.css[^"'']*["''][^>]*>\s*$'
   $earlyRe = '(?m)^\s*<script\b[^>]*\bsrc\s*=\s*["''](?:data/[^"'']+|home\.js)[^"'']*["''][^>]*>\s*</script>\s*$'
   $homeRe = '(?m)^\s*<script\b[^>]*\bsrc\s*=\s*["''][^"'']*home\.js[^"'']*["''][^>]*>\s*</script>\s*$'
