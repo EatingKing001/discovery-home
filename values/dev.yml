@@ -12,10 +12,10 @@ container:
 service:
   port: 8090
 
-ingress:
-  enabled: true
-  ingressClassName: nginx
-  domain: discovery-home-dev.intern-ai.org.cn
-  path: /home
-  https: true
-  secretName: generic-intern-ai.org.cn # when https=true, use this secret as tls 
+# ingress:
+#   enabled: true
+#   ingressClassName: nginx
+#   domain: discovery-home-dev.intern-ai.org.cn
+#   path: /home
+#   https: true
+#   secretName: generic-intern-ai.org.cn # when https=true, use this secret as tls 
