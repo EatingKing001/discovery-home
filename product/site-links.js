@@ -7,13 +7,20 @@
    *
    * basePath：站点挂载子路径（无尾斜杠），须与 values/*.yml 的 ingress path 对齐（现为 /home）。
    * - 本地 http-server 根路径预览：临时改为 ""
+   *
+   * downloads：Mac 安装包不写死 dmg 直链，由 downloads.js 按频道拉 OSS release-manifest 再拼 dmg。
+   * - releaseBase：inkstone releases 根
+   * - downloadChannel：可选覆盖 "prod" | "staging"；空则按 hostname 自动推断
+   *   · discovery-home.intern-ai.org.cn → prod
+   *   · discovery-home-staging… / discovery-home-dev… / 本地 → staging
+   *   （dev 与 staging 共用 staging 频道 manifest，与「dev 链接把 prod 换成 staging」一致）
    */
   window.SiteLinkConfig = Object.freeze({
     basePath: "/home",
     discoveryWebApp: "https://discovery.intern-ai.org.cn/",
     downloads: Object.freeze({
-      macIntel: "",
-      macArm: ""
+      releaseBase: "https://openxlab.oss-cn-shanghai.aliyuncs.com/releases/inkstone/",
+      downloadChannel: ""
     }),
     protocols: Object.freeze({
       service: "https://sso.openxlab.org.cn/protocol/service",
