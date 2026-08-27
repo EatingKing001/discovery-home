@@ -75,9 +75,43 @@ function Has-Src([string]$Html, [string]$Needle) {
   return $Html -match [regex]::Escape($Needle)
 }
 
+function Ensure-BaseHref {
+  param(
+    [string]$Html,
+    [string]$Href = "/home/"
+  )
+  if ($Html -match '(?is)<base\b[^>]*\bhref\s*=\s*["''][^"'']*["'']') {
+    return [regex]::Replace($Html, '(?is)(<base\b[^>]*\bhref\s*=\s*["''])[^"'']*(["''])', "`${1}$Href`${2}", 1)
+  }
+  $cssRe = '(?m)^\s*<link\b[^>]*\brel\s*=\s*["'']stylesheet["'']'
+  $next = Insert-BeforeMatch $Html "  <base href=`"$Href`">" $cssRe
+  if ($null -eq $next) { return $Html }
+  return $next
+}
+
+function Patch-BaseHref {
+  param([string]$Html, [string]$Label)
+  $before = $Html
+  $html = Ensure-BaseHref $Html
+  if ($html -eq $before) { return @{ Html = $html; Injected = @() } }
+  $msg = if ($before -match '(?is)<base\b') { "$Label → 更新 <base href=`"/home/`">" } else { "$Label → <base href=`"/home/`">" }
+  return @{ Html = $html; Injected = @($msg) }
+}
+
+# tabs/home 使用 ../../ 相对路径，须相对文档 URL（/home/tabs/home/）解析。
+# 注入 <base href="/home/"> 会使 ../../shared/... 错误解析为 /shared/...（iframe 404）。
+function Remove-BaseHref {
+  param([string]$Html)
+  if ($Html -notmatch '(?is)<base\b') { return $Html }
+  return [regex]::Replace($Html, '(?m)^\s*<base\b[^>]*>\s*\r?\n?', '')
+}
+
 function Patch-IndexHtml([string]$Path) {
   $html = Remove-OldBizScripts (Read-Utf8 $Path)
   $injected = @()
+  $basePatch = Patch-BaseHref $html "index.html"
+  $html = $basePatch.Html
+  $injected += $basePatch.Injected
   $shellRe = '(?m)^\s*<script\b[^>]*\bsrc\s*=\s*["''][^"'']*shared/js/shell\.js[^"'']*["''][^>]*>\s*</script>\s*$'
 
   if (-not (Has-Src $html "product/site-links.js")) {
@@ -109,6 +143,9 @@ function Patch-IndexHtml([string]$Path) {
 function Patch-HomeHtml([string]$Path) {
   $html = Remove-OldBizScripts (Read-Utf8 $Path)
   $injected = @()
+  $before = $html
+  $html = Remove-BaseHref $html
+  if ($html -ne $before) { $injected += "tabs/home/index.html → 移除 <base>（保留文档 URL 相对路径）" }
   $homeCssRe = '(?m)^\s*<link\b[^>]*\bhref\s*=\s*["''][^"'']*home\.css[^"'']*["''][^>]*>\s*$'
   $earlyRe = '(?m)^\s*<script\b[^>]*\bsrc\s*=\s*["''](?:data/[^"'']+|home\.js)[^"'']*["''][^>]*>\s*</script>\s*$'
   $homeRe = '(?m)^\s*<script\b[^>]*\bsrc\s*=\s*["''][^"'']*home\.js[^"'']*["''][^>]*>\s*</script>\s*$'
