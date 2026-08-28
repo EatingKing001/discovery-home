@@ -1,0 +1,112 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-25",
+  "source": {
+    "project": "Adobe Source Han Serif",
+    "version": "2.003R",
+    "repository": "https://github.com/adobe-fonts/source-han-serif",
+    "license": "SIL Open Font License 1.1",
+    "licenseFile": "LICENSE.txt",
+    "files": {
+      "600": "https://github.com/adobe-fonts/source-han-serif/blob/release/OTF/SimplifiedChinese/SourceHanSerifSC-SemiBold.otf",
+      "700": "https://github.com/adobe-fonts/source-han-serif/blob/release/OTF/SimplifiedChinese/SourceHanSerifSC-Bold.otf"
+    }
+  },
+  "build": {
+    "fontToolsVersion": "4.63.0",
+    "outputFormat": "WOFF2",
+    "strategy": "Tiered current Home, GB2312 level-1 common, and GB2312 level-2 extended subsets",
+    "commonCharacters": " 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz.,:;!?/\\+-_()[]{}%#&@'\"，。！？：；、·“”‘’（）【】《》〈〉—–…",
+    "coverageSets": {
+      "home": {
+        "familyName": "InkStone Han Serif SC Home",
+        "requestedCharacterCount": 220,
+        "source": "Computed serif text used by the current formal Home page plus common Latin and Chinese punctuation"
+      },
+      "common": {
+        "familyName": "InkStone Han Serif SC Common",
+        "requestedCharacterCount": 4306,
+        "source": "GB2312 symbol rows and level-1 common Chinese characters, excluding Home characters"
+      },
+      "extended": {
+        "familyName": "InkStone Han Serif SC Extended",
+        "requestedCharacterCount": 3008,
+        "source": "GB2312 level-2 Chinese characters, excluding Home and Common characters"
+      }
+    },
+    "notes": [
+      "All three families are registered in fallback order through --font-serif-cjk.",
+      "The Home family covers every current serif title at both 600 and 700 weights.",
+      "Common and Extended families load only when future copy uses characters absent from the Home family.",
+      "Each output is a static weight instance, not a variable font.",
+      "The internal families are renamed because Source is a Reserved Font Name under the upstream OFL license."
+    ]
+  },
+  "weights": {
+    "600": {
+      "style": "SemiBold",
+      "home": {
+        "outputFile": "inkstone-han-serif-sc-home-600.woff2",
+        "bytes": 103436,
+        "sha256": "d8fd947fc23ceb59025195027037ab7a90976c85badbd656f69660fa484f5e30",
+        "glyphCount": 668,
+        "requestedCharacterCount": 220,
+        "cmapCharacterCount": 220,
+        "missingRequestedCharacters": []
+      },
+      "common": {
+        "outputFile": "inkstone-han-serif-sc-common-600.woff2",
+        "bytes": 1966984,
+        "sha256": "7a47d23526973cf3347e764282b049c84b0ca278cfadac5386acc5819f66e247",
+        "glyphCount": 7997,
+        "requestedCharacterCount": 4306,
+        "cmapCharacterCount": 4308,
+        "missingRequestedCharacters": []
+      },
+      "extended": {
+        "outputFile": "inkstone-han-serif-sc-extended-600.woff2",
+        "bytes": 1695120,
+        "sha256": "ba47c702e51363c79c2ecfd2c311193592f08ff44b5c7689242108ba699046f4",
+        "glyphCount": 5434,
+        "requestedCharacterCount": 3008,
+        "cmapCharacterCount": 3008,
+        "missingRequestedCharacters": []
+      }
+    },
+    "700": {
+      "style": "Bold",
+      "home": {
+        "outputFile": "inkstone-han-serif-sc-home-700.woff2",
+        "bytes": 102968,
+        "sha256": "928ae7e6b6bf6f4b9ad277e20a341313d3e68005dc474ba9ac490778ca06b378",
+        "glyphCount": 668,
+        "requestedCharacterCount": 220,
+        "cmapCharacterCount": 220,
+        "missingRequestedCharacters": []
+      },
+      "common": {
+        "outputFile": "inkstone-han-serif-sc-common-700.woff2",
+        "bytes": 2021188,
+        "sha256": "df8721438f7d64d50b7715a1ffb76fb3e455a808265a9a8a4ec3bd560e9b94d9",
+        "glyphCount": 7997,
+        "requestedCharacterCount": 4306,
+        "cmapCharacterCount": 4308,
+        "missingRequestedCharacters": []
+      },
+      "extended": {
+        "outputFile": "inkstone-han-serif-sc-extended-700.woff2",
+        "bytes": 1747252,
+        "sha256": "1228cdb8c7fd011bc870507a52ae48448ed58b03b25bb7d241a231f4b630000d",
+        "glyphCount": 5434,
+        "requestedCharacterCount": 3008,
+        "cmapCharacterCount": 3008,
+        "missingRequestedCharacters": []
+      }
+    }
+  },
+  "validation": {
+    "currentHomeSerifTextMissingAt600": [],
+    "currentHomeSerifTextMissingAt700": [],
+    "allGeneratedSubsetMissingRequestedCharacters": []
+  }
+}

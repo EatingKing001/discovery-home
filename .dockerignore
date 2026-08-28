@@ -1,0 +1,9 @@
+.git
+docs
+*.md
+node_modules
+deploy/src
+env
+values
+.cursor
+design-system
