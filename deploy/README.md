@@ -7,10 +7,10 @@
 ```
 develop              → values/dev.yml     → discovery-home-dev.intern-ai.org.cn/home
 release              → values/release.yml → discovery-home-staging.intern-ai.org.cn/home
-main-new / tag_prod_* → values/prod.yml   → discovery-home.intern-ai.org.cn/home
+main / tag_prod_* → values/prod.yml   → discovery-home.intern-ai.org.cn/home
 ```
 
-生产 CI（本文件显式 job）仅触发：`main-new`、`/^tag_prod_aliyun_[0-9].*$/`。
+生产 CI（本文件显式 job）仅触发：`main`、`/^tag_prod_aliyun_[0-9].*$/`。
 
 ## CI 变量（本仓 variables）
 
