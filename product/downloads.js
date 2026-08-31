@@ -137,6 +137,11 @@
         return;
       }
       triggerBrowserDownload(url);
+      // Track only when download actually starts (manifest URL resolved).
+      const version = key === "mac-intel" ? "mac_intel" : key === "mac-arm" ? "mac_arm" : key;
+      if (window.DiscoveryAnalytics && typeof window.DiscoveryAnalytics.track === "function") {
+        window.DiscoveryAnalytics.track("download_click", { version: version });
+      }
     });
   }
 
