@@ -1,3 +1,51 @@
+:root {
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --paper: #171a20;
+  --bg: #111318;
+  --ink: #f2efe8;
+  --ink-soft: #c9c5bc;
+  --bg-soft: #282d36;
+  --bg-soft-1: #1e2229;
+  --line: #646c78;
+  --muted: #a8adb6;
+  --muted-2: #9097a2;
+  --vermilion-1: #151f2c;
+  --vermilion-2: #1b2d43;
+  --vermilion-3: #294665;
+  --vermilion-4: #4f779f;
+  --vermilion-5: #aacaf0;
+  --vermilion-6: #8db8e9;
+  --vermilion-7: #6f9bd2;
+  --success: #b7c87d;
+  --success-soft: #87965b;
+  --success-bg: #242a1c;
+  --success-deep: #d2df9b;
+  --warning: #e8c27a;
+  --warning-soft: #b28a4f;
+  --warning-bg: #33291a;
+  --warning-deep: #f4d18a;
+  --error: #ffb4ab;
+  --error-soft: #d37a78;
+  --error-bg: #3b2021;
+  --error-deep: #ff8a80;
+  --rec-red: #ff887a;
+  --ai-tint: #172333;
+  --ai-tint-rule: #496985;
+  --component-overlay-bg: color-mix(in srgb, var(--bg) 82%, transparent);
+  --component-dialog-shadow: 0 20px 60px -4px rgb(0 0 0 / 56%);
+  --component-toast-shadow: 0 12px 32px rgb(0 0 0 / 48%);
+}
+
+:root[data-theme="dark"] .app-toast {
+  border: 1px solid var(--line);
+  background: var(--bg-soft-1);
+  color: var(--ink);
+}
+
 .ds-page {
   box-sizing: border-box;
   width: min(100%, var(--layout-content-max));
@@ -52,10 +100,17 @@
   line-height: 1.7;
 }
 
+.ds-hero-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-top: 24px;
+}
+
 .ds-module-nav {
   display: inline-flex;
   gap: 4px;
-  margin-top: 24px;
   padding: 4px;
   border: 1px solid var(--line);
   border-radius: var(--radius-card);
@@ -83,6 +138,59 @@
 
 .ds-module-nav a:focus-visible {
   outline-color: var(--ink);
+}
+
+.ds-theme-toggle {
+  display: none;
+  min-height: 42px;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--bg-soft-1);
+  color: var(--ink-soft);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.js .ds-theme-toggle {
+  display: inline-flex;
+}
+
+.ds-theme-toggle:hover {
+  background: var(--bg-soft);
+  color: var(--ink);
+}
+
+.ds-theme-toggle:focus-visible {
+  outline-color: var(--ink);
+}
+
+.ds-theme-toggle-track {
+  position: relative;
+  width: 34px;
+  height: 20px;
+  flex: 0 0 34px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  background: var(--paper);
+}
+
+.ds-theme-toggle-thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--ink);
+  transition: transform 150ms ease;
+}
+
+:root[data-theme="dark"] .ds-theme-toggle-thumb {
+  transform: translateX(14px);
 }
 
 .ds-section {
@@ -174,6 +282,33 @@
   overflow-wrap: anywhere;
   color: var(--ink);
   font-size: 14px;
+}
+
+.ds-token-values {
+  display: grid;
+  gap: 4px;
+}
+
+.ds-token-values > span {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.ds-token-values em {
+  color: var(--muted);
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.ds-token-values code {
+  color: var(--ink-soft);
+  font-family: var(--font-sans);
+  font-size: 12px;
 }
 
 .ds-color-swatch {
@@ -596,5 +731,11 @@
 
   .ds-component-ledger {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-theme-toggle-thumb {
+    transition-duration: 0.01ms;
   }
 }

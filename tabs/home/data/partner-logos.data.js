@@ -19,6 +19,6 @@
 
   global.HomePartnerLogos = Object.fromEntries(Object.entries(names).map(([line, entries]) => [line, entries.map((name) => ({
       name,
-      src: `../../shared/assets/orgs/partners/${line}-${name}.svg`
+      src: `../../shared/assets/orgs/partners/logo-${name}.svg`
   }))]));
 })(window);

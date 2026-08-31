@@ -203,8 +203,8 @@
 
 /*
  * Text link button. The supplied Figma node ids 242:63225 and 242:63226 are
- * currently absent from the file, so typography and color inherit the verified
- * text-button baseline while the underline behavior follows the user rule.
+ * currently absent from the file, so typography inherits the verified
+ * text-button baseline while foreground and underline use the confirmed ink color.
  */
 .btn-link {
   position: relative;
@@ -215,7 +215,7 @@
   padding: 0;
   border: 0;
   background: transparent;
-  color: var(--component-text-button-fg);
+  color: var(--ink);
   box-shadow: none;
   font-size: 15px;
   font-weight: 400;
@@ -240,7 +240,7 @@
 }
 
 .btn-link:hover {
-  color: var(--component-text-button-fg);
+  color: var(--ink);
   cursor: pointer;
 }
 
@@ -547,7 +547,7 @@ fieldset.tm-field {
 
 .cf-input-count.is-near,
 .cf-textarea-count.is-near {
-  color: var(--state-warning);
+  color: var(--warning-deep);
 }
 
 .cf-input-count.is-max,
