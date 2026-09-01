@@ -28,13 +28,15 @@
 
 ### `product/` 业务文件
 
+- `product/vendor/migo-analytics.bundle.js` — 已发布 `@migo/analytics` UMD（静态部署直接 COPY）
+- `product/analytics-bootstrap.js` — 神策初始化；iframe 关闭 auto `$pageview`
 - `product/site-links.js` — 外链、下载频道/`releaseBase`、协议、合作提交 API、`basePath`（`SiteLinkConfig`；须与 `values/*.yml` ingress path 对齐，现为 `/home`）
 - `product/base-path.js` — 子路径：无尾斜杠跳转、`<base>`、壳 iframe 绝对 `src`（仅壳 `index.html`）
 - `product/cooperation-submit.js` — 合作表单可插拔提交
-- `product/downloads.js` — Mac 下载（OSS release-manifest → dmg）+ 移动端 toast
+- `product/downloads.js` — Mac 下载（OSS release-manifest → dmg）+ 移动端 toast + `download_click`
 - `product/protocol-links.js` — Footer 协议外链注入
 - `product/cooperation-cta-hide.css` — 无 `cooperationSubmitUrl` 时隐藏申请合作 CTA；有接口后删除 CSS 与注入即可
-- `product/sync-from-design.ps1` — 设计同步 + HTML 注入
+- `product/sync-from-design.ps1` — 设计同步 + HTML 注入（含埋点 script / `data-analytics-*`）
 
 说明：设计仓同步可能把设计版 `shared/js/site-links.js` 带回；正式 HTML **只引用** `product/site-links.js`，忽略设计版即可。本地根路径预览可将 `basePath` 临时设为 `""`。
 
@@ -45,6 +47,8 @@
 **`index.html`（shell）：**
 
 ```html
+<script src="product/vendor/migo-analytics.bundle.js?v=…" defer></script>
+<script src="product/analytics-bootstrap.js?v=…" defer></script>
 <script src="product/site-links.js?v=…" defer></script>
 <script src="product/base-path.js?v=…" defer></script>
 <script src="shared/js/shell.js?v=…" defer></script>
@@ -56,6 +60,8 @@
 ```html
 <link rel="stylesheet" href="home.css?v=…">
 <link rel="stylesheet" href="../../product/cooperation-cta-hide.css?v=…">
+<script src="../../product/vendor/migo-analytics.bundle.js?v=…" defer></script>
+<script src="../../product/analytics-bootstrap.js?v=…" defer></script>
 <script src="../../product/site-links.js?v=…" defer></script>
 <!-- data/*.js + home.js 保持设计侧顺序 -->
 <script src="home.js?v=…" defer></script>

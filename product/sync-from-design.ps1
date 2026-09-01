@@ -17,6 +17,7 @@ param(
 $ErrorActionPreference = "Stop"
 $Dest = Split-Path -Parent $PSScriptRoot
 $BizVer = "20260826-biz1"
+$AnalyticsVer = "20260831-analytics1"
 
 function Write-Utf8NoBom {
   param([string]$Path, [string]$Content)
@@ -106,6 +107,28 @@ function Remove-BaseHref {
   return [regex]::Replace($Html, '(?m)^\s*<base\b[^>]*>\s*\r?\n?', '')
 }
 
+function Ensure-AttrOnMatch {
+  param(
+    [string]$Html,
+    [string]$OpenTagRegex,
+    [string]$AttrName,
+    [string]$AttrValue,
+    [string]$Label
+  )
+  $opts = [System.Text.RegularExpressions.RegexOptions]::IgnoreCase -bor [System.Text.RegularExpressions.RegexOptions]::Singleline
+  $m = [regex]::Match($Html, $OpenTagRegex, $opts)
+  if (-not $m.Success) { return @{ Html = $Html; Injected = @() } }
+  $tag = $m.Value
+  if ($tag -match [regex]::Escape($AttrName)) {
+    # Already has attr name; rewrite value if present as different.
+    $updated = [regex]::Replace($tag, "(?i)\b$([regex]::Escape($AttrName))\s*=\s*[""'][^""']*[""']", "$AttrName=`"$AttrValue`"")
+    if ($updated -eq $tag) { return @{ Html = $Html; Injected = @() } }
+    return @{ Html = $Html.Substring(0, $m.Index) + $updated + $Html.Substring($m.Index + $m.Length); Injected = @("$Label → 更新 $AttrName") }
+  }
+  $inserted = $tag -replace '>$', " $AttrName=`"$AttrValue`">"
+  return @{ Html = $Html.Substring(0, $m.Index) + $inserted + $Html.Substring($m.Index + $m.Length); Injected = @("$Label → $AttrName=`"$AttrValue`"") }
+}
+
 function Patch-IndexHtml([string]$Path) {
   $html = Remove-OldBizScripts (Read-Utf8 $Path)
   $injected = @()
@@ -114,8 +137,28 @@ function Patch-IndexHtml([string]$Path) {
   $injected += $basePatch.Injected
   $shellRe = '(?m)^\s*<script\b[^>]*\bsrc\s*=\s*["''][^"'']*shared/js/shell\.js[^"'']*["''][^>]*>\s*</script>\s*$'
 
+  if (-not (Has-Src $html "product/vendor/migo-analytics.bundle.js")) {
+    $next = Insert-BeforeMatch $html "<script src=`"product/vendor/migo-analytics.bundle.js?v=$AnalyticsVer`" defer></script>" $shellRe
+    if ($null -eq $next) { Write-Warning "index.html：未找到 shell.js，无法注入 migo-analytics.bundle.js" }
+    else { $html = $next; $injected += "index.html → product/vendor/migo-analytics.bundle.js" }
+  }
+
+  if (-not (Has-Src $html "product/analytics-bootstrap.js")) {
+    $vendorRe = '(?m)^\s*<script\b[^>]*\bsrc\s*=\s*["''][^"'']*product/vendor/migo-analytics\.bundle\.js[^"'']*["''][^>]*>\s*</script>\s*$'
+    $next = Insert-AfterMatch $html "<script src=`"product/analytics-bootstrap.js?v=$AnalyticsVer`" defer></script>" $vendorRe
+    if ($null -eq $next) {
+      $next = Insert-BeforeMatch $html "<script src=`"product/analytics-bootstrap.js?v=$AnalyticsVer`" defer></script>" $shellRe
+    }
+    if ($null -eq $next) { Write-Warning "index.html：未找到 vendor/shell，无法注入 analytics-bootstrap.js" }
+    else { $html = $next; $injected += "index.html → product/analytics-bootstrap.js" }
+  }
+
   if (-not (Has-Src $html "product/site-links.js")) {
-    $next = Insert-BeforeMatch $html "<script src=`"product/site-links.js?v=$BizVer`" defer></script>" $shellRe
+    $bootstrapRe = '(?m)^\s*<script\b[^>]*\bsrc\s*=\s*["''][^"'']*product/analytics-bootstrap\.js[^"'']*["''][^>]*>\s*</script>\s*$'
+    $next = Insert-AfterMatch $html "<script src=`"product/site-links.js?v=$BizVer`" defer></script>" $bootstrapRe
+    if ($null -eq $next) {
+      $next = Insert-BeforeMatch $html "<script src=`"product/site-links.js?v=$BizVer`" defer></script>" $shellRe
+    }
     if ($null -eq $next) { Write-Warning "index.html：未找到 shell.js，无法注入 site-links.js" }
     else { $html = $next; $injected += "index.html → product/site-links.js" }
   }
@@ -135,6 +178,13 @@ function Patch-IndexHtml([string]$Path) {
     if ($null -eq $next) { Write-Warning "index.html：未找到 shell.js，无法注入 cooperation-submit.js" }
     else { $html = $next; $injected += "index.html → product/cooperation-submit.js" }
   }
+
+  $headerPatch = Ensure-AttrOnMatch $html '(?is)<a\b[^>]*\bclass\s*=\s*["''][^"'']*\bsite-header-action\b[^"'']*["''][^>]*>' "data-analytics-event" "online_use_click" "index.html header"
+  $html = $headerPatch.Html
+  $injected += $headerPatch.Injected
+  $headerEntry = Ensure-AttrOnMatch $html '(?is)<a\b[^>]*\bclass\s*=\s*["''][^"'']*\bsite-header-action\b[^"'']*["''][^>]*>' "data-analytics-prop-entry" "header" "index.html header"
+  $html = $headerEntry.Html
+  $injected += $headerEntry.Injected
 
   Write-Utf8NoBom $Path $html
   return $injected
@@ -157,8 +207,28 @@ function Patch-HomeHtml([string]$Path) {
     else { $html = $next; $injected += "tabs/home/index.html → product/cooperation-cta-hide.css" }
   }
 
+  if (-not (Has-Src $html "product/vendor/migo-analytics.bundle.js")) {
+    $next = Insert-BeforeMatch $html "<script src=`"../../product/vendor/migo-analytics.bundle.js?v=$AnalyticsVer`" defer></script>" $earlyRe
+    if ($null -eq $next) { Write-Warning "tabs/home/index.html：未找到 home.js/data 脚本，无法注入 migo-analytics.bundle.js" }
+    else { $html = $next; $injected += "tabs/home/index.html → product/vendor/migo-analytics.bundle.js" }
+  }
+
+  if (-not (Has-Src $html "product/analytics-bootstrap.js")) {
+    $vendorRe = '(?m)^\s*<script\b[^>]*\bsrc\s*=\s*["''][^"'']*product/vendor/migo-analytics\.bundle\.js[^"'']*["''][^>]*>\s*</script>\s*$'
+    $next = Insert-AfterMatch $html "<script src=`"../../product/analytics-bootstrap.js?v=$AnalyticsVer`" defer></script>" $vendorRe
+    if ($null -eq $next) {
+      $next = Insert-BeforeMatch $html "<script src=`"../../product/analytics-bootstrap.js?v=$AnalyticsVer`" defer></script>" $earlyRe
+    }
+    if ($null -eq $next) { Write-Warning "tabs/home/index.html：无法注入 analytics-bootstrap.js" }
+    else { $html = $next; $injected += "tabs/home/index.html → product/analytics-bootstrap.js" }
+  }
+
   if (-not (Has-Src $html "product/site-links.js")) {
-    $next = Insert-BeforeMatch $html "<script src=`"../../product/site-links.js?v=$BizVer`" defer></script>" $earlyRe
+    $bootstrapRe = '(?m)^\s*<script\b[^>]*\bsrc\s*=\s*["''][^"'']*product/analytics-bootstrap\.js[^"'']*["''][^>]*>\s*</script>\s*$'
+    $next = Insert-AfterMatch $html "<script src=`"../../product/site-links.js?v=$BizVer`" defer></script>" $bootstrapRe
+    if ($null -eq $next) {
+      $next = Insert-BeforeMatch $html "<script src=`"../../product/site-links.js?v=$BizVer`" defer></script>" $earlyRe
+    }
     if ($null -eq $next) { Write-Warning "tabs/home/index.html：未找到 home.js/data 脚本，无法注入 site-links.js" }
     else { $html = $next; $injected += "tabs/home/index.html → product/site-links.js" }
   }
@@ -185,6 +255,20 @@ function Patch-HomeHtml([string]$Path) {
       $injected += "tabs/home/index.html → $($s.Needle)"
     }
   }
+
+  $standaloneCta = Ensure-AttrOnMatch $html '(?is)<a\b(?=[^>]*\bdata-discovery-link\b)(?![^>]*\bhero-action\b)(?![^>]*\bdownload-card\b)[^>]*\bclass\s*=\s*["''][^"'']*\bbtn-primary\b[^"'']*["''][^>]*>' "data-analytics-event" "online_use_click" "home standalone CTA"
+  $html = $standaloneCta.Html
+  $injected += $standaloneCta.Injected
+  $standaloneEntry = Ensure-AttrOnMatch $html '(?is)<a\b(?=[^>]*\bdata-discovery-link\b)(?![^>]*\bhero-action\b)(?![^>]*\bdownload-card\b)[^>]*\bclass\s*=\s*["''][^"'']*\bbtn-primary\b[^"'']*["''][^>]*>' "data-analytics-prop-entry" "header" "home standalone CTA"
+  $html = $standaloneEntry.Html
+  $injected += $standaloneEntry.Injected
+
+  $heroCta = Ensure-AttrOnMatch $html '(?is)<a\b[^>]*\bclass\s*=\s*["''][^"'']*\bhero-action\b[^"'']*["''][^>]*>' "data-analytics-event" "online_use_click" "home hero CTA"
+  $html = $heroCta.Html
+  $injected += $heroCta.Injected
+  $heroEntry = Ensure-AttrOnMatch $html '(?is)<a\b[^>]*\bclass\s*=\s*["''][^"'']*\bhero-action\b[^"'']*["''][^>]*>' "data-analytics-prop-entry" "banner" "home hero CTA"
+  $html = $heroEntry.Html
+  $injected += $heroEntry.Injected
 
   Write-Utf8NoBom $Path $html
   return $injected
