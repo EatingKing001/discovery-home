@@ -40,7 +40,7 @@
 
 - **PV/UV**：壳页（及独立打开的 Home）初始化后神策 `quick('autoTrack')` → `$pageview`；UV 由神策侧按匿名 `distinct_id` 统计。官网无登录，bootstrap 后 `setIdentity({ resolving: false, userId: null })`。
 - **iframe 策略**：`?embedded=1` 或 `parent!==self` 时仍初始化 DOM 点击采集，但 `startAutoTrack` 置空，避免与壳页重复 `$pageview`。独立打开 `/tabs/home/` 走完整 autoTrack。
-- **事件**：`online_use_click`（`entry`: `header` \| `banner` \| `downloads_web`）；`download_click`（`version`: `web` \| `mac_intel` \| `mac_arm`）。网页版卡片一次点击同时打两个事件（collector 单节点只能绑一个 event，故用 bootstrap 内监听）。
+- **事件**：`online_use_click`（`entry`: `header` \| `banner` \| `downloads_web`）；`download_click`（`version`: `web` \| `mac_intel` \| `mac_arm`；Mac 另带 `package_version` 来自 release-manifest）。网页版卡片一次点击同时打两个事件（collector 单节点只能绑一个 event，故用 bootstrap 内监听；无 `package_version`）。
 - **isDev**：hostname ≠ `discovery-home.intern-ai.org.cn` 时为 `true`（上报神策测试项目 `default`）。
 
 更新 vendor 包（需内网 registry）：
