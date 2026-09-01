@@ -1,0 +1,11 @@
+{
+  "name": "discovery-home-fe",
+  "private": true,
+  "description": "Static site; package.json only vendors @migo/analytics for product/vendor bundle",
+  "scripts": {
+    "vendor:analytics": "node scripts/vendor-migo-analytics.mjs"
+  },
+  "dependencies": {
+    "@migo/analytics": "1.0.0"
+  }
+}
