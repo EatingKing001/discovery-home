@@ -4,7 +4,7 @@
   const toastIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v6"></path><circle cx="12" cy="16" r="1" fill="currentColor" stroke="none"></circle></svg>';
   let toastTimer = 0;
 
-  /** @type {Record<string, Promise<string>>} */
+  /** @type {Record<string, Promise<{ url: string, packageVersion: string }>>} */
   const dmgUrlByKey = Object.create(null);
 
   function showToast(message) {
@@ -69,12 +69,15 @@
     const downloads = Array.isArray(manifest?.downloads) ? manifest.downloads : [];
     const dmg = downloads.find((item) => item && String(item.format || "").toLowerCase() === "dmg");
     const path = dmg ? String(dmg.path || "").trim() : "";
-    return path ? joinUrl(releaseBase(), path) : "";
+    const url = path ? joinUrl(releaseBase(), path) : "";
+    const packageVersion = String(manifest?.version || "").trim();
+    return { url, packageVersion };
   }
 
   function loadDmgUrl(key) {
+    const empty = { url: "", packageVersion: "" };
     const manifestUrl = manifestUrlFor(key);
-    if (!manifestUrl) return Promise.resolve("");
+    if (!manifestUrl) return Promise.resolve(empty);
 
     return fetch(manifestUrl, { credentials: "omit", cache: "no-cache" })
       .then((res) => {
@@ -82,24 +85,24 @@
         return res.json();
       })
       .then((manifest) => {
-        const url = dmgUrlFromManifest(manifest);
-        if (!url) {
+        const result = dmgUrlFromManifest(manifest);
+        if (!result.url) {
           console.info(`[discovery-home] release-manifest 无 dmg：${key}`, manifestUrl);
         }
-        return url;
+        return result;
       })
       .catch((err) => {
         console.info(`[discovery-home] 拉取 release-manifest 失败：${key}`, manifestUrl, err);
-        return "";
+        return empty;
       });
   }
 
   /** 同 key 共用 in-flight；成功结果缓存，失败可重试。 */
   function resolveDmgUrl(key) {
     if (!dmgUrlByKey[key]) {
-      dmgUrlByKey[key] = loadDmgUrl(key).then((url) => {
-        if (!url) delete dmgUrlByKey[key];
-        return url;
+      dmgUrlByKey[key] = loadDmgUrl(key).then((result) => {
+        if (!result.url) delete dmgUrlByKey[key];
+        return result;
       });
     }
     return dmgUrlByKey[key];
@@ -130,13 +133,22 @@
       showToast("请使用电脑下载");
       return;
     }
-    resolveDmgUrl(key).then((url) => {
+    resolveDmgUrl(key).then((result) => {
+      const url = result && result.url;
       if (!url) {
         console.info(`[discovery-home] 下载地址未配置：${key}`);
         showToast("下载地址未配置");
         return;
       }
       triggerBrowserDownload(url);
+      // Track only when download actually starts (manifest URL resolved).
+      const version = key === "mac-intel" ? "mac_intel" : key === "mac-arm" ? "mac_arm" : key;
+      if (window.DiscoveryAnalytics && typeof window.DiscoveryAnalytics.track === "function") {
+        const props = { version: version };
+        const packageVersion = result.packageVersion || "";
+        if (packageVersion) props.package_version = packageVersion;
+        window.DiscoveryAnalytics.track("download_click", props);
+      }
     });
   }
 
