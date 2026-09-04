@@ -33,7 +33,7 @@
 - `product/site-links.js` — 外链、下载频道/`releaseBase`、协议、合作提交 API、`basePath`（`SiteLinkConfig`；须与 `values/*.yml` ingress path 对齐，现为 `/home`）
 - `product/base-path.js` — 子路径：无尾斜杠跳转、`<base>`、壳 iframe 绝对 `src`（仅壳 `index.html`）
 - `product/cooperation-submit.js` — 合作表单可插拔提交
-- `product/downloads.js` — Mac 下载（OSS release-manifest → dmg）+ 移动端 toast + `download_click`
+- `product/downloads.js` — Mac / Windows 下载（OSS release-manifest → dmg / exe）+ 移动端 toast + `download_click`
 - `product/protocol-links.js` — Footer 协议外链注入
 - `product/cooperation-cta-hide.css` — 无 `cooperationSubmitUrl` 时隐藏申请合作 CTA；有接口后删除 CSS 与注入即可
 - `product/sync-from-design.ps1` — 设计同步 + HTML 注入（含埋点 script / `data-analytics-*`）
@@ -97,7 +97,7 @@ npx http-server -p 8023 -c-1
 ## 同步后检查清单
 
 1. **业务 script 是否仍指向 `product/`**，且位于设计 `shell.js` / `home.js` 的合理位置（site-links → base-path → shell，业务薄层在后）。
-2. **钩子是否改名**：`[data-cooperation-form]`、`[data-local-cooperation-form]`、`.footer-policy-link`、文案「平台服务协议」「个人信息保护政策」、Mac 卡 `article.download-card` 及副标题 `Intel x64` / `ARM64`、`.is-coming`。钩子变了就改 `product/`，不要改设计仓逻辑硬塞业务。
+2. **钩子是否改名**：`[data-cooperation-form]`、`[data-local-cooperation-form]`、`.footer-policy-link`、文案「平台服务协议」「个人信息保护政策」、下载卡 `article.download-card` 及文案 `Intel x64` / `ARM64` / `Windows 客户端`、`.is-coming`（Linux 仍敬请期待）。钩子变了就改 `product/`，不要改设计仓逻辑硬塞业务。若同步把 Windows 卡盖回 `is-coming`，需在正式仓改回 `is-hoverable`。
 3. **Toast 容器是否还在**：`#shell-toast`、`#home-local-cooperation-toast`。
 4. **`product/site-links.js` 是否仍为正式仓配置**（含 `basePath` / `downloads.releaseBase` / `downloadChannel` / `protocols` / `cooperationSubmitUrl`）；`basePath` 与部署 path 一致，壳是否仍引用 `product/base-path.js`。
-5. 本地起静态服务，抽测：Footer 协议新开页、Mac 卡点击（桌面走 staging manifest→dmg / 窄屏 toast「请使用电脑下载」）、合作表单未配置时 toast「提交通道未配置」且 console 有 payload。
+5. 本地起静态服务，抽测：Footer 协议新开页、Mac / Windows 卡点击（桌面走 staging manifest→dmg/exe / 窄屏 toast「请使用电脑下载」）、合作表单未配置时 toast「提交通道未配置」且 console 有 payload。
