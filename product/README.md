@@ -23,7 +23,7 @@
 | `site-links.js` | `SiteLinkConfig`（`basePath` / 外链 / 下载频道 / 协议 / 合作 API） |
 | `base-path.js` | 子路径挂载：无尾斜杠跳转、`<base>`、Home iframe 绝对 `src`（壳 `index.html`） |
 | `cooperation-submit.js` | 合作表单提交 |
-| `downloads.js` | Mac 下载：按频道拉 OSS `release-manifest` 取 dmg；下载真正开始时 `download_click` |
+| `downloads.js` | Mac / Windows 下载：按频道拉 OSS `release-manifest` 取 dmg / exe；下载真正开始时 `download_click` |
 | `protocol-links.js` | Footer 协议外链 |
 | `cooperation-cta-hide.css` | 无 `cooperationSubmitUrl` 时隐藏 logo 墙下申请合作 CTA；有接口后删除本文件及 HTML 注入即可 |
 | `sync-from-design.ps1` | 设计同步 + HTML 注入 |
@@ -40,7 +40,8 @@
 
 - **PV/UV**：壳页（及独立打开的 Home）初始化后神策 `quick('autoTrack')` → `$pageview`；UV 由神策侧按匿名 `distinct_id` 统计。官网无登录，bootstrap 后 `setIdentity({ resolving: false, userId: null })`。
 - **iframe 策略**：`?embedded=1` 或 `parent!==self` 时仍初始化 DOM 点击采集，但 `startAutoTrack` 置空，避免与壳页重复 `$pageview`。独立打开 `/tabs/home/` 走完整 autoTrack。
-- **事件**：`online_use_click`（`entry`: `header` \| `banner` \| `downloads_web`）；`download_click`（`version`: `web` \| `mac_intel` \| `mac_arm`；Mac 另带 `package_version` 来自 release-manifest）。网页版卡片一次点击同时打两个事件（collector 单节点只能绑一个 event，故用 bootstrap 内监听；无 `package_version`）。
+- **事件**：`online_use_click`（`entry`: `header` \| `banner` \| `downloads_web`）；`download_click`（`version`: `web` \| `mac_intel` \| `mac_arm` \| `windows`；Mac / Windows 另带 `package_version` 来自 release-manifest）。网页版卡片一次点击同时打两个事件（collector 单节点只能绑一个 event，故用 bootstrap 内监听；无 `package_version`）。
+- **客户端包路径**：`{releaseBase}{arch}/{channel}/release-manifest.json`；arch 为 `mac_x64` / `mac_arm` / `win`，channel 为 `staging` | `prod`；安装包 format 分别为 `dmg` / `exe`。
 - **isDev**：hostname ≠ `discovery-home.intern-ai.org.cn` 时为 `true`（上报神策测试项目 `default`）。
 
 更新 vendor 包（需内网 registry）：
@@ -65,6 +66,8 @@ npm run vendor:analytics
 
 - `[data-cooperation-form]` / `[data-local-cooperation-form]`
 - `.footer-policy-link` 与文案「平台服务协议」「个人信息保护政策」
-- `article.download-card` + `Intel x64` / `ARM64` / `.is-coming`
+- `article.download-card` + `Intel x64` / `ARM64` / `Windows 客户端` / `.is-coming`（Linux 仍 `is-coming`）
 - Toast：`#shell-toast`、`#home-local-cooperation-toast`
 - 埋点：`.site-header-action`、`.hero-action`、`a.download-card[data-discovery-link]`
+
+设计仓若仍把 Windows 卡标成 `is-coming`，同步后需在正式仓把该卡改回 `is-hoverable`（与 Mac 同结构），否则 `downloads.js` 不会绑定 Win 下载。
