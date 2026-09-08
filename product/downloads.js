@@ -5,7 +5,7 @@
   let toastTimer = 0;
 
   /** @type {Record<string, Promise<{ url: string, packageVersion: string }>>} */
-  const dmgUrlByKey = Object.create(null);
+  const packageUrlByKey = Object.create(null);
 
   function showToast(message) {
     const toast = document.getElementById("home-local-cooperation-toast") || document.getElementById("shell-toast");
@@ -38,7 +38,13 @@
   function archFolder(key) {
     if (key === "mac-intel") return "mac_x64";
     if (key === "mac-arm") return "mac_arm";
+    if (key === "win") return "win";
     return "";
+  }
+
+  function packageFormatFor(key) {
+    if (key === "win") return "exe";
+    return "dmg";
   }
 
   /**
@@ -65,16 +71,17 @@
     return joinUrl(releaseBase(), folder + "/" + resolveDownloadChannel() + "/release-manifest.json");
   }
 
-  function dmgUrlFromManifest(manifest) {
+  function packageUrlFromManifest(manifest, key) {
+    const format = packageFormatFor(key);
     const downloads = Array.isArray(manifest?.downloads) ? manifest.downloads : [];
-    const dmg = downloads.find((item) => item && String(item.format || "").toLowerCase() === "dmg");
-    const path = dmg ? String(dmg.path || "").trim() : "";
+    const item = downloads.find((entry) => entry && String(entry.format || "").toLowerCase() === format);
+    const path = item ? String(item.path || "").trim() : "";
     const url = path ? joinUrl(releaseBase(), path) : "";
     const packageVersion = String(manifest?.version || "").trim();
     return { url, packageVersion };
   }
 
-  function loadDmgUrl(key) {
+  function loadPackageUrl(key) {
     const empty = { url: "", packageVersion: "" };
     const manifestUrl = manifestUrlFor(key);
     if (!manifestUrl) return Promise.resolve(empty);
@@ -85,9 +92,9 @@
         return res.json();
       })
       .then((manifest) => {
-        const result = dmgUrlFromManifest(manifest);
+        const result = packageUrlFromManifest(manifest, key);
         if (!result.url) {
-          console.info(`[discovery-home] release-manifest 无 dmg：${key}`, manifestUrl);
+          console.info(`[discovery-home] release-manifest 无 ${packageFormatFor(key)}：${key}`, manifestUrl);
         }
         return result;
       })
@@ -98,23 +105,25 @@
   }
 
   /** 同 key 共用 in-flight；成功结果缓存，失败可重试。 */
-  function resolveDmgUrl(key) {
-    if (!dmgUrlByKey[key]) {
-      dmgUrlByKey[key] = loadDmgUrl(key).then((result) => {
-        if (!result.url) delete dmgUrlByKey[key];
+  function resolvePackageUrl(key) {
+    if (!packageUrlByKey[key]) {
+      packageUrlByKey[key] = loadPackageUrl(key).then((result) => {
+        if (!result.url) delete packageUrlByKey[key];
         return result;
       });
     }
-    return dmgUrlByKey[key];
+    return packageUrlByKey[key];
   }
 
-  function resolveMacCards() {
+  function resolveDownloadCards() {
     const cards = Array.from(document.querySelectorAll("article.download-card.is-hoverable:not(.is-coming)"));
     const intel = cards.find((card) => /Intel\s*x64/i.test(card.textContent || ""));
     const arm = cards.find((card) => /ARM64/i.test(card.textContent || ""));
+    const win = cards.find((card) => /Windows\s*客户端/i.test(card.textContent || ""));
     return [
       { el: intel, key: "mac-intel" },
-      { el: arm, key: "mac-arm" }
+      { el: arm, key: "mac-arm" },
+      { el: win, key: "win" }
     ].filter((item) => item.el);
   }
 
@@ -128,12 +137,19 @@
     anchor.remove();
   }
 
-  function onMacCardActivate(key) {
+  function trackVersionFor(key) {
+    if (key === "mac-intel") return "mac_intel";
+    if (key === "mac-arm") return "mac_arm";
+    if (key === "win") return "windows";
+    return key;
+  }
+
+  function onDownloadCardActivate(key) {
     if (isMobileClient()) {
       showToast("请使用电脑下载");
       return;
     }
-    resolveDmgUrl(key).then((result) => {
+    resolvePackageUrl(key).then((result) => {
       const url = result && result.url;
       if (!url) {
         console.info(`[discovery-home] 下载地址未配置：${key}`);
@@ -142,9 +158,8 @@
       }
       triggerBrowserDownload(url);
       // Track only when download actually starts (manifest URL resolved).
-      const version = key === "mac-intel" ? "mac_intel" : key === "mac-arm" ? "mac_arm" : key;
       if (window.DiscoveryAnalytics && typeof window.DiscoveryAnalytics.track === "function") {
-        const props = { version: version };
+        const props = { version: trackVersionFor(key) };
         const packageVersion = result.packageVersion || "";
         if (packageVersion) props.package_version = packageVersion;
         window.DiscoveryAnalytics.track("download_click", props);
@@ -161,18 +176,18 @@
 
     card.addEventListener("click", (event) => {
       event.preventDefault();
-      onMacCardActivate(key);
+      onDownloadCardActivate(key);
     });
 
     card.addEventListener("keydown", (event) => {
       if (event.key !== "Enter" && event.key !== " ") return;
       event.preventDefault();
-      onMacCardActivate(key);
+      onDownloadCardActivate(key);
     });
   }
 
   function init() {
-    resolveMacCards().forEach(({ el, key }) => bindCard(el, key));
+    resolveDownloadCards().forEach(({ el, key }) => bindCard(el, key));
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
