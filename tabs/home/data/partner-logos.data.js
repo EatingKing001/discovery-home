@@ -17,8 +17,17 @@
     ]
   };
 
-  global.HomePartnerLogos = Object.fromEntries(Object.entries(names).map(([line, entries]) => [line, entries.map((name) => ({
+  const darkModeNames = new Set([
+    "清华大学", "复旦大学", "上海交通大学", "同济大学", "南京大学", "苏州大学", "上海科技大学", "哥伦比亚大学",
+    "中国地震局", "厦门大学", "中国科学技术大学", "中国科学院物理研究所"
+  ]);
+
+  global.HomePartnerLogos = Object.fromEntries(Object.entries(names).map(([line, entries]) => [line, entries.map((name) => {
+    const logo = {
       name,
-      src: `../../shared/assets/orgs/partners/logo-${name}.svg`
-  }))]));
+      src: `../../shared/assets/orgs/partners/logo-${name}.svg?v=20260901-transparent1`
+    };
+    if (darkModeNames.has(name)) logo.darkSrc = `../../shared/assets/orgs/partners/logo-${name}-dark.svg?v=20260904-partner-dark2`;
+    return logo;
+  })]));
 })(window);

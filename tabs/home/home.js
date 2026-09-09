@@ -198,6 +198,7 @@
   const partnerPixelsPerSecond = 22;
   const partnerWall = document.querySelector(".partner-wall");
   let partnerTracksInitialized = false;
+  const currentTheme = () => document.documentElement.getAttribute("data-theme");
 
   function initializePartnerTracks() {
     if (partnerTracksInitialized) return;
@@ -222,7 +223,11 @@
         image.loading = "lazy";
         image.decoding = "async";
         image.fetchPriority = "low";
-        image.src = logo.src;
+        if (logo.darkSrc) {
+          image.dataset.themeSrcLight = logo.src;
+          image.dataset.themeSrcDark = logo.darkSrc;
+          image.src = currentTheme() === "dark" ? logo.darkSrc : logo.src;
+        } else image.src = logo.src;
         const name = document.createElement("span");
         name.className = "partner-logo-name";
         name.textContent = logo.name;
@@ -426,9 +431,12 @@
   }
 
   function renderCasePicture(src, alt) {
-    const base = String(src).replace(/\.png(?:\?.*)?$/, "");
+    const source = String(src);
+    const match = source.match(/^(.*?)(\.png)(\?.*)?$/);
+    const base = match?.[1] || source.replace(/\.png$/, "");
+    const query = match?.[3] || "";
     const sizes = "(max-width: 767px) calc(100vw - 40px), 720px";
-    return `<picture><source type="image/avif" srcset="${base}@1x.avif 1x, ${base}@2x.avif 2x" sizes="${sizes}"><source type="image/webp" srcset="${base}@1x.webp 1x, ${base}@2x.webp 2x" sizes="${sizes}"><img src="${base}@1x.png" srcset="${base}@1x.png 1x, ${base}@2x.png 2x" sizes="${sizes}" alt="${alt}" width="720" height="405" loading="lazy" decoding="async" fetchpriority="low"></picture>`;
+    return `<picture><source type="image/avif" srcset="${base}@1x.avif${query} 1x, ${base}@2x.avif${query} 2x" sizes="${sizes}"><source type="image/webp" srcset="${base}@1x.webp${query} 1x, ${base}@2x.webp${query} 2x" sizes="${sizes}"><img src="${base}@1x.png${query}" srcset="${base}@1x.png${query} 1x, ${base}@2x.png${query} 2x" sizes="${sizes}" alt="${alt}" width="720" height="405" loading="lazy" decoding="async" fetchpriority="low"></picture>`;
   }
 
   function renderCase(index, focusTab = false, requestedDirection = 0) {

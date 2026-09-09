@@ -98,6 +98,18 @@
   --component-motion-toast: 220ms ease;
 }
 
+:root[data-theme="dark"] {
+  --component-overlay-bg: color-mix(in srgb, var(--bg) 82%, transparent);
+  --component-dialog-shadow: 0 20px 60px -4px rgb(0 0 0 / 56%);
+  --component-toast-shadow: 0 12px 32px rgb(0 0 0 / 48%);
+}
+
+:root[data-theme="dark"] .app-toast {
+  border-color: var(--line);
+  background: var(--bg-soft-1);
+  color: var(--ink);
+}
+
 /* Buttons: sizes, hierarchy levels, text actions, danger and disabled states. */
 .btn,
 .btn-primary,
@@ -113,18 +125,25 @@
 }
 
 .btn,
+.btn-primary,
+.btn-text,
+.btn-link,
+.tm-btn {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 24px;
+}
+
+.btn,
 .btn-primary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
   height: var(--component-control-height-md);
-  padding: 7px 14px;
-  border-radius: var(--radius);
+  padding: 5px 14px;
+  border-radius: var(--radius-card);
   box-shadow: none;
-  font-size: 13px;
-  font-weight: 500;
-  line-height: 16px;
   letter-spacing: 0;
   cursor: pointer;
   transition: background-color var(--component-motion-fast), border-color var(--component-motion-fast), opacity var(--component-motion-fast);
@@ -167,9 +186,9 @@
 }
 
 /*
- * Figma text button: nodes 242:63219 (default) and 242:63221 (hover).
- * Natural width is text width + 24px horizontal padding; the reference copy
- * therefore renders at 84px without hard-coding a content-specific width.
+ * The original text-button evidence is nodes 242:63219 (default) and
+ * 242:63221 (hover). Typography follows the current shared Button baseline;
+ * natural width remains text width + 24px horizontal padding.
  */
 .btn-text {
   display: inline-flex;
@@ -183,9 +202,6 @@
   background: var(--component-text-button-bg);
   color: var(--component-text-button-fg);
   box-shadow: none;
-  font-size: 15px;
-  font-weight: 400;
-  line-height: 24px;
   letter-spacing: 0;
   cursor: pointer;
   transition: background-color var(--component-motion-fast);
@@ -217,9 +233,6 @@
   background: transparent;
   color: var(--ink);
   box-shadow: none;
-  font-size: 15px;
-  font-weight: 400;
-  line-height: 24px;
   letter-spacing: 0;
   cursor: pointer;
   text-decoration: none;
@@ -275,6 +288,7 @@
 .btn-size-sm {
   min-height: var(--component-control-height-sm);
   height: var(--component-control-height-sm);
+  padding-block: 3px;
   padding-inline: 12px;
 }
 
@@ -301,7 +315,7 @@
   min-height: var(--component-control-height-md);
   padding: 0;
   border: 1px solid transparent;
-  border-radius: var(--radius);
+  border-radius: var(--radius-card);
   background: transparent;
   color: var(--component-button-fg);
   box-shadow: none;
@@ -390,7 +404,7 @@
   height: 28px;
   padding: 0;
   border: 0;
-  border-radius: var(--radius);
+  border-radius: var(--radius-card);
   background: transparent;
   color: var(--muted);
   cursor: pointer;
@@ -697,10 +711,7 @@ fieldset.tm-field {
   justify-content: center;
   height: var(--component-control-height-md);
   padding: 0 14px;
-  border-radius: var(--radius);
-  font-size: 13px;
-  font-weight: 500;
-  line-height: 16px;
+  border-radius: var(--radius-card);
   letter-spacing: 0.02em;
   cursor: pointer;
   transition: background-color var(--component-motion-fast), color var(--component-motion-fast), border-color var(--component-motion-fast), opacity var(--component-motion-fast);

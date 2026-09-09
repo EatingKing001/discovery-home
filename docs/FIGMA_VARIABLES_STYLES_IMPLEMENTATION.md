@@ -129,9 +129,9 @@ Text Style 的字体家族、字重、字号、行高和字间距必须按 Figma
 
 ### 4.2 Mode 与 Alias
 
-- 当前尚未完整读取 Variable Collection 的 Modes 和 Alias 链，因此不预设 Light、Dark、High Contrast 或 Density。
-- 已确认的默认值可以先写入 `:root`；只有 Figma 明确存在其他 Mode 时，才增加对应的主题属性作用域。
-- 如果确认存在 Dark Mode，使用明确的 `[data-theme="dark"]`，由 shell 管理主题属性。
+- 当前尚未完整读取 Variable Collection 的 Modes 和 Alias 链；正式 Dark 值是用户批准的项目代码映射，不登记为已确认的 Figma Mode。
+- 已确认的默认值写入 `:root`；项目代码 Dark 映射写入共享 `:root[data-theme="dark"]`，保持与 Light 相同的语义变量名。以后取得 Figma Mode / Alias 证据时再逐项核对，不能倒推设计资产。
+- 主题属性由 `shared/js/theme.js` 管理，shell、模块页与 Design System 共同消费；模块只能补充私有语义变量的 Dark 对应值。
 - 其他业务 Mode 使用明确的 `data-theme` 或 `data-density`，不能用页面 class 隐式覆盖。
 - Figma Alias 在 CSS 中继续引用目标 Token；禁止把 Alias 解析成重复的字面值。
 

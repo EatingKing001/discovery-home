@@ -55,6 +55,8 @@
 }
 
 :root {
+  color-scheme: light;
+
   /* Existing core color Variables. */
   --paper: #ffffff;
   --bg: #fdfcf8;
@@ -138,6 +140,53 @@
   --layout-page-gutter: 20px;
   --layout-section-space: 64px;
   --layout-text-measure: 72ch;
+}
+
+/*
+ * Product dark mode. Core values mirror the approved Design System semantic
+ * colors one-to-one. The additional surface and auxiliary values complete
+ * code-only colors that do not yet exist as Figma Variables.
+ */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --paper: #1a1815;
+  --bg: #1a1815;
+  --ink: #ebe6dc;
+  --ink-soft: #b8b1a3;
+  --bg-soft: #252320;
+  --bg-soft-1: #1f1d1a;
+  --line: #3a3631;
+  --muted: #8a8478;
+  --muted-2: #5a554c;
+  --line-soft: #3a414c;
+  --rule-soft: #353b45;
+  --dot: #252729;
+  --paper-warm: var(--bg-soft);
+  --aux-cyan-3: #69cbd3;
+  --aux-violet-2: #c9ace0;
+  --aux-mint-4: #54b695;
+  --vermilion-1: #151f2c;
+  --vermilion-2: #1b2d43;
+  --vermilion-3: #294665;
+  --vermilion-4: #4f779f;
+  --vermilion-5: #aacaf0;
+  --vermilion-6: #8db8e9;
+  --vermilion-7: #6f9bd2;
+  --success: #b7c87d;
+  --success-soft: #87965b;
+  --success-bg: #242a1c;
+  --success-deep: #d2df9b;
+  --warning: #e8c27a;
+  --warning-soft: #b28a4f;
+  --warning-bg: #33291a;
+  --warning-deep: #f4d18a;
+  --error: #ffb4ab;
+  --error-soft: #d37a78;
+  --error-bg: #3b2021;
+  --error-deep: #ff8a80;
+  --rec-red: #ff887a;
+  --ai-tint: #172333;
+  --ai-tint-rule: #496985;
 }
 
 @media (min-width: 768px) {

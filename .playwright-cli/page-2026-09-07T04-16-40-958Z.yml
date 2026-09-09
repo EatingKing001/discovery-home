@@ -1,0 +1,449 @@
+- generic [active] [ref=e1]:
+  - main [ref=e2]:
+    - region [ref=e3]:
+      - generic [ref=e4]:
+        - generic [ref=e5]: 上海人工智能实验室牵头建设 · 国家级科研基础设施
+        - heading "端到端全链路 AI 科研工作台" [level=1] [ref=e6]
+        - paragraph [ref=e7]: 面向重要复杂科研任务的可信科研执行平台，以学科模型和专业能力为基础，贯通数据、计算与实验，将每一次执行沉淀为可追溯、可复现、可持续迭代的科研资产
+        - link "在线使用" [ref=e8] [cursor=pointer]:
+          - /url: https://discovery.intern-ai.org.cn/
+      - generic [ref=e9]:
+        - img "多学科专业能力围绕科研任务按需调用" [ref=e11]
+        - img "一个平台从科学问题推进到实验验证" [ref=e13]
+        - img "每一步有据可查，每个结论都能复核" [ref=e15]
+        - img "书生·端砚科研工作台界面" [ref=e22]
+    - region [ref=e23]:
+      - generic [ref=e24]:
+        - generic [ref=e25]:
+          - heading "平台核心优势" [level=2] [ref=e26]
+          - paragraph [ref=e27]: 既懂学科、也贯通科研全链路，将每一步执行沉淀为可复用、可追溯的科研产物，并以安全可控、开放互联的体系支撑复杂科研任务
+        - generic [ref=e28]:
+          - article [ref=e29]:
+            - generic [ref=e30]:
+              - heading "全链贯通" [level=3] [ref=e31]
+              - paragraph [ref=e32]: 从科学问题、计算设计持续推进到实验验证和反馈迭代
+            - img "全链科研工作流界面" [ref=e34]
+          - article [ref=e35]:
+            - generic [ref=e36]:
+              - heading "学科纵深" [level=3] [ref=e37]
+              - paragraph [ref=e38]: 理解专业知识，更掌握领域中的数据、工具、标准方法和研究范式
+            - img "学科知识与工具界面" [ref=e40]
+          - article [ref=e41]:
+            - generic [ref=e42]:
+              - heading "产物原生" [level=3] [ref=e43]
+              - paragraph [ref=e44]: 交付图表、数据、代码、结构文件、实验方案和研究报告，而不是一段不可复用的回答
+            - img "科研产物生成界面" [ref=e46]
+          - article [ref=e47]:
+            - generic [ref=e48]:
+              - heading "科研证据链" [level=3] [ref=e49]
+              - paragraph [ref=e50]: 证据随执行产生，产物与来源绑定，关键结论可追溯、可复核
+            - img "科研证据链界面" [ref=e52]
+          - article [ref=e53]:
+            - generic [ref=e54]:
+              - heading "安全可控" [level=3] [ref=e55]
+              - paragraph [ref=e56]: 数据尽量留在科研现场，外部访问经过授权，代码与工具在隔离环境中执行
+            - img "安全权限与受控执行界面" [ref=e58]
+          - article [ref=e59]:
+            - generic [ref=e60]:
+              - heading "生态开放" [level=3] [ref=e61]
+              - paragraph [ref=e62]: 通过标准接口和协议接入模型、数据、工具、智能体、算力和实验设施
+            - img "科研开放生态界面" [ref=e64]
+    - region [ref=e65]:
+      - generic [ref=e66]:
+        - generic [ref=e67]:
+          - heading "全链贯通" [level=2] [ref=e68]
+          - paragraph [ref=e69]: 从科学问题、计算设计持续推进到实验验证和反馈迭代
+        - generic [ref=e71]:
+          - generic [ref=e72]:
+            - heading "问题与假设" [level=3] [ref=e73]
+            - paragraph [ref=e74]:
+              - generic [ref=e75]: 提出问题
+              - generic [ref=e78]: 文献调研
+              - generic [ref=e81]: 假设生成
+          - generic [ref=e82]:
+            - heading "实验方案规划" [level=3] [ref=e83]
+            - paragraph [ref=e84]: 方案设计
+          - generic [ref=e85]:
+            - heading "实验验证分析" [level=3] [ref=e86]
+            - paragraph [ref=e87]:
+              - generic [ref=e88]: 湿实验
+              - generic [ref=e91]: 实验数据获取
+              - generic [ref=e94]: 结果分析
+          - generic [ref=e95]:
+            - heading "实验成果输出" [level=3] [ref=e96]
+            - paragraph [ref=e97]: 结果可靠性判断
+          - strong [ref=e99]: 成果发布
+          - generic [ref=e109]: 不可靠
+          - generic [ref=e110]:
+            - heading "实验迭代" [level=3] [ref=e111]
+            - paragraph [ref=e112]:
+              - generic [ref=e113]: 再次验证
+              - generic [ref=e116]: 方案修正
+    - region [ref=e117]:
+      - generic [ref=e118]:
+        - generic [ref=e119]:
+          - heading "学科纵深" [level=2] [ref=e120]
+          - paragraph [ref=e121]: 理解专业知识，更掌握领域中的数据、工具、标准方法和研究范式
+        - generic [ref=e122]:
+          - generic "六大学科领域" [ref=e123]:
+            - generic [ref=e124]:
+              - generic [ref=e125]: 六大学科领域
+              - generic [ref=e128]: 地球科学
+              - generic [ref=e130]: 生命科学
+              - generic [ref=e132]: 物质科学
+              - generic [ref=e134]: 物理
+              - generic [ref=e136]: 数学
+              - generic [ref=e138]: 神经科学
+          - generic [ref=e140]:
+            - generic [ref=e141]:
+              - heading "科研应用" [level=3] [ref=e142]
+              - generic [ref=e143]:
+                - article [ref=e144]:
+                  - generic:
+                    - generic:
+                      - img "蛋白质结构插图"
+                  - generic [ref=e145]:
+                    - heading "蛋白质检索引擎" [level=4] [ref=e146]
+                    - paragraph [ref=e147]: VenusPod 构建全球最大 150 亿序列数据集，破解 AI 蛋白质设计数据瓶颈
+                  - generic [ref=e148]: 上海交通大学
+                - article [ref=e150]:
+                  - generic:
+                    - generic:
+                      - img "地球系统插图"
+                  - generic [ref=e151]:
+                    - heading "地球科学家" [level=4] [ref=e152]
+                    - paragraph [ref=e153]: 解析地质、气候与环境数据，探索地球系统的奥秘
+                  - generic [ref=e154]: 上海交通大学
+                - article [ref=e156]:
+                  - generic:
+                    - generic:
+                      - img "化学实验器材插图"
+                  - generic [ref=e157]:
+                    - heading "化学科研助手" [level=4] [ref=e158]
+                    - paragraph [ref=e159]: 助你快速设计实验、分析数据，提升化学研究效率
+                  - generic [ref=e160]: 上海交通大学
+            - generic [ref=e162]:
+              - heading "科研数据" [level=3] [ref=e163]
+              - generic [ref=e164]:
+                - article [ref=e165]:
+                  - img "开放靶标平台数据插图" [ref=e168]
+                  - generic [ref=e169]:
+                    - heading "开放靶标平台 OTP" [level=4] [ref=e170]
+                    - paragraph [ref=e171]: 开放靶标平台（Open Targets Platform）是一个整合了基因组学、化学和药物数据的综合性平台，旨在加速药物靶标发现和验证。
+                  - generic [ref=e172]: 上海人工智能实验室
+                - article [ref=e175]:
+                  - img "单细胞转录组数据插图" [ref=e178]
+                  - generic [ref=e179]:
+                    - heading "CZ CELLxGENE 单细胞转录组数据库" [level=4] [ref=e180]
+                    - paragraph [ref=e181]: CZ CELLxGENE 是一个专注于单细胞转录组学数据的开放平台，提供高质量的单细胞 RNA 测序数据集，支持科研人员进行细胞类型鉴定、基因表达分析和生物标记物发现等研究。
+                  - generic [ref=e182]: 上海人工智能实验室
+                - article [ref=e185]:
+                  - img "NCI 基因组数据插图" [ref=e188]
+                  - generic [ref=e189]:
+                    - heading "NCI 基因组数据共享平台 GDC" [level=4] [ref=e190]
+                    - paragraph [ref=e191]: NCI Genomic Data Commons (GDC) 是美国国家癌症研究所（NCI）建立的基因组数据共享平台，旨在整合和标准化癌症基因组数据，为研究人员提供高质量的数据资源。
+                  - generic [ref=e192]: 上海人工智能实验室
+            - generic [ref=e195]:
+              - heading "科研工具" [level=3] [ref=e196]
+              - generic [ref=e197]:
+                - article [ref=e198]:
+                  - generic [ref=e199]:
+                    - heading "multiomics_integration" [level=4] [ref=e200]
+                    - paragraph [ref=e202]: 多组学整合 - 整合多组学：基因表达、蛋白质数据、途径富集和代谢途径。使用此技能进行多组学任务，包括获取跨癌症的基因表达、通过加入获取 uniprotkb 条目、获取功能富集 kegg 获取。
+                  - generic [ref=e203]: 上海人工智能实验室
+                - article [ref=e206]:
+                  - generic [ref=e207]:
+                    - heading "atmospheric-science-calculations" [level=4] [ref=e208]
+                    - paragraph [ref=e210]: 计算气象和气候科学的大气参数，包括科里奥利参数、地转风、热量指数、位温和露点。
+                  - generic [ref=e211]: 上海人工智能实验室
+                - article [ref=e214]:
+                  - generic [ref=e215]:
+                    - heading "nuwa-skill" [level=4] [ref=e216]
+                    - paragraph [ref=e218]: 女娲学习方法论 Skill。它解决的是知识工作者输入过多、输出过少、读了很多论文但无法形成知识体系、无法持续输出的痛点，强调先建框架再填内容。
+                  - generic [ref=e219]: 上海人工智能实验室
+    - region [ref=e222]:
+      - generic [ref=e223]:
+        - generic [ref=e224]:
+          - heading "产物原生" [level=2] [ref=e225]
+          - paragraph [ref=e226]: 交付图表、数据、代码、结构文件、实验方案和研究报告，而不是一段不可复用的回答
+        - generic [ref=e227]:
+          - article [ref=e228]:
+            - img "文献综述及引用网络" [ref=e231]
+            - generic [ref=e232]:
+              - heading "文献综述及引用网络" [level=3] [ref=e233]
+              - paragraph [ref=e234]: 构建可追溯知识地图，梳理证据层级与研究演进；识别共识、争议及证据缺口，辅助选题、问题收敛与假设生成
+          - article [ref=e235]:
+            - img "数据统计结果" [ref=e238]
+            - generic [ref=e239]:
+              - heading "数据统计结果" [level=3] [ref=e240]
+              - paragraph [ref=e241]: 将科研问题转化为可检验定量结论，体现效应大小、不确定性与稳健性，支撑组间对比、风险研判及后续实验决策阈值设置
+          - article [ref=e242]:
+            - img "论文插图" [ref=e245]
+            - generic [ref=e246]:
+              - heading "论文插图" [level=3] [ref=e247]
+              - paragraph [ref=e248]: 交付图表、数据、代码、结构文件、实验方案和研究报告，而不是一段不可复用的回答
+          - article [ref=e249]:
+            - img "分析代码" [ref=e252]
+            - generic [ref=e253]:
+              - heading "分析代码" [level=3] [ref=e254]
+              - paragraph [ref=e255]: 沉淀可审查、复现、迁移的方法资产，记录依赖、参数与版本，支持复跑及二次分析
+          - article [ref=e256]:
+            - img "实验设计" [ref=e259]
+            - generic [ref=e260]:
+              - heading "实验设计" [level=3] [ref=e261]
+              - paragraph [ref=e262]: 将分析结论转为验证路径，明确变量、对照、指标与标准，提升因果识别与实验效率
+          - article [ref=e263]:
+            - img "仿真结果" [ref=e266]
+            - generic [ref=e267]:
+              - heading "仿真结果" [level=3] [ref=e268]
+              - paragraph [ref=e269]: 探索难实验的结构与机制，对比方案生成预测，缩小实验空间、降低试错成本
+          - article [ref=e270]:
+            - img "论文草稿 / 技术报告" [ref=e273]
+            - generic [ref=e274]:
+              - heading "论文草稿 / 技术报告" [level=3] [ref=e275]
+              - paragraph [ref=e276]: 整合证据、方法与结论形成科研叙事，支持协作评审，沉淀组织知识资产
+    - region [ref=e277]:
+      - generic [ref=e278]:
+        - generic [ref=e279]:
+          - heading "科研证据链" [level=2] [ref=e280]
+          - paragraph [ref=e281]: 证据随执行产生，产物与来源绑定，关键结论可追溯、可复核
+        - generic [ref=e282]:
+          - tablist "科研证据链产物" [ref=e283]:
+            - tab "文献综述 关联原始文献、引用位置；保留证据摘录及其与综述结论的对应关系" [selected] [ref=e284] [cursor=pointer]:
+              - strong [ref=e285]: 文献综述
+              - generic [ref=e286]: 关联原始文献、引用位置；保留证据摘录及其与综述结论的对应关系
+            - tab [ref=e288] [cursor=pointer]:
+              - strong [ref=e289]: 数据统计结果
+            - tab [ref=e290] [cursor=pointer]:
+              - strong [ref=e291]: 论文插图
+            - tab [ref=e292] [cursor=pointer]:
+              - strong [ref=e293]: 分析代码
+            - tab [ref=e294] [cursor=pointer]:
+              - strong [ref=e295]: 实验设计
+          - tabpanel "文献综述 关联原始文献、引用位置；保留证据摘录及其与综述结论的对应关系" [ref=e297]:
+            - generic "原始论文与综述结论之间的引用证据链" [ref=e298]:
+              - article [ref=e299]:
+                - heading "原始论文 [10]" [level=3] [ref=e300]
+              - article [ref=e312]:
+                - heading "原始论文 [12]" [level=3] [ref=e313]
+              - article [ref=e322]:
+                - heading "原始论文 [10]" [level=3] [ref=e323]
+              - article [ref=e335]:
+                - heading "综述结论" [level=3] [ref=e336]
+                - generic [aria-hidden] [ref=e337]:
+                  - paragraph [ref=e338]
+                  - paragraph [ref=e340]:
+                    - emphasis [ref=e342]: "[01]"
+                  - paragraph [ref=e344]
+                  - paragraph [ref=e346]
+                  - paragraph [ref=e348]:
+                    - emphasis [ref=e350]: "[05]"
+                    - emphasis [ref=e351]: "[10]"
+                  - paragraph [ref=e352]
+                - strong [ref=e354]:
+                  - text: 关键结论
+                  - emphasis [ref=e355]: "[12]"
+                  - emphasis [ref=e356]: "[18]"
+              - generic [ref=e357]:
+                - generic [aria-hidden] [ref=e358]: ✓
+                - text: 引用可回溯 · 结论可复核
+    - region [ref=e359]:
+      - generic [ref=e360]:
+        - generic [ref=e361]:
+          - heading "安全可控" [level=2] [ref=e362]
+          - paragraph [ref=e363]: 数据尽量留在科研现场，外部访问经过授权，代码与工具在隔离环境中执行
+        - figure [ref=e364]:
+          - img "安全可控架构：默认不出域、出域必受控、执行必隔离，并支持最小必要上下文传输、访问审计与机构级权限" [ref=e366]:
+            - generic [ref=e367]: 默认不出域
+            - generic [ref=e371]: 出域必受控
+            - generic [ref=e375]: 执行必隔离
+            - generic [ref=e379]: 本地文件、软件与计算资源连接
+            - generic [ref=e380]: 产物版本与全过程留痕
+            - generic [ref=e381]: 最小必要上下文传输
+            - generic [ref=e382]: 外部资源授权及访问审计
+            - generic [ref=e383]: 隔离的代码和工具执行环境
+            - generic [ref=e384]: 课题、团队和机构级权限
+    - region [ref=e385]:
+      - generic [ref=e386]:
+        - generic [ref=e387]:
+          - heading "生态开放" [level=2] [ref=e388]
+          - paragraph [ref=e389]: 通过标准接口和协议接入模型、数据、工具、智能体、算力和实验设施
+        - img "生态开放架构：科学算力、科学数据、科学模型、科研智能体、科学工具和科学仪器与自主实验室统一接入、统一编排至书生·端砚" [ref=e390]:
+          - generic [aria-hidden] [ref=e392]:
+            - generic [ref=e414]: 科学算力
+            - generic [ref=e418]: 科学数据
+            - generic [ref=e422]: 科学模型
+            - generic [ref=e426]: 科研智能体
+            - generic [ref=e430]: 科学工具
+            - generic [ref=e434]: 科学仪器与自主实验室
+            - generic [ref=e439]: 统一接入 统一编排
+    - region [ref=e443]:
+      - generic [ref=e444]:
+        - generic [ref=e445]:
+          - heading "科研基座" [level=2] [ref=e446]
+          - paragraph [ref=e447]: Intern-S2 主导科学推理与任务执行，World Model 驱动实验状态理解与结果推演，SCP 统筹资源连接、流程编排与协作治理
+        - generic [ref=e448]:
+          - article [ref=e449]:
+            - generic [ref=e450]:
+              - heading "科学多模态大模型 Intern-S2" [level=3] [ref=e451]: 科学多模态大模型Intern-S2
+              - paragraph [ref=e452]: 千亿级参数科学大模型支撑科研从问答走向复杂信息理解、长程任务组织、工具验证与持续迭代。
+            - list [ref=e453]:
+              - listitem [ref=e454]:
+                - strong [ref=e455]: 跨模态统一表征
+                - generic [ref=e456]: 统一理解文本、图表、公式、表格与长时序，整合异构科研证据。
+              - listitem [ref=e457]:
+                - strong [ref=e458]: 长程科学推理
+                - generic [ref=e459]: 拆解目标、规划流程，调用代码、数据库、科学工具与算力执行任务。
+              - listitem [ref=e460]:
+                - strong [ref=e461]: 强化学习与自我进化
+                - generic [ref=e462]: 通过可验证强化学习、智能体训练与自演化任务生成，持续提升专业适应性。
+          - article [ref=e463]:
+            - generic [ref=e464]:
+              - heading "世界模型 World Model" [level=3] [ref=e465]: 世界模型World Model
+              - paragraph [ref=e466]: 贯通干湿实验，将大语言模型生成的方案转化为真实验证，并基于实验结果持续优化方案。
+            - list [ref=e467]:
+              - listitem [ref=e468]:
+                - strong [ref=e469]: 统一理解实验状态
+                - generic [ref=e470]: 融合多模态实验信息，判断样品、仪器与环境状态，支撑异常识别和设备协同。
+              - listitem [ref=e471]:
+                - strong [ref=e472]: 支撑实验推演与自主规划
+                - generic [ref=e473]: 推演动作对实验结果的影响，验证方案、筛选参数、评估风险并规划设备操作。
+              - listitem [ref=e474]:
+                - strong [ref=e475]: 支撑闭环验证与迭代发现
+                - generic [ref=e476]: 对比预测与真实结果，分析偏差并更新模型，形成闭环，提高结论可信度和发现效率。
+          - article [ref=e477]:
+            - generic [ref=e478]:
+              - heading "科学智能上下文协议 SCP" [level=3] [ref=e479]: 科学智能上下文协议SCP
+              - paragraph [ref=e480]: 面向科学智能的万能转换器，连接科研资源、编排实验流程，实现协作共享与全程追溯。
+            - list [ref=e481]:
+              - listitem [ref=e482]:
+                - strong [ref=e483]: 统一连接与能力发现
+                - generic [ref=e484]: 标准化封装数据、模型、工具与设备，屏蔽接口差异，降低接入和开发成本。
+              - listitem [ref=e485]:
+                - strong [ref=e486]: 全流程编排与协同执行
+                - generic [ref=e487]: 统一编排任务、工具、多智能体及实验执行，沉淀可复用技能，提升自动化效率。
+              - listitem [ref=e488]:
+                - strong [ref=e489]: 全链路追溯与可信共享
+                - generic [ref=e490]: 记录实验数据和日志，通过权限管控支持跨机构协作，保障安全共享、可追溯和可复现。
+    - region [ref=e491]:
+      - generic [ref=e492]:
+        - generic [ref=e493]:
+          - heading "科研成果" [level=2] [ref=e494]
+          - paragraph [ref=e495]: 携手顶尖科研机构，跨越多学科前沿，让 AI 从模型能力走向真实科研成果
+        - generic [ref=e496]:
+          - tablist "科研成果" [ref=e497]:
+            - tab "01 新一代蛋白质大模型 书生AMix" [selected] [ref=e498] [cursor=pointer]:
+              - generic [ref=e499]: "01"
+              - strong [ref=e500]: 新一代蛋白质大模型 书生AMix
+            - tab "02 端到端大气世界模型 Earth-o1" [ref=e501] [cursor=pointer]:
+              - generic [ref=e502]: "02"
+              - strong [ref=e503]: 端到端大气世界模型 Earth-o1
+            - tab "03 脑电磁基础模型 BrainOmni" [ref=e504] [cursor=pointer]:
+              - generic [ref=e505]: "03"
+              - strong [ref=e506]: 脑电磁基础模型 BrainOmni
+            - tab "04 融合蛋白序列与结构双模态AI预测模型 ViraHunter" [ref=e507] [cursor=pointer]:
+              - generic [ref=e508]: "04"
+              - strong [ref=e509]: 融合蛋白序列与结构双模态AI预测模型 ViraHunter
+            - tab "05 首个心脏虚拟细胞模型" [ref=e510] [cursor=pointer]:
+              - generic [ref=e511]: "05"
+              - strong [ref=e512]: 首个心脏虚拟细胞模型
+            - tab "06 脑机理科学发现系统 ΣBrains-Lab（数字斑马鱼脑）" [ref=e513] [cursor=pointer]:
+              - generic [ref=e514]: "06"
+              - strong [ref=e515]: 脑机理科学发现系统 ΣBrains-Lab（数字斑马鱼脑）
+            - tab "07 基因理解设计大模型 CENO" [ref=e516] [cursor=pointer]:
+              - generic [ref=e517]: "07"
+              - strong [ref=e518]: 基因理解设计大模型 CENO
+            - tab "08 书生·扶摇：面向空天飞行器的气动智能联合创新平台" [ref=e519] [cursor=pointer]:
+              - generic [ref=e520]: "08"
+              - strong [ref=e521]: 书生·扶摇：面向空天飞行器的气动智能联合创新平台
+            - tab "09 AI决策+自动化合成闭环研发体系（电镀材料研发）" [ref=e522] [cursor=pointer]:
+              - generic [ref=e523]: "09"
+              - strong [ref=e524]: AI决策+自动化合成闭环研发体系（电镀材料研发）
+            - tab "10 芯片设计智能体成果组（ChipDesign Agent、AgenticDTCO）" [ref=e525] [cursor=pointer]:
+              - generic [ref=e526]: "10"
+              - strong [ref=e527]: 芯片设计智能体成果组（ChipDesign Agent、AgenticDTCO）
+          - tabpanel "01 新一代蛋白质大模型 书生AMix" [ref=e528]:
+            - generic [ref=e529]:
+              - generic [ref=e530]: 生命科学 · 蛋白质大模型 · AI生命设计
+              - heading "新一代蛋白质大模型 书生AMix" [level=3] [ref=e531]
+              - paragraph [ref=e532]: 基于扩散大语言模型统一建模自然语言、蛋白质序列、功能理解与序列设计，实现从“理解蛋白质”到“设计蛋白质”的跨越
+            - img "新一代蛋白质大模型书生 AMix 科研成果" [ref=e535]
+            - generic [ref=e537]:
+              - term [ref=e538]: 联合单位：
+              - definition [ref=e539]: 清华大学智能产业研究院、复旦大学
+    - region [ref=e540]:
+      - generic [ref=e541]:
+        - generic [ref=e542]:
+          - heading "连接科研力量 共创科学未来" [level=2] [ref=e543]
+          - paragraph [ref=e544]: 携手全球顶尖科研机构共同推动人工智能在科学研究中的深度应用
+        - generic "合作机构" [ref=e545]
+    - region [ref=e546]:
+      - generic [ref=e547]:
+        - heading "下载 书生·端砚 共同开启科学发现的下一程" [level=2] [ref=e549]
+        - generic [ref=e550]:
+          - link "打开书生·端砚网页版" [ref=e551] [cursor=pointer]:
+            - /url: https://discovery.intern-ai.org.cn/
+            - strong [ref=e553]: 网页版
+            - generic [aria-hidden]:
+              - strong: 点击进入网页版
+          - button "Mac 客户端 Intel x64" [ref=e554] [cursor=pointer]:
+            - generic [ref=e555]:
+              - strong [ref=e556]: Mac 客户端
+              - generic [ref=e557]: Intel x64
+            - generic [aria-hidden]:
+              - generic: 适用于 macOS 13 及以上
+          - button "Mac 客户端 Mac ARM64" [ref=e558] [cursor=pointer]:
+            - generic [ref=e559]:
+              - strong [ref=e560]: Mac 客户端
+              - generic [ref=e561]: Mac ARM64
+            - generic [aria-hidden]:
+              - generic: 适用于 macOS 13 及以上
+          - article [ref=e562] [cursor=pointer]:
+            - strong [ref=e564]: Linux 客户端
+            - generic [aria-hidden]:
+              - generic: 适用于 Ubuntu 22.04 及以上
+          - article [ref=e565] [cursor=pointer]:
+            - generic [ref=e566]:
+              - strong [ref=e567]: Windows 客户端
+              - generic [ref=e568]: ×64
+            - generic [aria-hidden]:
+              - generic: 适用于 Win11 及以上
+  - contentinfo [ref=e569]:
+    - generic [ref=e570]:
+      - generic [ref=e571]:
+        - link "返回页面顶部" [ref=e572] [cursor=pointer]:
+          - /url: "#home-hero"
+          - img "书生·端砚" [ref=e573]
+        - group "界面颜色模式" [ref=e574]:
+          - button "使用亮色模式" [pressed] [ref=e576] [cursor=pointer]
+          - button "使用暗色模式" [ref=e579] [cursor=pointer]
+      - navigation "页脚导航" [ref=e582]:
+        - generic [ref=e583]:
+          - heading "了解平台" [level=2] [ref=e584]
+          - link "平台核心优势" [ref=e585] [cursor=pointer]:
+            - /url: "#home-advantages"
+          - link "科研基座" [ref=e586] [cursor=pointer]:
+            - /url: "#home-research-foundation"
+        - generic [ref=e587]:
+          - heading "成果与合作" [level=2] [ref=e588]
+          - link "科研成果" [ref=e589] [cursor=pointer]:
+            - /url: "#home-research-cases"
+          - link "合作共建" [ref=e590] [cursor=pointer]:
+            - /url: "#home-cooperation"
+        - generic [ref=e591]:
+          - heading "体验产品" [level=2] [ref=e592]
+          - link "网页版 ↗" [ref=e593] [cursor=pointer]:
+            - /url: https://discovery.intern-ai.org.cn/
+          - link "下载客户端" [ref=e594] [cursor=pointer]:
+            - /url: "#home-downloads"
+        - generic [ref=e595]:
+          - heading "联系我们" [level=2] [ref=e596]
+          - generic [ref=e597]: interndiscovery@pjlab.org.cn
+          - generic [ref=e598]:
+            - img "书生·端砚公众号二维码" [ref=e600]
+            - generic [ref=e601]: 微信公众号
+    - generic [ref=e602]:
+      - generic [ref=e603]: © All Rights Reserved. 沪ICP备2021009351号-21
+      - link "平台服务协议" [ref=e604] [cursor=pointer]
+      - link "个人信息保护政策" [ref=e605] [cursor=pointer]
+  - status

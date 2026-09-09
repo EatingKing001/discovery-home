@@ -5,16 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light dark">
   <title>组件规范 · InternInkStone Design System</title>
-  <script src="./theme.js?v=20260831-1"></script>
+  <script src="../shared/js/theme.js?v=20260831-theme1"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&amp;family=Inter:wght@400;500;600;700&amp;family=Noto+Sans+SC:wght@400;500;600;700&amp;family=Noto+Serif+SC:wght@400;600&amp;display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../shared/css/tokens.css?v=20260831-colors1">
+  <link rel="stylesheet" href="../shared/css/tokens.css?v=20260904-dark-dot1">
   <link rel="stylesheet" href="../shared/css/base.css">
-  <link rel="stylesheet" href="../shared/css/shell.css">
+  <link rel="stylesheet" href="../shared/css/shell.css?v=20260831-theme1">
   <link rel="stylesheet" href="../shared/css/styles.css">
-  <link rel="stylesheet" href="../shared/css/design-system-overrides.css?v=20260831-link1">
-  <link rel="stylesheet" href="./design-system.css?v=20260831-2">
+  <link rel="stylesheet" href="../shared/css/design-system-overrides.css?v=20260905-button-type1">
+  <link rel="stylesheet" href="./design-system.css?v=20260904-button-global1">
   <script defer src="../shared/js/components.js?v=20260821-1"></script>
 </head>
 <body>
@@ -82,7 +82,7 @@
           </article>
         </div>
         <div class="ds-control-specs" aria-label="按钮公共尺寸规范">
-          <span>32px / Padding X 12px</span><span>36px / Padding X 14px</span><span>Font 13px / 500</span><span>Radius 4px</span><span>Icon 14px</span>
+          <span>32px / Padding X 12px</span><span>36px / Padding X 14px</span><span>Font 14px / 400 / 24px</span><span>Radius 8px</span><span>Icon 14px</span>
         </div>
       </div>
 
@@ -138,7 +138,7 @@
               <div class="ds-button-state"><span>Default</span><button class="btn-text" type="button">文字按钮</button></div>
               <div class="ds-button-state"><span>Hover</span><button class="btn-text ds-preview-text-button-hover" type="button">文字按钮</button></div>
             </div>
-            <p><code>.btn-text</code> · 高 36px · Padding X 12px · Radius 8px · Font 15px / 24px。实际 hover 时鼠标指针为 pointer。</p>
+            <p><code>.btn-text</code> · 高 36px · Padding X 12px · Radius 8px · Font 14px / 400 / 24px。实际 hover 时鼠标指针为 pointer。</p>
           </article>
           <article class="ds-component-card">
             <p class="ds-component-kicker">Text Link</p>
@@ -147,7 +147,7 @@
               <div class="ds-button-state"><span>Default</span><a class="btn-link" href="#component-buttons">文字链接按钮</a></div>
               <div class="ds-button-state"><span>Hover</span><a class="btn-link ds-preview-link-button-hover" href="#component-buttons">文字链接按钮</a></div>
             </div>
-            <p><code>.btn-link</code> · 默认无下划线；hover 与键盘 focus 时，下划线从左向右出现，鼠标指针为 pointer。</p>
+            <p><code>.btn-link</code> · Font 14px / 400 / 24px · 默认无下划线；hover 与键盘 focus 时，下划线从左向右出现，鼠标指针为 pointer。</p>
           </article>
         </div>
       </div>

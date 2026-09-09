@@ -18,13 +18,13 @@
 
 | 文件 | 允许内容 | 不允许内容 | 当前状态 |
 | --- | --- | --- | --- |
-| `tokens.css` | 有证据的 Figma Variable、项目字体基线、登记过的适配 Token、来源明确的项目语义 Token | 单页面选择器、未确认的 Figma 资产 | 第一批颜色、圆角、字体与适配 Token 已创建；参考 Brand Scale、Semantic & AI Colors 及组件兼容别名已登记；Figma Modes / Alias 未实现 |
+| `tokens.css` | 有证据的 Figma Variable、项目字体基线、登记过的适配 Token、来源明确的项目语义 Token 及其正式 Light / Dark 同名映射 | 单页面选择器、未确认的 Figma 资产 | 第一批颜色、圆角、字体与适配 Token 已创建；项目代码 Dark 映射已启用，不能据此反推 Figma Modes / Alias |
 | `base.css` | 元素级基础样式与明确的可访问性基础规则 | 模块布局 | 字体、媒体、表单继承与焦点基础代码已创建；Home 与 Design System 消费 |
 | `shell.css` | 顶部导航、shell 布局、iframe 容器、shell 遮罩 | 模块内容样式 | Home shell 已实现 |
 | `styles.css` | 尚未完成归属迁移的过渡公共样式 | 无期限累积的新模块样式 | 只有责任注释，尚无迁移规则 |
 | `design-system-overrides.css` | 已确认的 Figma Text Style 映射、已稳定的公共组件覆盖、已批准的候选公共组件基线 | 单模块特例、Design System 展示页私有布局 | `Title/h1`、Buttons、Dialog、Checkbox 和 Toast 已创建；Home 与 Design System 消费 |
 | `tabs/<module>/<module>.css` | 模块私有布局、状态与组件变体 | 其他模块选择器 | 按模块创建 |
-| `design-system/design-system.css` | 规范核对页自身布局与仅供核对页使用的代码 dark mode 覆盖 | 产品模块样式 | 原子与组件规范页展示布局、亮暗切换和代码 dark 参数已创建；不代表正式产品页已启用 dark mode |
+| `design-system/design-system.css` | 规范核对页自身布局 | 产品模块样式、正式主题 Token | 原子与组件规范页展示布局已创建；正式 Light / Dark 参数归 `tokens.css`，公共组件暗色状态归 `design-system-overrides.css` |
 
 ## 选择规则
 
