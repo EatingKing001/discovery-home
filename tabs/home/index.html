@@ -20,6 +20,8 @@
   <link rel="stylesheet" href="../../shared/css/design-system-overrides.css?v=20260905-button-type1">
  <link rel="stylesheet" href="home.css?v=20260907-cases-align3">
 <link rel="stylesheet" href="../../product/cooperation-cta-hide.css?v=20260826-biz1">
+<script src="../../product/vendor/migo-analytics.bundle.js?v=20260831-analytics1" defer></script>
+<script src="../../product/analytics-bootstrap.js?v=20260831-analytics1" defer></script>
 <script src="../../product/site-links.js?v=20260826-biz1" defer></script>
 <script src="data/research-cases.data.js?v=20260907-research-cases1" defer></script>
   <script src="data/partner-logos.data.js?v=20260904-partner-dark3" defer></script>
@@ -34,7 +36,7 @@
     <nav class="standalone-nav" aria-label="官网导航">
       <a class="btn-text" href="#home-advantages" data-home-anchor="home-advantages">平台核心优势</a><a class="btn-text" href="#home-research-foundation" data-home-anchor="home-research-foundation">科研基座</a><a class="btn-text" href="#home-research-cases" data-home-anchor="home-research-cases">科研成果</a><a class="btn-text" href="#home-cooperation" data-home-anchor="home-cooperation">合作共建</a><a class="btn-text" href="#home-downloads" data-home-anchor="home-downloads">下载客户端</a>
     </nav>
-    <a class="btn-primary" data-discovery-link href="https://discovery.intern-ai.org.cn/" target="_blank" rel="noopener noreferrer">在线使用</a>
+    <a class="btn-primary" data-discovery-link href="https://discovery.intern-ai.org.cn/" target="_blank" rel="noopener noreferrer" data-analytics-event="online_use_click" data-analytics-prop-entry="header">在线使用</a>
   </header>
 
   <main>
@@ -43,7 +45,7 @@
         <span class="hero-eyebrow">上海人工智能实验室牵头建设 · 国家级科研基础设施</span>
         <h1 id="home-hero-title">端到端全链路 AI 科研工作台</h1>
         <p>面向重要复杂科研任务的可信科研执行平台，以学科模型和专业能力为基础，贯通数据、计算与实验，将每一次执行沉淀为可追溯、可复现、可持续迭代的科研资产</p>
-        <a class="btn-primary hero-action" data-discovery-link href="https://discovery.intern-ai.org.cn/" target="_blank" rel="noopener noreferrer">在线使用</a>
+        <a class="btn-primary hero-action" data-discovery-link href="https://discovery.intern-ai.org.cn/" target="_blank" rel="noopener noreferrer" data-analytics-event="online_use_click" data-analytics-prop-entry="banner">在线使用</a>
       </div>
       <div class="hero-stage" data-hero-stage>
         <picture>
@@ -556,8 +558,11 @@ branch_df &lt;- tribble(
             <span class="download-card-state download-card-default"><img src="assets/icons/downloads/apple.svg" alt="" width="48" height="48" loading="lazy" decoding="async"><strong>Mac 客户端</strong><span class="download-card-subtitle">Mac ARM64</span></span>
             <span class="download-card-state download-card-hover" aria-hidden="true"><img src="assets/icons/downloads/download.svg?v=20260904-download-icon" alt="" width="48" height="48" loading="lazy" decoding="async"><span class="download-hover-copy">适用于<br>macOS 13 及以上</span></span>
           </article>
-          <article class="download-card is-hoverable is-coming"><span class="download-card-state download-card-default"><img src="assets/icons/downloads/linux1.svg" alt="" width="48" height="48" loading="lazy" decoding="async"><strong>Linux 客户端</strong></span><span class="download-card-state download-card-hover" aria-hidden="true"><img src="assets/icons/downloads/download.svg?v=20260904-download-icon" alt="" width="48" height="48" loading="lazy" decoding="async"><span class="download-hover-copy">适用于<br>Ubuntu 22.04 及以上</span></span></article>
-          <article class="download-card is-hoverable is-coming"><span class="download-card-state download-card-default"><img src="assets/icons/downloads/ri-windows-fill1.svg" alt="" width="48" height="48" loading="lazy" decoding="async"><strong>Windows 客户端</strong><span class="download-card-subtitle">×64</span></span><span class="download-card-state download-card-hover" aria-hidden="true"><img src="assets/icons/downloads/download.svg?v=20260904-download-icon" alt="" width="48" height="48" loading="lazy" decoding="async"><span class="download-hover-copy">适用于<br>Win11 及以上</span></span></article>
+          <article class="download-card is-hoverable">
+            <span class="download-card-state download-card-default"><img src="assets/icons/downloads/ri-windows-fill1.svg" alt="" width="48" height="48" loading="lazy" decoding="async"><strong>Windows 客户端</strong><span class="download-card-subtitle">×64</span></span>
+            <span class="download-card-state download-card-hover" aria-hidden="true"><img src="assets/icons/downloads/download.svg?v=20260904-download-icon" alt="" width="48" height="48" loading="lazy" decoding="async"><span class="download-hover-copy">适用于<br>Win11 及以上</span></span>
+          </article>
+          <article class="download-card is-coming"><span class="download-card-state download-card-default"><img src="assets/icons/downloads/linux1.svg" alt="" width="48" height="48" loading="lazy" decoding="async"><strong>Linux 客户端</strong><span class="download-card-subtitle">敬请期待</span></span></article>
         </div>
       </div>
     </section>
