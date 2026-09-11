@@ -6,12 +6,12 @@
       id: "aerospace",
       tabLabel: "中国航天科技集团",
       hideOrgNames: true,
-      logo: "assets/icons/cooperation/logo-casc-wordmark.svg",
+      logo: "assets/images/cooperation/logo-casc.svg?v=20260911-coop9",
       logoWide: true,
       logoWidth: 245,
       logoHeight: 36,
       titleLines: ["书生·端砚 × 天玄·千枢", "航天科学发现平台"],
-      body: "融合“书生·端砚”的科学智能体能力与“天玄·千枢”的航天领域知识和工具体系，构建航天科学发现平台，支持知识探索、方案生成、仿真分析与协同创新",
+      body: "双方团队聚焦航天复杂系统工程中的关键科研痛点，深度融合“书生·端砚”科学智能体能力，协同构建涵盖领域科学知识、科研方法及干湿实验工具的一体化科研体系，打造兼具“快速迭代”与“深度认知”能力的航天科研新引擎，共同建设“天玄·千枢”航天科学发现平台。",
       tags: ["电磁超材料", "合金设计", "飞行器气动设计", "发动机研发"],
       features: [
         {
@@ -30,14 +30,16 @@
           description: "科研助手、对话探索、实验与仿真一体化，提升研发效率"
         }
       ],
-      image: "assets/images/cooperation/image-cooperation-aerospace.png?v=20260911-coop2",
+      image: "assets/images/cooperation/image-cooperation-aerospace.png?v=20260911-coop16",
+      imageWidth: 1024,
+      imageHeight: 642,
       imageAlt: "天玄·千枢航天科学发现平台"
     },
     {
       id: "yazhouwan",
       tabLabel: "崖州湾国家实验室",
       hideOrgNames: true,
-      logo: "assets/images/cooperation/logo-yazhouwan.png?v=20260911-coop7",
+      logo: "assets/images/cooperation/logo-yazhouwan.png?v=20260911-coop10",
       logoWide: true,
       logoWidth: 173,
       logoHeight: 48,
@@ -56,17 +58,14 @@
           description: "综合育种值、亲缘与生产条件，生成配种方案并推演多代遗传风险"
         },
         {
-          icon: "assets/icons/cooperation/feature-file-check.svg",
-          title: "可信科研协同",
-          description: "Agent 调度专业工具完成计算，并保留数据、参数、日志与分析结果"
-        },
-        {
           icon: "assets/icons/cooperation/feature-workflow.svg",
           title: "育种能力持续进化",
           description: "将有效方法沉淀为 Skill 或 Workflow，形成可复用的育种科研能力"
         }
       ],
-      image: "assets/images/cooperation/image-cooperation-yazhou.png?v=20260911-coop7",
+      image: "assets/images/cooperation/image-cooperation-yazhou.png?v=20260911-coop16",
+      imageWidth: 1024,
+      imageHeight: 604,
       imageStroke: true,
       imageAlt: "智能生物育种平台"
     }
