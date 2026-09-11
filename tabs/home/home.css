@@ -762,7 +762,8 @@ body.home-page > main { padding-top: 69px; }
 .cooperation-case-intro { display: flex; min-width: 0; flex-direction: column; gap: 16px; }
 .cooperation-case-org { display: flex; margin: 0; align-items: center; gap: 8px; }
 .cooperation-case-org-logo { display: block; width: 36px; height: 36px; object-fit: contain; object-position: left center; flex: 0 0 auto; }
-.cooperation-case-org-logo.is-wide { width: auto; max-width: min(var(--logo-w, 245px), 100%); height: auto; max-height: 48px; }
+.cooperation-case-org-logo.is-wide { width: auto; max-width: min(var(--logo-w, 245px), 100%); height: auto; max-height: var(--logo-h, 48px); }
+:root[data-theme="dark"] .cooperation-case-org-logo { filter: none; }
 .cooperation-case-org-names { display: flex; min-width: 0; flex-direction: column; gap: 0; }
 .cooperation-case-org-names strong { color: var(--accent); font: 600 15px/1.3 var(--font-sans); }
 .cooperation-case-org-names span { color: var(--accent); font: 400 11px/1.35 var(--font-sans); }
@@ -780,8 +781,7 @@ body.home-page > main { padding-top: 69px; }
 .cooperation-case-media { min-width: 0; overflow: hidden; border-radius: var(--radius-card); background: transparent; }
 .cooperation-case-media.has-stroke { box-sizing: border-box; border: 1px solid var(--line-soft); }
 .cooperation-case-media picture { display: block; width: 100%; }
-.cooperation-case-media img { display: block; width: 100%; height: auto; aspect-ratio: 2940 / 1846; object-fit: cover; object-position: center; }
-.cooperation-case-media.has-stroke img { aspect-ratio: 1280 / 803; }
+.cooperation-case-media img { display: block; width: 100%; height: auto; }
 .partner-wall { display: grid; gap: 12px; margin: 0; padding-top: 40px; padding-bottom: 64px; overflow: hidden; }
 .partner-wall-title { display: flex; width: min(940px, 100%); margin: 0 auto; align-items: center; justify-content: center; gap: 16px; color: var(--muted); font: 400 18px/24px var(--font-sans); letter-spacing: 0; text-align: center; white-space: nowrap; }
 .partner-wall-title::before,

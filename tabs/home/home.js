@@ -582,14 +582,13 @@
       .replace(/"/g, "&quot;");
   }
 
-  function renderCooperationPicture(src, alt) {
-    const source = String(src);
-    const match = source.match(/^(.*?)(\.png)(\?.*)?$/);
-    const base = match?.[1] || source.replace(/\.png$/, "");
-    const query = match?.[3] || "";
+  function renderCooperationPicture(item) {
+    const source = escapeCooperationText(String(item.image || ""));
     const sizes = "(max-width: 767px) calc(100vw - 40px), 720px";
-    const safeAlt = escapeCooperationText(alt);
-    return `<picture><img src="${base}@1x.png${query}" srcset="${base}@1x.png${query} 1x, ${base}@2x.png${query} 2x" sizes="${sizes}" alt="${safeAlt}" width="720" height="452" loading="lazy" decoding="async"></picture>`;
+    const safeAlt = escapeCooperationText(item.imageAlt);
+    const width = Number(item.imageWidth) || 1024;
+    const height = Number(item.imageHeight) || 642;
+    return `<picture><img src="${source}" sizes="${sizes}" alt="${safeAlt}" width="${width}" height="${height}" loading="lazy" decoding="async"></picture>`;
   }
 
   function renderCooperationCase(index, focusTab = false) {
@@ -622,7 +621,7 @@
     const logoAlt = hideNames ? escapeCooperationText(item.tabLabel || item.orgName || "") : "";
     const logoWidth = Number(item.logoWidth) || (logoWide ? 220 : 36);
     const logoHeight = Number(item.logoHeight) || (logoWide ? 48 : 36);
-    const logoMax = logoWide ? ` style="--logo-w: ${logoWidth}px"` : "";
+    const logoMax = logoWide ? ` style="--logo-w: ${logoWidth}px; --logo-h: ${logoHeight}px"` : "";
     const namesHtml = hideNames
       ? ""
       : `<div class="cooperation-case-org-names">${item.orgName ? `<strong>${escapeCooperationText(item.orgName)}</strong>` : ""}${item.orgNameEn ? `<span>${escapeCooperationText(item.orgNameEn)}</span>` : ""}</div>`;
@@ -630,7 +629,7 @@
       ? `<div class="cooperation-case-org"><img class="${logoClass}" src="${escapeCooperationText(logoSrc)}"${logoDark} alt="${logoAlt}" width="${logoWidth}" height="${logoHeight}"${logoMax}>${namesHtml}</div>`
       : "";
     const mediaClass = `cooperation-case-media${item.imageStroke ? " has-stroke" : ""}`;
-    cooperationCase.innerHTML = `<div class="cooperation-case-copy">${orgHtml}<div class="cooperation-case-intro"><h3>${titleHtml}</h3><p>${escapeCooperationText(item.body)}</p><ul class="cooperation-case-tags">${tagsHtml}</ul></div><ul class="cooperation-case-features">${featuresHtml}</ul></div><div class="${mediaClass}">${renderCooperationPicture(item.image, item.imageAlt)}</div>`;
+    cooperationCase.innerHTML = `<div class="cooperation-case-copy">${orgHtml}<div class="cooperation-case-intro"><h3>${titleHtml}</h3><p>${escapeCooperationText(item.body)}</p><ul class="cooperation-case-tags">${tagsHtml}</ul></div><ul class="cooperation-case-features">${featuresHtml}</ul></div><div class="${mediaClass}">${renderCooperationPicture(item)}</div>`;
   }
 
   if (cooperationTabs && cooperationCase && cooperationData.length) {
