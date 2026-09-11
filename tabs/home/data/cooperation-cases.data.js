@@ -58,11 +58,6 @@
           description: "综合育种值、亲缘与生产条件，生成配种方案并推演多代遗传风险"
         },
         {
-          icon: "assets/icons/cooperation/feature-file-check.svg",
-          title: "可信科研协同",
-          description: "Agent 调度专业工具完成计算，并保留数据、参数、日志与分析结果"
-        },
-        {
           icon: "assets/icons/cooperation/feature-workflow.svg",
           title: "育种能力持续进化",
           description: "将有效方法沉淀为 Skill 或 Workflow，形成可复用的育种科研能力"
