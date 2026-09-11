@@ -268,7 +268,7 @@ Figma 中“全链贯通”“安全可控”“科研基座能力”和合作 C
 | `OutputGallery` / `OutputCard` | 产物原生 | `featured` 与 `compact` 两种卡片变体 |
 | `EvidenceChain` / `EvidenceProgressTabs` | 科研证据链 | 7 个进度 Tab、5 秒自动轮播、手动切换、面板与连接线 |
 | `SecurityDiagram` | 安全可控 | Figma 节点 `198:35475` 的单张 1400×500 PNG、替代文本和整图等比适配 |
-| `EcosystemDiagram` | 生态开放 | Figma 节点 `198:35502` 的单张 868×580 PNG、替代文本和整图等比适配 |
+| `EcosystemDiagram` | 生态开放 | Figma 节点 `543:21676` 的 910×580 复合图示；文本/节点使用 HTML/CSS，底座、连线、端点和品牌图形使用精确导出资产，并对完整画布等比适配 |
 | `ResearchFoundationBanner` | 科研基座 Banner | 网格、两张装饰图、中心说明卡 |
 | `CapabilityGrid` / `CapabilityCard` | SCP / Intern-S2 / World Model | 三列布局、能力条目和状态图标 |
 | `ResearchFoundationStage` | 科研基座 Banner + 能力 | 相邻文档流、Banner 同步离场、能力区顺序进入 |
@@ -280,13 +280,13 @@ Figma 中“全链贯通”“安全可控”“科研基座能力”和合作 C
 
 `EvidenceProgressTabs` 与 `CaseTabs` 当前都只服务 Home，先共享一个 Home 私有的 `HomeTabController` 状态核心，样式分别留在对应业务组件 modifier 中；不把“Tab”提前写进 Design System。只有第二个非 Home 产品模块出现相同 ARIA、键盘和状态合同后，才提炼公共 Tab，并同步 `components.html`。`ShellDialogHost` 则不同：合作弹窗必须覆盖吸顶导航，且 Design System 已有 Dialog 基线，因此实现时直接把该候选公共组件接入 shell，而不是在 iframe 内再做一套遮罩。
 
-除产品明确指定为整图 PNG 的 `image-safecontrol` 与 `image-open-ecosystem` 外，代码化复合图示应保持文本为 HTML、图标为真实导出资产、连接线为 CSS/SVG 结构。这两张整图不再承担分节点动画；页面必须提供完整替代文本，并只对整图做等比缩放和完整显示。
+除产品明确指定为整图 PNG 的 `image-safecontrol` 外，代码化复合图示应保持文本为 HTML、图标为真实导出资产、连接线为 CSS/SVG 结构。原 `image-open-ecosystem`（`198:35502`）整图 PNG 仅作为历史/回退资源保留，不再是正式运行时事实；当前生态开放改由 `543:21676` 的代码化画布承担，并提供完整替代文本和整体等比缩放。
 
 ## 8. `image-` 图层与资源归属
 
 ### 8.1 盘点结论
 
-2026-08-21 首次只遍历页面目标根节点时找到 25 个以 `image-` 开头的图层；该结果漏掉了科研证据链实例所引用组件集 `168:1325` 中的其他变体。补充展开 7 个变体后，本次检查快照修正为 **32 个**：其中 9 个是包含文本、节点、连接线或矢量的复合图示 Frame，继续代码化；其余 23 个使用 Figma 返回的原始 PNG 或精确导出图。`image-safecontrol` 与 `image-open-ecosystem` 虽然是复合图示，但按产品决定分别从节点 `198:35475`、`198:35502` 导出整图 PNG。前缀只是 Figma 命名约定，不等于每个图层都是单张位图。
+2026-08-21 首次只遍历页面目标根节点时找到 25 个以 `image-` 开头的图层；该结果漏掉了科研证据链实例所引用组件集 `168:1325` 中的其他变体。补充展开 7 个变体后，本次检查快照修正为 **32 个**：其中 9 个是包含文本、节点、连接线或矢量的复合图示 Frame，继续代码化；其余 23 个使用 Figma 返回的原始 PNG 或精确导出图。该段是历史盘点快照；2026-09-05 实现覆盖后，生态开放按节点 `543:21676` 增补为第 10 个代码化复合图示，旧 `198:35502` PNG 仅保留作历史/回退，不作为正式运行时事实。前缀只是 Figma 命名约定，不等于每个图层都是单张位图。
 
 后续盘点不能只递归页面当前可见实例：必须同时解析页面使用到的 Component / Instance 引用，并继续扫描对应 Component Set 的全部产品状态。实施启动时仍须重新盘点数量、节点 ID 和类型，8.2 清单按差异刷新后再导出。
 
@@ -335,17 +335,17 @@ Figma MCP 资产 URL 约 7 天失效。实现时必须下载并提交真实字�
 | `image-chain06` | `168:1073`（内部图示 `226:4769`） | **复合图示，代码化**；实验设计 | 不生成整图；精确 SVG / 图标放 `tabs/home/assets/icons/evidence-chain/chain06/` |
 | `image-chain07` | `168:1175`（内部图示 `226:4965`） | **复合图示，代码化**；论文草稿 / 技术报告 | 不生成整图；精确 SVG / 图标放 `tabs/home/assets/icons/evidence-chain/chain07/` |
 | `image-safecontrol` | `198:35475` | **整图 PNG**；不再代码化拆分 | `tabs/home/assets/images/security/image-safecontrol.png` |
-| `image-open-ecosystem` | `198:35502` | **整图 PNG**；不再代码化拆分 | `tabs/home/assets/images/ecosystem/image-open-ecosystem.png` |
+| `image-open-ecosystem` | `543:21676` | **复合图示，代码化**；文本/节点为 HTML/CSS，底座、连线、端点和品牌图形使用精确导出资产 | `tabs/home/assets/icons/ecosystem/543-21676/` |
 | `image-worldmordel` | `198:35630` | 透明背景 PNG；禁止添加容器背景、圆角、`box-shadow` 或 `drop-shadow`；Figma 拼写保留用于追溯 | `tabs/home/assets/images/research-base/image-worldmordel.png` |
 | `image-interns2` | `198:35631` | 透明背景 PNG；禁止添加容器背景、圆角、`box-shadow` 或 `drop-shadow` | `tabs/home/assets/images/research-base/image-interns2.png` |
 | `image-ResearchCases-Achievements01` | `198:51080` | Figma 当前首个案例 PNG；本地已提供 01–10 全量案例图 | `tabs/home/assets/images/research-cases/image-research-cases-achievements01.png` 至 `...10.png` |
 | `image-intern-QRcode` | `220:62071` | PNG | `tabs/home/assets/images/footer/image-intern-qrcode.png` |
 
-除清单中已确定作为运行时整图的 `image-safecontrol` 与 `image-open-ecosystem` 外，如实施阶段确实需要代码化复合图示截图用于人工比对，只能临时导出到任务临时目录；它不进入运行时资源目录，也不能与代码化图示同时成为两个事实来源。
+除清单中已确定作为运行时整图的 `image-safecontrol` 外，如实施阶段确实需要代码化复合图示截图用于人工比对，只能临时导出到任务临时目录；旧 `image-open-ecosystem` PNG 仍可作为历史/回退对照，但不与 `543:21676` 代码化实现同时成为运行时事实来源。
 
 ### 8.3 复合图示 1:1 实现合同
 
-9 个“复合图示，代码化”（2 个页面固定图示 + 7 个证据链状态）不能被理解为“按观感重画”。它们必须以 Figma 自然尺寸作为唯一参考坐标系，在实施时页面基准画布上 1:1 复现节点尺寸、中心坐标、连线端点、圆点直径、描边、圆角、阴影和层级；响应式只对完整参考画布做同一比例的二维缩放。`image-safecontrol` 与 `image-open-ecosystem` 不属于该代码化合同，改按 8.2、10.9 与 10.10 的整图 PNG 合同执行。
+10 个“复合图示，代码化”（2 个页面固定图示 + 生态开放 + 7 个证据链状态）不能被理解为“按观感重画”。它们必须以 Figma 自然尺寸作为唯一参考坐标系，在实施时页面基准画布上 1:1 复现节点尺寸、中心坐标、连线端点、圆点直径、描边、圆角、阴影和层级；响应式只对完整参考画布做同一比例的二维缩放。`image-safecontrol` 仍按 8.2、10.9 的整图 PNG 合同执行，旧 `image-open-ecosystem` PNG 仅作历史/回退。
 
 #### 8.3.1 通用坐标与缩放规则
 
@@ -365,7 +365,7 @@ Figma MCP 资产 URL 约 7 天失效。实现时必须下载并提交真实字�
 | `image-flow` `198:27602` | `1400 × 340` | 当前 6 个阶段几何为：问题与假设 `(50,61,320,94)`、实验方案规划 `(405,61,160,94)`、实验验证分析 `(600,61,320,94)`、实验成果输出 `(955,61,160,94)`、成果发布 `(1165,38,140,140)`、实验迭代 `(600,209,530,94)`。主链水平连接线从 x=364/559/914/1109、y=102 起，宽分别为 40/40/40/60；实验迭代反馈垂线位于 `(747,138,12,77)`，由实验迭代顶部圆点向上绘制，箭头尖端与 `(712,137,85,0)` 的“实验数据获取”下划线相接；成果输出回落线位于 `(1029,149,12,60)` 并保持向下。所有子步骤、标题色条和端点以 `228:62880`–`228:62923`、`242:63138` 当前节点为准；不得沿用本文旧版 1400×400 画布或旧主链坐标。 |
 | `image-six-subject` `210:53949` | `492 × 408` | 6 个外围学科节点均为 120×120：相对 inner group 位于上排 x=88/236、y=0，中排 x=0/324、y=144，下排 x=88/236、y=288；中心节点为 180×180，位于图示局部 `(132,114)`（Figma 页面坐标为 x=190、y=212）。外围浅圆为 200×200，外层圆为 320×320；图标均为 24×24。圆环、径向连接线和图标使用精确 SVG/几何，不按肉眼重新排成六边形。 |
 | `image-safecontrol` `198:35475` | `1400 × 500` | 按最新实现决定从该节点直接导出完整 PNG；文字、六边形、图标、连线和端点均烘焙在同一图片内。页面只做整图等比缩放与完整显示，不再拆分或用 HTML/CSS/SVG 重绘内部元素。 |
-| `image-open-ecosystem` `198:35502` | `868 × 580` | 从该节点直接导出完整 PNG；六个输入卡、汇聚路径、端点圆圈、中心节点、椭圆底座和品牌 Logo 均烘焙在同一图片内。页面只做整图等比缩放与完整显示，不再拆分或用 HTML/CSS/SVG 重绘内部元素。 |
+| `image-open-ecosystem` `543:21676` | `910 × 580` | 以完整参考画布 1:1 复现：六个输入卡（`543:21708/21719/21723/21727/21731/21735`）、六条汇聚连接线（`543:21691`–`543:21696`）、中心接入节点（`543:21704`/`543:21706`）、596×183 渐变底座（`543:21677`）和品牌落点（`543:21739`）；文本保留为 HTML，精确 SVG/PNG 资产放在 `tabs/home/assets/icons/ecosystem/543-21676/`，整体按同一比例缩放。 |
 
 表中的数值只表示 2026-08-21 检查时的几何，不再声明为未来实现验收基线。实际实现前必须用同一节点 ID 重新读取自然尺寸与子层坐标，并把刷新后的结果写入本地 manifest；同次 manifest 才是该轮开发和截图验收的锁定事实。这样既能追溯设计变化，也不会依赖临时资产 URL、旧文档数字或文件名猜测来源。
 
@@ -398,14 +398,13 @@ manifest 必须为每个 `image-chain` 状态保留外层节点、内部图示�
 
 `shared/assets/logos/书生logo.png` 是 108px 品牌图标，不默认替换 Figma 下载卡中的网页版图标；两者需要先做视觉核对。
 
-合作机构 Logo 不属于上述 25 个 `image-` 图层。现已放入 `shared/assets/orgs/partners/`：共 38 个 SVG，其中 `line1-` 12 个、`line2-` 12 个、`line3-` 14 个；全部文件都符合 `^line[123]-.+\.svg$`，XML 可解析，未发现 `<script>`、`foreignObject` 或 HTTP 外链。`PartnerLogoTile` 只引用该目录，不把机构 Logo 塞进 Home 通用图片目录。
+合作机构 Logo 不属于上述 25 个 `image-` 图层。运行时资源放在 `shared/assets/orgs/partners/`：38 个亮色 SVG 使用 `logo-机构名.svg` 命名，指定机构另有 `logo-机构名-dark.svg` 暗色变体。早期设计导出的 `line1-`、`line2-`、`line3-` 文件已清理，不再作为运行时资源。`PartnerLogoTile` 只引用该目录，不把机构 Logo 塞进 Home 通用图片目录。
 
 分行与数据规则固定如下：
 
-1. 文件名以 `line1-`、`line2-`、`line3-` 开头的 Logo 分别进入第一、第二、第三行；前缀是布局数据，不参与可见机构名称和 `alt`。
-2. 三行固定为 12、12、14 个互不重复的机构，顺序写入 Home 私有 `tabs/home/data/partner-logos.data.js`。浏览器运行时不扫描目录；后续若要精确调整顺序，应同步修改数据数组及对应文件前缀。
-3. 不匹配三个前缀之一的新增文件视为未分配资源，资源检查必须报错，不能默默塞入任意一行。marquee 的第二份循环内容由组件克隆数据并设 `aria-hidden`，源数组不重复维护。
-4. 当前 38 个 SVG 总计约 9.12MiB，其中 24 个包含嵌入式 image 数据。浏览器对重复 marquee 的同 URL 会复用网络缓存，但首屏传输仍需关注；正式上线前保留这些原始文件，另做无损 SVG 优化或 60px 显示所需的 2x 运行时衍生物，并在截图对照通过后让数据文件引用优化版本，不直接覆盖用户提供的源 Logo。
+1. 三行固定为 12、12、14 个互不重复的机构，分组和顺序写入 Home 私有 `tabs/home/data/partner-logos.data.js`；浏览器运行时不扫描目录。
+2. 运行时亮色资源使用 `logo-机构名.svg`，暗色变体使用 `logo-机构名-dark.svg`；文件名前缀不再承担行布局语义。
+3. marquee 的第二份循环内容由组件克隆数据并设 `aria-hidden`，源数组不重复维护。当前 38 个亮色 SVG 中有 24 个包含嵌入式 image 数据，指定机构的 8 个暗色变体保持纯矢量并只替换颜色。
 
 ### 8.5 科研案例补充素材盘点与迁入方案
 
@@ -453,7 +452,7 @@ manifest 必须为每个 `image-chain` 状态保留外层节点、内部图示�
 | 产物原生 | 3 张主卡 + 4 张次卡 | 2 列 | 1 列；保持图片比例 |
 | 科研证据链 | 左侧 7 个进度 Tab + 右侧图示 | Tab 置于图示上方并允许换行，不依赖横向滚动 | Tab 纵向堆叠在当前面板上方；来源节点按阅读顺序重排，纯装饰连接线可隐藏 |
 | 安全可控 | 1400×500 中心三原则 + 六个外围说明 | 完整图示整体等比缩放，不重算多边形或连线 | 完整图示继续整体等比缩放；如需额外可读文本只能增加经产品确认的辅助说明，不改图示几何 |
-| 生态开放 | 868×580 六类入口汇聚到中心 | 完整图示整体等比缩放，不改为 3×2 重排 | 完整图示继续整体等比缩放，保留六条汇聚路径和品牌落点 |
+| 生态开放 | 910×580 六类入口汇聚到中心 | 完整参考画布整体等比缩放，不改为 3×2 重排 | 完整参考画布继续整体等比缩放，保留六条汇聚路径、渐变底座和品牌落点 |
 | 科研基座 Banner | 按 Banner→能力的正常文档流滚动；中心卡 + 两张视差图 | 保持正常文档流，装饰图缩放、中心卡流式 | 保持 Banner→能力正常文档流展示；网格仍填满 Banner |
 | 三项基座能力 | 3 列 | 2 + 1 | 单列；条目不压缩成难读小字 |
 | 科研案例 | 左侧 10 项 Tab + 右侧详情 | Tab 置顶并换行/分列，详情下置 | Tab 纵向列表或紧凑两列换行，详情单列，主图等比缩放；不把整页带出横向滚动 |
@@ -461,7 +460,7 @@ manifest 必须为每个 `image-chain` 状态保留外层节点、内部图示�
 | 下载卡 | 5 张并排 | 3 + 2 | 1 或 2 列，以 160px 最小可读尺寸决定 |
 | Footer | 品牌 + 4 列链接 | 2 列链接 | 单列/折行，备案和协议上下排列 |
 
-上述 9 个代码化复合图示与安全可控、生态开放两张整图 PNG 均不得采用局部横向滚动；其 wrapper 只负责计算比例和占位高度。证据链与科研案例 Tab 通过换行或纵向重排适配；只有已明确要求连续运动的学科资源轨道和合作 Logo wall 在自身裁切 viewport 内运行 marquee，不能把该例外扩展到流程图、Tab 或复合图示。
+上述 10 个代码化复合图示与安全可控整图 PNG 均不得采用局部横向滚动；其 wrapper 只负责计算比例和占位高度。证据链与科研案例 Tab 通过换行或纵向重排适配；只有已明确要求连续运动的学科资源轨道和合作 Logo wall 在自身裁切 viewport 内运行 marquee，不能把该例外扩展到流程图、Tab 或复合图示。
 
 ## 10. 模块效果与交互执行方案
 
@@ -564,7 +563,7 @@ Hero 拆成 `HeroIntroduction`、`HeroScreenStage` 和 3 个 `HeroDecorationCard
 
 ### 10.10 生态开放
 
-该区块静态展示。`EcosystemDiagram` 从实施前刷新后的节点 `198:35502` 直接导出完整 PNG（2026-08-21 快照为 868×580），六类输入、汇聚连接线、中心节点、椭圆底座与品牌落点全部烘焙在同一图片中；运行时不得再用 HTML/CSS/SVG 拆分重绘。图片提供完整替代文本，中小屏只整体等比缩放并完整展示，不把六入口重排为另一套 3×2 图，也不添加未要求的 hover / 切换交互。
+该区块静态展示。`EcosystemDiagram` 使用实施时刷新后的节点 `543:21676`（910×580）作为完整参考画布：六类输入、汇聚连接线、端点、中心接入/编排节点、596×183 渐变底座和品牌落点按 Figma 坐标由 HTML/CSS 与精确导出资产组合实现。文本可被选择和读取，图标与复杂矢量来自 `tabs/home/assets/icons/ecosystem/543-21676/`；旧 `198:35502` 整图 PNG 仅作历史/回退，不被正式 HTML 引用。中小屏只整体等比缩放并完整展示，不把六入口重排为另一套 3×2 图，也不添加未要求的 hover / 切换交互。
 
 ### 10.11 科研基座 Banner 与科研基座能力
 
@@ -589,7 +588,7 @@ Hero 拆成 `HeroIntroduction`、`HeroScreenStage` 和 3 个 `HeroDecorationCard
 
 ### 10.13 合作共建
 
-机构 Logo 统一放在 `shared/assets/orgs/partners/`。实现时从静态数据文件按前缀分组：`line1-`、`line2-`、`line3-` 分别进入第一、第二、第三行；当前盘点为 12、12、14 个，前缀去除后作为默认机构名 / `alt`。`PartnerLogoTile` 是统一容器组件：外框尺寸、背景、圆角、描边和间距由组件控制，内部图片盒固定 `60 × 60px`、`object-fit: contain`；纯重复轨道副本设空 alt / `aria-hidden`。
+机构 Logo 统一放在 `shared/assets/orgs/partners/`。实现时从静态数据文件的 `line1`、`line2`、`line3` 数组分组，文件本身使用 `logo-机构名.svg`，指定机构的暗色版使用 `logo-机构名-dark.svg`；当前盘点为 12、12、14 个，机构名直接来自数据并作为默认 `alt`。`PartnerLogoTile` 是统一容器组件：外框尺寸、背景、圆角、描边和间距由组件控制，内部图片盒固定 `60 × 60px`、`object-fit: contain`；纯重复轨道副本设空 alt / `aria-hidden`。
 
 Logo wall 使用三条可反向或错速的无缝 `MarqueeTrack`，两侧通过 mask 渐隐；周期按轨道实际宽度计算恒定像素速度。任一卡片 hover 或键盘 focus 时，对应轨道暂停；卡片内 Logo 图片隐藏并显示文件名前缀后的机构名称。名称态以 Figma `361:39144` 为基准，复用 `--bg-soft`、`--ink` 和 Body/Compact：13px / 400 / 1.65、水平垂直居中，离开卡片后恢复 Logo 与滚动。文档隐藏时暂停，减少动态模式改为静态可换行 Logo 列表。mask 属于 viewport，不覆盖可聚焦内容，也不能让 marquee 产生页面根横向溢出。
 
@@ -647,7 +646,7 @@ Footer 中黑色文字链接全部作为页内锚点：平台核心能力→`hom
 1. 实施启动时先对目标根节点和各模块重新执行 `get_design_context` + 截图，生成本轮 Figma manifest；刷新顶层顺序、尺寸、文字、Variable、`image-` 清单和复合图示坐标。标题文字若有变化，先重生成 Source Han Serif SC 600/700 页面字符子集。
 2. 接入本轮字体子集，补齐本页缺失 Token 和 Text / Effect Style 映射，并同步 Design System 核对页；随后创建 shell 入口与 Navigation，在架构地图登记 `home:ready`、锚点滚动和合作 Dialog 的跨 iframe 协议，并建立统一外链配置。
 3. 创建 `tabs/home/index.html`、`home.css`、`home.js`，先搭 rail、full-bleed 分割线、代码底纹、锚点和无 JS 可见基线。
-4. 下载 23 个 Figma 运行时图片图层的真实资产（包含 `image-safecontrol` 与 `image-open-ecosystem` 整图 PNG）；代码化 9 个复合图示（含证据链 7 个状态）并下载其真实图标 / 精确 SVG；把科研案例 02–10 补充源图从 Downloads **复制**到 Home 资源目录并校验。
+4. 下载 Figma 运行时图片图层的真实资产（安全可控保留整图 PNG，生态开放按 `543:21676` 拆分为代码化画布及其精确 SVG/PNG 资产）；代码化 10 个复合图示（含生态开放和证据链 7 个状态）并校验其自然尺寸与哈希；把科研案例 02–10 补充源图从 Downloads **复制**到 Home 资源目录并校验。
 5. 先实现全部静态终态和 390 / 768 / 1024 / 1440px 适配，再接 `HomeAnchorController`、`HomeTabController`、marquee 和统一 motion runtime。
 6. 依次实现 Hero、全链、学科、证据链、科研基座、案例与 Logo wall 的滚动/切换效果；每完成一类先验证减少动态和脚本失败降级。
 7. 把合作申请登记为 Design System Dialog 新变体并在 `components.html` 核对，再接入 shell host；提交接口确认前只验证 schema、校验和消息 payload。
@@ -664,9 +663,9 @@ Footer 中黑色文字链接全部作为页内锚点：平台核心能力→`hom
 - Figma 标题实际命中 `InkStone Han Serif SC Home` 页面子集；Noto Serif SC 只作为失败/缺字 fallback，字体许可与 manifest 随资产提交，冷缓存时无永久不可见文字。
 - 实施时 manifest 中全部 `image-` 图层都有明确去向；2026-08-21 修正快照为 32 个，其中必须包含组件集 `168:1325` 的 `image-chain01`—`image-chain07`，最终数量仍以同次 Figma 盘点为准，临时 Figma URL 不进入代码。
 - Navigation / Footer / favicon 使用仓库内既有 Logo 文件；点击 Navigation Logo 会刷新当前页面，Footer Logo 保持非刷新入口。
-- 合作机构 Logo 单独进入 `shared/assets/orgs/partners/`，不污染 `shared/assets/common/`；`line1-`、`line2-`、`line3-` 分别进入三行，当前 12 / 12 / 14 个文件全部被分配且三行无重复，每个可见图盒为 60×60px。
-- 9 个代码化复合图示的文本仍可选择、缩放和被辅助技术读取；节点包围盒、连线端点、圆心、描边与 Figma 自然尺寸基线逐项对齐。安全可控与生态开放整图 PNG 均提供完整替代文本。
-- 9 个代码化复合图示和两张整图 PNG 在中等/紧凑宽度使用统一比例整体缩放，不存在局部横向滚动、非等比拉伸或开发自行重排拓扑；证据链 7 个状态逐项完成截图对照。
+- 合作机构 Logo 单独进入 `shared/assets/orgs/partners/`，不污染 `shared/assets/common/`；静态数据中的 `line1`、`line2`、`line3` 分别进入三行，当前 12 / 12 / 14 个机构全部被分配且三行无重复，每个可见图盒为 60×60px。
+- 10 个代码化复合图示的文本仍可选择、缩放和被辅助技术读取；节点包围盒、连线端点、圆心、描边与 Figma 自然尺寸基线逐项对齐。安全可控整图 PNG 提供完整替代文本，生态开放提供 figure 替代文本并保留可读 DOM。
+- 10 个代码化复合图示和安全可控整图 PNG 在中等/紧凑宽度使用统一比例整体缩放，不存在局部横向滚动、非等比拉伸或开发自行重排拓扑；生态开放和证据链 7 个状态逐项完成截图对照。
 - 页面根无非预期横向滚动；流程图、证据链 Tab 和科研案例 Tab 均不依赖局部横向滚动。学科资源轨道与 Logo wall 的 marquee 必须在自身 viewport 裁切。
 - Navigation 吸顶且中心按钮组不受左右 Logo / CTA 宽度影响；Nav 与 Footer 的每个锚点都到达同一目标并正确处理焦点。
 - Navigation、Hero、Footer 的“在线使用 / 网页版”都从统一配置新开正确地址，并带 `noopener noreferrer`。

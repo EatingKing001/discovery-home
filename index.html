@@ -3,16 +3,19 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
   <meta name="description" content="书生·端砚——端到端全链路 AI 科研工作台">
   <title>书生·端砚｜AI 科研工作台</title>
   <link rel="icon" href="shared/assets/logos/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="shared/assets/logos/favicon.ico" sizes="any">
   <link rel="preload" href="shared/assets/fonts/source-han-serif-sc/inkstone-han-serif-sc-home-700.woff2?v=20260825-font2" as="font" type="font/woff2" crossorigin>
   <base href="/home/">
-  <link rel="stylesheet" href="shared/css/tokens.css?v=20260825-font2">
+  <script src="shared/js/theme.js?v=20260831-theme1"></script>
+  <link rel="stylesheet" href="shared/css/tokens.css?v=20260904-dark-dot1">
   <link rel="stylesheet" href="shared/css/base.css?v=20260824-home76">
-  <link rel="stylesheet" href="shared/css/shell.css?v=20260826-home78">
+  <link rel="stylesheet" href="shared/css/shell.css?v=20260831-theme1">
   <link rel="stylesheet" href="shared/css/styles.css?v=20260824-home76">
-  <link rel="stylesheet" href="shared/css/design-system-overrides.css?v=20260824-home76">
+  <link rel="stylesheet" href="shared/css/design-system-overrides.css?v=20260905-button-type1">
 <script src="product/vendor/migo-analytics.bundle.js?v=20260831-analytics1" defer></script>
 <script src="product/analytics-bootstrap.js?v=20260831-analytics1" defer></script>
 <script src="product/site-links.js?v=20260826-biz1" defer></script>
@@ -23,13 +26,13 @@
 <body class="site-shell">
   <header class="site-header">
     <button class="site-brand-button" type="button" data-refresh-page aria-label="刷新书生·端砚官网">
-      <img src="shared/assets/logos/duanyan-default.svg" alt="" width="120" height="32">
+      <img src="shared/assets/logos/duanyan-default.svg" data-theme-src-light="shared/assets/logos/duanyan-default.svg" alt="" width="115" height="32">
     </button>
     <nav class="site-nav" data-site-nav aria-label="官网导航">
       <button class="btn-text" type="button" data-anchor-id="home-advantages">平台核心优势</button>
       <button class="btn-text" type="button" data-anchor-id="home-research-foundation">科研基座</button>
       <button class="btn-text" type="button" data-anchor-id="home-research-cases">科研成果</button>
-      <button class="btn-text" type="button" data-anchor-id="home-cooperation">合作共建</button>
+      <button class="btn-text" type="button" data-anchor-id="home-cooperation">生态合作案例</button>
       <button class="btn-text" type="button" data-anchor-id="home-downloads">下载客户端</button>
     </nav>
     <a class="btn-primary site-header-action" href="https://discovery.intern-ai.org.cn/" target="_blank" rel="noopener noreferrer" data-analytics-event="online_use_click" data-analytics-prop-entry="header">在线使用</a>
@@ -38,7 +41,7 @@
     </button>
   </header>
   <main class="site-main">
-    <iframe class="site-frame" data-home-frame src="tabs/home/index.html?embedded=1&amp;v=20260827-home143" title="书生·端砚官网 Home"></iframe>
+    <iframe class="site-frame" data-home-frame src="tabs/home/index.html?embedded=1&amp;v=20260907-cases-align3" title="书生·端砚官网 Home"></iframe>
   </main>
 
   <div class="tm-overlay" id="cooperation-dialog" aria-hidden="true">
