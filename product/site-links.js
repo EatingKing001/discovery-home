@@ -16,7 +16,7 @@
    *   （dev 与 staging 共用 staging 频道 manifest，与「dev 链接把 prod 换成 staging」一致）
    */
   window.SiteLinkConfig = Object.freeze({
-    basePath: "",
+    basePath: "/home",
     discoveryWebApp: "https://discovery.intern-ai.org.cn/",
     downloads: Object.freeze({
       releaseBase: "https://openxlab.oss-cn-shanghai.aliyuncs.com/releases/inkstone/",

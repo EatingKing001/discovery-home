@@ -19,14 +19,15 @@
   <link rel="stylesheet" href="../../shared/css/shell.css?v=20260831-theme1">
   <link rel="stylesheet" href="../../shared/css/styles.css?v=20260824-home76">
   <link rel="stylesheet" href="../../shared/css/design-system-overrides.css?v=20260905-button-type1">
- <link rel="stylesheet" href="home.css?v=20260907-cases-align3">
+ <link rel="stylesheet" href="home.css?v=20260911-coop12">
 <link rel="stylesheet" href="../../product/cooperation-cta-hide.css?v=20260826-biz1">
 <script src="../../product/vendor/migo-analytics.bundle.js?v=20260831-analytics1" defer></script>
 <script src="../../product/analytics-bootstrap.js?v=20260831-analytics1" defer></script>
 <script src="../../product/site-links.js?v=20260826-biz1" defer></script>
 <script src="data/research-cases.data.js?v=20260907-research-cases1" defer></script>
+<script src="data/cooperation-cases.data.js?v=20260911-coop7" defer></script>
   <script src="data/partner-logos.data.js?v=20260904-partner-dark3" defer></script>
-  <script src="home.js?v=20260907-research-cases1" defer></script>
+  <script src="home.js?v=20260911-coop7" defer></script>
 <script src="../../product/protocol-links.js?v=20260826-biz1" defer></script>
 <script src="../../product/downloads.js?v=20260826-biz1" defer></script>
 <script src="../../product/cooperation-submit.js?v=20260826-biz1" defer></script>
@@ -527,8 +528,30 @@ branch_df &lt;- tribble(
 
     <section class="home-section cooperation-section" id="home-cooperation" data-home-section tabindex="-1" aria-labelledby="home-cooperation-title">
       <div class="home-rail section-content cooperation-content">
-        <header class="section-heading compact"><h2 id="home-cooperation-title">连接科研力量 共创科学未来</h2><p>携手全球顶尖科研机构共同推动人工智能在科学研究中的深度应用</p></header>
+        <header class="section-heading compact"><h2 id="home-cooperation-title" class="text-title-h2">生态合作案例</h2><p>携手顶尖科研机构，共建开放协同的科学发现生态</p></header>
+        <div class="cooperation-showcase">
+          <div class="cooperation-tabs" role="tablist" aria-orientation="horizontal" aria-label="生态合作案例" data-cooperation-tabs></div>
+          <article class="cooperation-case" id="cooperation-case-panel" data-cooperation-case>
+            <div class="cooperation-case-copy">
+              <div class="cooperation-case-org">
+                <img class="cooperation-case-org-logo is-wide" src="assets/icons/cooperation/logo-casc-wordmark.svg" alt="中国航天科技集团" width="245" height="36">
+              </div>
+              <div class="cooperation-case-intro">
+                <h3><span class="cooperation-case-kicker">书生·端砚 × 天玄·千枢</span>航天科学发现平台</h3>
+                <p>融合“书生·端砚”的科学智能体能力与“天玄·千枢”的航天领域知识和工具体系，构建航天科学发现平台，支持知识探索、方案生成、仿真分析与协同创新</p>
+                <ul class="cooperation-case-tags"><li>电磁超材料</li><li>合金设计</li><li>飞行器气动设计</li><li>发动机研发</li></ul>
+              </div>
+              <ul class="cooperation-case-features">
+                <li><span class="cooperation-feature-icon" style="--feature-icon: url('assets/icons/cooperation/feature-knowledge.svg')" aria-hidden="true"></span><div><strong>知识驱动科研</strong><p>融合航天知识库与科研语料，支撑智能问答与知识发现</p></div></li>
+                <li><span class="cooperation-feature-icon" style="--feature-icon: url('assets/icons/cooperation/feature-tools.svg')" aria-hidden="true"></span><div><strong>多学科工具集成</strong><p>覆盖超材料、合金设计、气动仿真、CAD/CAE 等专业工具链</p></div></li>
+                <li><span class="cooperation-feature-icon" style="--feature-icon: url('assets/icons/cooperation/feature-collab.svg')" aria-hidden="true"></span><div><strong>智能科研协同</strong><p>科研助手、对话探索、实验与仿真一体化，提升研发效率</p></div></li>
+              </ul>
+            </div>
+            <div class="cooperation-case-media"><picture><img src="assets/images/cooperation/image-cooperation-aerospace@1x.png?v=20260911-coop2" srcset="assets/images/cooperation/image-cooperation-aerospace@1x.png?v=20260911-coop2 1x, assets/images/cooperation/image-cooperation-aerospace@2x.png?v=20260911-coop2 2x" sizes="(max-width: 767px) calc(100vw - 40px), 720px" alt="天玄·千枢航天科学发现平台" width="720" height="452" loading="lazy" decoding="async"></picture></div>
+          </article>
+        </div>
         <div class="partner-wall" aria-label="合作机构">
+          <h3 class="partner-wall-title">更多合作伙伴</h3>
           <div class="partner-fade"><div class="partner-track" data-partner-line="line1"></div></div>
           <div class="partner-fade"><div class="partner-track reverse" data-partner-line="line2"></div></div>
           <div class="partner-fade"><div class="partner-track" data-partner-line="line3"></div></div>
@@ -536,7 +559,7 @@ branch_df &lt;- tribble(
         <div class="cooperation-cta dot-field">
           <div class="cooperation-cta-content">
             <div class="cooperation-cta-copy"><h3><span>让你的科研课题连接更多能力，让专业资源创造更大价值，</span><span>一起拓展科学发现的边界</span></h3></div>
-            <button class="btn-primary" type="button" data-open-cooperation>申请合作</button>
+            <button class="btn-primary" type="button" data-open-cooperation hidden>申请合作</button>
           </div>
           <picture><source type="image/avif" srcset="assets/images/cooperation/image-cooperation-cta@1x.avif 1x, assets/images/cooperation/image-cooperation-cta@2x.avif 2x" sizes="(max-width: 767px) 420px, 612px"><source type="image/webp" srcset="assets/images/cooperation/image-cooperation-cta@1x.webp 1x, assets/images/cooperation/image-cooperation-cta@2x.webp 2x" sizes="(max-width: 767px) 420px, 612px"><img class="cooperation-cta-art" src="assets/images/cooperation/image-cooperation-cta@1x.png" srcset="assets/images/cooperation/image-cooperation-cta@1x.png 1x, assets/images/cooperation/image-cooperation-cta@2x.png 2x" sizes="(max-width: 767px) 420px, 612px" alt="" aria-hidden="true" width="612" height="487" loading="lazy" decoding="async"></picture>
         </div>
