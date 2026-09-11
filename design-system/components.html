@@ -3,16 +3,18 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
   <title>组件规范 · InternInkStone Design System</title>
+  <script src="../shared/js/theme.js?v=20260831-theme1"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&amp;family=Inter:wght@400;500;600;700&amp;family=Noto+Sans+SC:wght@400;500;600;700&amp;family=Noto+Serif+SC:wght@400;600&amp;display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../shared/css/tokens.css">
+  <link rel="stylesheet" href="../shared/css/tokens.css?v=20260904-dark-dot1">
   <link rel="stylesheet" href="../shared/css/base.css">
-  <link rel="stylesheet" href="../shared/css/shell.css">
+  <link rel="stylesheet" href="../shared/css/shell.css?v=20260831-theme1">
   <link rel="stylesheet" href="../shared/css/styles.css">
-  <link rel="stylesheet" href="../shared/css/design-system-overrides.css?v=20260821-5">
-  <link rel="stylesheet" href="./design-system.css?v=20260821-3">
+  <link rel="stylesheet" href="../shared/css/design-system-overrides.css?v=20260905-button-type1">
+  <link rel="stylesheet" href="./design-system.css?v=20260904-button-global1">
   <script defer src="../shared/js/components.js?v=20260821-1"></script>
 </head>
 <body>
@@ -20,20 +22,28 @@
     <header class="ds-hero">
       <p class="ds-eyebrow">InternInkStone</p>
       <h1 class="ds-title">组件规范</h1>
-      <p class="ds-summary">从参考项目迁移 Buttons、Toast 与指定的“创建课题”Dialog，并按当前 Figma 证据补充文字按钮与文字链接按钮；组件样式统一绑定本项目 Token。</p>
-      <nav class="ds-module-nav" aria-label="Design System 模块">
-        <a href="./index.html">原子规范</a>
-        <a href="./components.html" aria-current="page">组件规范</a>
-      </nav>
+      <p class="ds-summary">从参考项目迁移 Buttons、Toast、指定的“创建课题”Dialog，以及 Brand Scale 和 Semantic &amp; AI Colors；组件样式统一绑定本项目 Token，并随亮暗模式切换。</p>
+      <div class="ds-hero-tools">
+        <nav class="ds-module-nav" aria-label="Design System 模块">
+          <a href="./index.html">原子规范</a>
+          <a href="./components.html" aria-current="page">组件规范</a>
+        </nav>
+        <button class="ds-theme-toggle" type="button" role="switch" aria-checked="false" aria-label="深色模式" data-theme-toggle>
+          <span>浅色</span>
+          <span class="ds-theme-toggle-track" aria-hidden="true"><span class="ds-theme-toggle-thumb"></span></span>
+          <span>深色</span>
+        </button>
+      </div>
     </header>
 
     <section class="ds-section" aria-labelledby="component-source">
       <h2 id="component-source">组件来源与范围</h2>
-      <p>Buttons 与 Toast 按参考 Design System 的完整规范迁移；Modal / Dialog 仅迁移截图指定的“创建课题”表单弹窗。文字按钮依据当前 Figma 节点新增，文字链接按钮依据已明确的交互规则新增。</p>
+      <p>Buttons 与 Toast 按参考 Design System 的完整规范迁移；Modal / Dialog 仅迁移截图指定的“创建课题”表单弹窗。Brand Scale 与 Semantic &amp; AI Colors 按来源 Token 表迁入并补齐 dark 值；文字按钮依据当前 Figma 节点新增，文字链接按钮依据已明确的交互规则新增。</p>
       <dl class="ds-component-ledger">
         <div><dt>Buttons</dt><dd>32px / 36px、一级 / 二级 / 三级、文字按钮、文字链接、危险、禁用</dd></div>
         <div><dt>Dialog form</dt><dd>文本输入、计数器、领域单选 chip、文本域、取消与创建</dd></div>
         <div><dt>Toast</dt><dd>success / warning / error；顶部单实例，1.8 秒后收起</dd></div>
+        <div><dt>Color parameters</dt><dd>Brand Scale 通过现有 accent 别名服务选中态；Semantic 色阶通过现有 state 别名服务危险按钮与三类 Toast；AI tint 继续服务选中信息面。</dd></div>
       </dl>
     </section>
 
@@ -72,7 +82,7 @@
           </article>
         </div>
         <div class="ds-control-specs" aria-label="按钮公共尺寸规范">
-          <span>32px / Padding X 12px</span><span>36px / Padding X 14px</span><span>Font 13px / 500</span><span>Radius 4px</span><span>Icon 14px</span>
+          <span>32px / Padding X 12px</span><span>36px / Padding X 14px</span><span>Font 14px / 400 / 24px</span><span>Radius 8px</span><span>Icon 14px</span>
         </div>
       </div>
 
@@ -128,7 +138,7 @@
               <div class="ds-button-state"><span>Default</span><button class="btn-text" type="button">文字按钮</button></div>
               <div class="ds-button-state"><span>Hover</span><button class="btn-text ds-preview-text-button-hover" type="button">文字按钮</button></div>
             </div>
-            <p><code>.btn-text</code> · 高 36px · Padding X 12px · Radius 8px · Font 15px / 24px。实际 hover 时鼠标指针为 pointer。</p>
+            <p><code>.btn-text</code> · 高 36px · Padding X 12px · Radius 8px · Font 14px / 400 / 24px。实际 hover 时鼠标指针为 pointer。</p>
           </article>
           <article class="ds-component-card">
             <p class="ds-component-kicker">Text Link</p>
@@ -137,7 +147,7 @@
               <div class="ds-button-state"><span>Default</span><a class="btn-link" href="#component-buttons">文字链接按钮</a></div>
               <div class="ds-button-state"><span>Hover</span><a class="btn-link ds-preview-link-button-hover" href="#component-buttons">文字链接按钮</a></div>
             </div>
-            <p><code>.btn-link</code> · 默认无下划线；hover 与键盘 focus 时，下划线从左向右出现，鼠标指针为 pointer。</p>
+            <p><code>.btn-link</code> · Font 14px / 400 / 24px · 默认无下划线；hover 与键盘 focus 时，下划线从左向右出现，鼠标指针为 pointer。</p>
           </article>
         </div>
       </div>

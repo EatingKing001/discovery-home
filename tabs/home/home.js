@@ -169,7 +169,7 @@
   const evidenceScaler = document.querySelector("[data-evidence-scaler]");
   if (evidenceScaler) {
     const resizeEvidence = () => {
-      const scale = Math.min(1.2, evidenceScaler.clientWidth / 800);
+      const scale = Math.min(1, evidenceScaler.clientWidth / 800);
       evidenceScaler.style.setProperty("--evidence-scale", scale);
       evidenceScaler.style.height = `${480 * scale}px`;
     };
@@ -196,43 +196,68 @@
 
   const partnerData = window.HomePartnerLogos || { line1: [], line2: [], line3: [] };
   const partnerPixelsPerSecond = 22;
-  document.querySelectorAll("[data-partner-line]").forEach((track) => {
-    const logos = partnerData[track.dataset.partnerLine] || [];
-    const fragment = document.createDocumentFragment();
-    [...logos, ...logos].forEach((logo, index) => {
-      const item = document.createElement("div");
-      item.className = "partner-logo";
-      item.dataset.orgName = logo.name;
-      if (index >= logos.length) item.setAttribute("aria-hidden", "true");
-      else {
-        item.tabIndex = 0;
-        item.setAttribute("role", "img");
-        item.setAttribute("aria-label", logo.name);
-      }
-      const image = document.createElement("img");
-      image.src = logo.src;
-      image.alt = "";
-      image.width = 60;
-      image.height = 60;
-      image.loading = index < 8 ? "eager" : "lazy";
-      const name = document.createElement("span");
-      name.className = "partner-logo-name";
-      name.textContent = logo.name;
-      name.setAttribute("aria-hidden", "true");
-      item.append(image, name);
-      fragment.append(item);
+  const partnerWall = document.querySelector(".partner-wall");
+  let partnerTracksInitialized = false;
+  const currentTheme = () => document.documentElement.getAttribute("data-theme");
+
+  function initializePartnerTracks() {
+    if (partnerTracksInitialized) return;
+    partnerTracksInitialized = true;
+    document.querySelectorAll("[data-partner-line]").forEach((track) => {
+      const logos = partnerData[track.dataset.partnerLine] || [];
+      const fragment = document.createDocumentFragment();
+      [...logos, ...logos].forEach((logo, index) => {
+        const item = document.createElement("div");
+        item.className = "partner-logo";
+        item.dataset.orgName = logo.name;
+        if (index >= logos.length) item.setAttribute("aria-hidden", "true");
+        else {
+          item.tabIndex = 0;
+          item.setAttribute("role", "img");
+          item.setAttribute("aria-label", logo.name);
+        }
+        const image = document.createElement("img");
+        image.alt = "";
+        image.width = 60;
+        image.height = 60;
+        image.loading = "lazy";
+        image.decoding = "async";
+        image.fetchPriority = "low";
+        if (logo.darkSrc) {
+          image.dataset.themeSrcLight = logo.src;
+          image.dataset.themeSrcDark = logo.darkSrc;
+          image.src = currentTheme() === "dark" ? logo.darkSrc : logo.src;
+        } else image.src = logo.src;
+        const name = document.createElement("span");
+        name.className = "partner-logo-name";
+        name.textContent = logo.name;
+        name.setAttribute("aria-hidden", "true");
+        item.append(image, name);
+        fragment.append(item);
+      });
+      track.replaceChildren(fragment);
+      const updatePartnerDuration = () => {
+        const loopDistance = track.scrollWidth / 2;
+        if (loopDistance > 0) track.style.setProperty("--partner-duration", `${loopDistance / partnerPixelsPerSecond}s`);
+      };
+      updatePartnerDuration();
+      if ("ResizeObserver" in window) {
+        const partnerResizeObserver = new ResizeObserver(updatePartnerDuration);
+        partnerResizeObserver.observe(track);
+      } else window.addEventListener("resize", updatePartnerDuration, { passive: true });
     });
-    track.replaceChildren(fragment);
-    const updatePartnerDuration = () => {
-      const loopDistance = track.scrollWidth / 2;
-      if (loopDistance > 0) track.style.setProperty("--partner-duration", `${loopDistance / partnerPixelsPerSecond}s`);
-    };
-    updatePartnerDuration();
-    if ("ResizeObserver" in window) {
-      const partnerResizeObserver = new ResizeObserver(updatePartnerDuration);
-      partnerResizeObserver.observe(track);
-    } else window.addEventListener("resize", updatePartnerDuration, { passive: true });
-  });
+  }
+
+  if (partnerWall) {
+    if ("IntersectionObserver" in window) {
+      const partnerInitObserver = new IntersectionObserver((entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        initializePartnerTracks();
+        partnerInitObserver.disconnect();
+      }, { rootMargin: "1000px 0px" });
+      partnerInitObserver.observe(partnerWall);
+    } else initializePartnerTracks();
+  }
 
   /* Shared scroll frame: hero exit, shallow image parallax, and section state. */
   const introduction = document.querySelector("[data-hero-introduction]");
@@ -314,11 +339,19 @@
   const evidenceTabList = document.querySelector(".evidence-tabs");
   const evidenceTabs = Array.from(document.querySelectorAll(".evidence-tab"));
   const evidencePanels = Array.from(document.querySelectorAll(".evidence-panel"));
+  const evidenceSection = document.querySelector(".evidence-section");
   const evidenceMobileSummary = document.querySelector("[data-evidence-mobile-summary]");
   const evidenceMobileDescription = evidenceMobileSummary?.querySelector("p");
   const evidenceMobileQuery = window.matchMedia("(max-width: 767px)");
   let evidenceIndex = 0;
   evidenceTabList?.setAttribute("aria-orientation", evidenceMobileQuery.matches ? "horizontal" : "vertical");
+
+  function loadEvidenceAssets() {
+    evidenceSection?.querySelectorAll("img[data-evidence-src]").forEach((image) => {
+      image.src = image.dataset.evidenceSrc;
+      delete image.dataset.evidenceSrc;
+    });
+  }
 
   function selectEvidence(index, focusTab = false) {
     evidenceIndex = (index + evidenceTabs.length) % evidenceTabs.length;
@@ -336,35 +369,37 @@
       const active = panelIndex === evidenceIndex;
       panel.hidden = !active;
       panel.classList.toggle("is-active", active);
-      if (!active) return;
-      const image = panel.querySelector("[data-evidence-image]");
-      if (!image || image.dataset.requested === "true") return;
-      image.dataset.requested = "true";
-      image.addEventListener("load", () => {
-        image.hidden = false;
-        panel.classList.remove("is-image-missing");
-      }, { once: true });
-      image.addEventListener("error", () => {
-        image.hidden = true;
-        panel.classList.add("is-image-missing");
-      }, { once: true });
-      image.src = image.dataset.src;
     });
   }
 
   evidenceTabs.forEach((tab, index) => {
-    tab.addEventListener("click", () => selectEvidence(index));
+    tab.addEventListener("click", () => {
+      selectEvidence(index);
+    });
     tab.addEventListener("keydown", (event) => {
       let next = null;
       if (event.key === "ArrowDown" || event.key === "ArrowRight") next = evidenceIndex + 1;
       else if (event.key === "ArrowUp" || event.key === "ArrowLeft") next = evidenceIndex - 1;
       else if (event.key === "Home") next = 0;
       else if (event.key === "End") next = evidenceTabs.length - 1;
-      if (next !== null) { event.preventDefault(); selectEvidence(next, true); }
+      if (next !== null) {
+        event.preventDefault();
+        selectEvidence(next, true);
+      }
     });
   });
   evidenceMobileQuery.addEventListener?.("change", () => selectEvidence(evidenceIndex));
   selectEvidence(evidenceIndex);
+  if (evidenceSection) {
+    if ("IntersectionObserver" in window) {
+      const evidenceAssetObserver = new IntersectionObserver((entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        loadEvidenceAssets();
+        evidenceAssetObserver.disconnect();
+      }, { rootMargin: "1000px 0px" });
+      evidenceAssetObserver.observe(evidenceSection);
+    } else loadEvidenceAssets();
+  }
 
   /* Research cases consume the local static dataset. */
   const caseData = window.HomeResearchCases || [];
@@ -395,6 +430,15 @@
     caseDetail?.style.removeProperty("--case-swipe-x");
   }
 
+  function renderCasePicture(src, alt) {
+    const source = String(src);
+    const match = source.match(/^(.*?)(\.png)(\?.*)?$/);
+    const base = match?.[1] || source.replace(/\.png$/, "");
+    const query = match?.[3] || "";
+    const sizes = "(max-width: 767px) calc(100vw - 40px), 720px";
+    return `<picture><source type="image/avif" srcset="${base}@1x.avif${query} 1x, ${base}@2x.avif${query} 2x" sizes="${sizes}"><source type="image/webp" srcset="${base}@1x.webp${query} 1x, ${base}@2x.webp${query} 2x" sizes="${sizes}"><img src="${base}@1x.png${query}" srcset="${base}@1x.png${query} 1x, ${base}@2x.png${query} 2x" sizes="${sizes}" alt="${alt}" width="720" height="405" loading="lazy" decoding="async" fetchpriority="low"></picture>`;
+  }
+
   function renderCase(index, focusTab = false, requestedDirection = 0) {
     if (!caseData.length || !caseDetail) return;
     window.clearTimeout(caseRenderTimer);
@@ -417,7 +461,7 @@
     resetCaseMotion();
     caseDetail.classList.add(slideDirection > 0 ? "is-slide-out-left" : slideDirection < 0 ? "is-slide-out-right" : "is-switching");
     const update = () => {
-      caseDetail.innerHTML = `<div class="case-copy"><span class="case-field">${item.primaryField} · ${item.secondaryField}</span><h3>${item.title}</h3><p>${item.highlight}</p></div><div class="case-media"><img src="${item.image}" alt="${item.imageAlt}" decoding="async" ${activeCase ? 'loading="lazy"' : ""}></div><dl class="case-meta"><div><dt>联合单位：</dt><dd>${item.partners}</dd></div></dl>`;
+      caseDetail.innerHTML = `<div class="case-copy"><span class="case-field">${item.primaryField} · ${item.secondaryField}</span><h3>${item.title}</h3><p>${item.highlight}</p></div><div class="case-media">${renderCasePicture(item.image, item.imageAlt)}</div><dl class="case-meta"><div><dt>联合单位：</dt><dd>${item.partners}</dd></div></dl>`;
       resetCaseMotion();
       if (!slideDirection || reducedMotion.matches) return;
       caseDetail.classList.add(slideDirection > 0 ? "is-slide-in-right" : "is-slide-in-left");

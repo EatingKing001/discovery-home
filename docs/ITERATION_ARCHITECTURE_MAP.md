@@ -19,6 +19,7 @@
 | Design System | `design-system/` | 原子规范、组件规范、交互示例与人工核对 | 原子页及 Buttons（含文字按钮、文字链接按钮）、指定 Create Topic Dialog、Toast 组件页已创建；产品模块验证尚未开始 |
 | 公共样式 | `shared/css/` | Token、基础样式、shell 样式和稳定或已批准的候选组件覆盖 | Home 与 Design System 已消费；Source Han Serif SC 页面子集、官网语义 Token、Buttons 和 Dialog 已接入 |
 | 公共组件交互 | `shared/js/components.js` | Dialog、表单计数 / 单选、Toast 的轻量公共行为 | 已创建；当前消费者仅 Design System，不包含产品业务提交逻辑 |
+| 公共主题运行时 | `shared/js/theme.js` | Light / Dark 初始化、用户偏好持久化、同域文档同步、控件状态与主题图片源切换 | 已创建；shell、Home 与 Design System 共同消费 |
 | 公共资源 | `shared/assets/` | shell 或多个模块共用的资源 | 官网 logo、favicon 和 `orgs/partners/` 合作机构 logo 已接入 |
 
 ## 影响级别
@@ -43,6 +44,14 @@ Shell 拥有：
 - 自己的 DOM、页面状态、交互和私有资源。
 - 单独打开时所需的兼容逻辑。
 - 向 shell 发请求并接收结果，但不直接修改 shell DOM。
+
+## 公共主题状态与图片接口
+
+- 每个正式文档在样式加载前运行 `shared/js/theme.js`，由根元素 `data-theme="light|dark"` 驱动同名语义 Token。
+- 显式选择写入 `interninkstone-theme`；只有没有显式选择时才跟随 `prefers-color-scheme`。shell、Home iframe 与 Design System 通过同域 `storage` 事件同步，不新增跨 iframe 产品消息。
+- 二态开关使用 `[data-theme-toggle]` / `aria-checked`；分段选项使用 `[data-theme-option="light|dark"]` / `aria-pressed`。
+- 主题图片使用 `data-theme-src-light` / `data-theme-src-dark`；响应式图片使用 `data-theme-srcset-light` / `data-theme-srcset-dark`。Dark 属性缺失时必须回退 Light，允许暗色图片分批交付。
+- 主题变化会在当前文档触发 `inkstone:themechange`，供后续代码化图表重绘；业务模块不得自行创建第二套主题存储键。
 
 ## 跨 iframe 通信登记
 

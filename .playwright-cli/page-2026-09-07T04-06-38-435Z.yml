@@ -1,0 +1,71 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - button "刷新书生·端砚官网" [ref=e3]
+    - navigation "官网导航" [ref=e4]:
+      - button "平台核心优势" [ref=e5]
+      - button "科研基座" [ref=e6]
+      - button "科研成果" [ref=e7]
+      - button "合作共建" [ref=e8]
+      - button "下载客户端" [ref=e9]
+    - link "在线使用" [ref=e10] [cursor=pointer]:
+      - /url: https://discovery.intern-ai.org.cn/
+    - button "打开导航菜单" [ref=e11]
+  - main [ref=e13]:
+    - iframe [ref=e14]:
+      - generic [ref=f1e1]:
+        - heading "Error response" [level=1] [ref=f1e2]
+        - paragraph [ref=f1e3]: "Error code: 404"
+        - paragraph [ref=f1e4]: "Message: File not found."
+        - paragraph [ref=f1e5]: "Error code explanation: 404 - Nothing matches the given URI."
+  - dialog [ref=e16]:
+    - banner [ref=e17]:
+      - heading [level=2] [ref=e18]: 申请合作
+      - button [ref=e19]
+    - generic [ref=e21]:
+      - generic [ref=e22]:
+        - generic [ref=e23]:
+          - generic [ref=e24]: 姓名 *
+          - textbox [ref=e25]
+        - generic [ref=e26]:
+          - generic [ref=e27]: 手机号 *
+          - textbox [ref=e28]
+        - generic [ref=e29]:
+          - generic [ref=e30]: 学校/单位 *
+          - textbox [ref=e31]
+        - generic [ref=e32]:
+          - generic [ref=e33]: 职位 *
+          - textbox [ref=e34]
+      - group [ref=e35]:
+        - generic [ref=e36]: 研究方向 *
+        - radiogroup [ref=e37]:
+          - radio [checked] [ref=e38]: 生命科学
+          - radio [ref=e39]: 地球科学
+          - radio [ref=e40]: 物质科学
+          - radio [ref=e41]: 神经科学
+          - radio [ref=e42]: 空间科学
+          - radio [ref=e43]: 物理科学
+          - radio [ref=e44]: 数学
+          - radio [ref=e45]: 化学
+          - radio [ref=e46]: 其他
+      - generic [ref=e47]:
+        - generic [ref=e48]: 具体研究内容 选填
+        - textbox [ref=e49]
+      - group [ref=e50]:
+        - generic [ref=e51]: 希望合作方式 *
+        - generic [ref=e52]:
+          - generic [ref=e53]:
+            - checkbox [ref=e54]
+            - text: 联合课题研究
+          - generic [ref=e55]:
+            - checkbox [ref=e56]
+            - text: 科研资源接入
+          - generic [ref=e57]:
+            - checkbox [ref=e58]
+            - text: 其他
+      - generic [ref=e59]:
+        - generic [ref=e60]: 具体可合作内容 选填
+        - textbox [ref=e61]
+    - contentinfo [ref=e62]:
+      - button [ref=e63]: 取消
+      - button [ref=e64]: 提交申请
+  - status
