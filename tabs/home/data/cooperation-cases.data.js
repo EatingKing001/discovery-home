@@ -4,12 +4,12 @@
   global.HomeCooperationCases = [
     {
       id: "aerospace",
-      tabLabel: "中国航天科技集团",
+      tabLabel: "中国航天科技体系与创新研究院",
       hideOrgNames: true,
-      logo: "assets/images/cooperation/logo-casc.svg?v=20260911-coop9",
+      logo: "assets/images/cooperation/logo-casc.png?v=20260912-coop17",
       logoWide: true,
       logoWidth: 245,
-      logoHeight: 36,
+      logoHeight: 43,
       titleLines: ["书生·端砚 × 天玄·千枢", "航天科学发现平台"],
       body: "双方团队聚焦航天复杂系统工程中的关键科研痛点，深度融合“书生·端砚”科学智能体能力，协同构建涵盖领域科学知识、科研方法及干湿实验工具的一体化科研体系，打造兼具“快速迭代”与“深度认知”能力的航天科研新引擎，共同建设“天玄·千枢”航天科学发现平台。",
       tags: ["电磁超材料", "合金设计", "飞行器气动设计", "发动机研发"],
@@ -30,9 +30,9 @@
           description: "科研助手、对话探索、实验与仿真一体化，提升研发效率"
         }
       ],
-      image: "assets/images/cooperation/image-cooperation-aerospace.png?v=20260911-coop16",
-      imageWidth: 1024,
-      imageHeight: 642,
+      image: "assets/images/cooperation/image-cooperation-aerospace.png?v=20260912-coop17",
+      imageWidth: 1470,
+      imageHeight: 920,
       imageAlt: "天玄·千枢航天科学发现平台"
     },
     {
