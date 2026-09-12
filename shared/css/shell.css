@@ -36,6 +36,7 @@
 
 .site-brand-button:hover { background: var(--bg-soft); }
 .site-brand-button img { display: block; width: 120px; height: 32px; }
+:root[data-theme="dark"] .site-brand-button img:not([data-theme-src-dark]) { filter: brightness(0) invert(1); }
 
 .site-nav {
   display: flex;

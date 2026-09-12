@@ -169,7 +169,7 @@
   const evidenceScaler = document.querySelector("[data-evidence-scaler]");
   if (evidenceScaler) {
     const resizeEvidence = () => {
-      const scale = Math.min(1.2, evidenceScaler.clientWidth / 800);
+      const scale = Math.min(1, evidenceScaler.clientWidth / 800);
       evidenceScaler.style.setProperty("--evidence-scale", scale);
       evidenceScaler.style.height = `${480 * scale}px`;
     };
@@ -196,43 +196,68 @@
 
   const partnerData = window.HomePartnerLogos || { line1: [], line2: [], line3: [] };
   const partnerPixelsPerSecond = 22;
-  document.querySelectorAll("[data-partner-line]").forEach((track) => {
-    const logos = partnerData[track.dataset.partnerLine] || [];
-    const fragment = document.createDocumentFragment();
-    [...logos, ...logos].forEach((logo, index) => {
-      const item = document.createElement("div");
-      item.className = "partner-logo";
-      item.dataset.orgName = logo.name;
-      if (index >= logos.length) item.setAttribute("aria-hidden", "true");
-      else {
-        item.tabIndex = 0;
-        item.setAttribute("role", "img");
-        item.setAttribute("aria-label", logo.name);
-      }
-      const image = document.createElement("img");
-      image.src = logo.src;
-      image.alt = "";
-      image.width = 60;
-      image.height = 60;
-      image.loading = index < 8 ? "eager" : "lazy";
-      const name = document.createElement("span");
-      name.className = "partner-logo-name";
-      name.textContent = logo.name;
-      name.setAttribute("aria-hidden", "true");
-      item.append(image, name);
-      fragment.append(item);
+  const partnerWall = document.querySelector(".partner-wall");
+  let partnerTracksInitialized = false;
+  const currentTheme = () => document.documentElement.getAttribute("data-theme");
+
+  function initializePartnerTracks() {
+    if (partnerTracksInitialized) return;
+    partnerTracksInitialized = true;
+    document.querySelectorAll("[data-partner-line]").forEach((track) => {
+      const logos = partnerData[track.dataset.partnerLine] || [];
+      const fragment = document.createDocumentFragment();
+      [...logos, ...logos].forEach((logo, index) => {
+        const item = document.createElement("div");
+        item.className = "partner-logo";
+        item.dataset.orgName = logo.name;
+        if (index >= logos.length) item.setAttribute("aria-hidden", "true");
+        else {
+          item.tabIndex = 0;
+          item.setAttribute("role", "img");
+          item.setAttribute("aria-label", logo.name);
+        }
+        const image = document.createElement("img");
+        image.alt = "";
+        image.width = 60;
+        image.height = 60;
+        image.loading = "lazy";
+        image.decoding = "async";
+        image.fetchPriority = "low";
+        if (logo.darkSrc) {
+          image.dataset.themeSrcLight = logo.src;
+          image.dataset.themeSrcDark = logo.darkSrc;
+          image.src = currentTheme() === "dark" ? logo.darkSrc : logo.src;
+        } else image.src = logo.src;
+        const name = document.createElement("span");
+        name.className = "partner-logo-name";
+        name.textContent = logo.name;
+        name.setAttribute("aria-hidden", "true");
+        item.append(image, name);
+        fragment.append(item);
+      });
+      track.replaceChildren(fragment);
+      const updatePartnerDuration = () => {
+        const loopDistance = track.scrollWidth / 2;
+        if (loopDistance > 0) track.style.setProperty("--partner-duration", `${loopDistance / partnerPixelsPerSecond}s`);
+      };
+      updatePartnerDuration();
+      if ("ResizeObserver" in window) {
+        const partnerResizeObserver = new ResizeObserver(updatePartnerDuration);
+        partnerResizeObserver.observe(track);
+      } else window.addEventListener("resize", updatePartnerDuration, { passive: true });
     });
-    track.replaceChildren(fragment);
-    const updatePartnerDuration = () => {
-      const loopDistance = track.scrollWidth / 2;
-      if (loopDistance > 0) track.style.setProperty("--partner-duration", `${loopDistance / partnerPixelsPerSecond}s`);
-    };
-    updatePartnerDuration();
-    if ("ResizeObserver" in window) {
-      const partnerResizeObserver = new ResizeObserver(updatePartnerDuration);
-      partnerResizeObserver.observe(track);
-    } else window.addEventListener("resize", updatePartnerDuration, { passive: true });
-  });
+  }
+
+  if (partnerWall) {
+    if ("IntersectionObserver" in window) {
+      const partnerInitObserver = new IntersectionObserver((entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        initializePartnerTracks();
+        partnerInitObserver.disconnect();
+      }, { rootMargin: "1000px 0px" });
+      partnerInitObserver.observe(partnerWall);
+    } else initializePartnerTracks();
+  }
 
   /* Shared scroll frame: hero exit, shallow image parallax, and section state. */
   const introduction = document.querySelector("[data-hero-introduction]");
@@ -314,11 +339,19 @@
   const evidenceTabList = document.querySelector(".evidence-tabs");
   const evidenceTabs = Array.from(document.querySelectorAll(".evidence-tab"));
   const evidencePanels = Array.from(document.querySelectorAll(".evidence-panel"));
+  const evidenceSection = document.querySelector(".evidence-section");
   const evidenceMobileSummary = document.querySelector("[data-evidence-mobile-summary]");
   const evidenceMobileDescription = evidenceMobileSummary?.querySelector("p");
   const evidenceMobileQuery = window.matchMedia("(max-width: 767px)");
   let evidenceIndex = 0;
   evidenceTabList?.setAttribute("aria-orientation", evidenceMobileQuery.matches ? "horizontal" : "vertical");
+
+  function loadEvidenceAssets() {
+    evidenceSection?.querySelectorAll("img[data-evidence-src]").forEach((image) => {
+      image.src = image.dataset.evidenceSrc;
+      delete image.dataset.evidenceSrc;
+    });
+  }
 
   function selectEvidence(index, focusTab = false) {
     evidenceIndex = (index + evidenceTabs.length) % evidenceTabs.length;
@@ -336,35 +369,37 @@
       const active = panelIndex === evidenceIndex;
       panel.hidden = !active;
       panel.classList.toggle("is-active", active);
-      if (!active) return;
-      const image = panel.querySelector("[data-evidence-image]");
-      if (!image || image.dataset.requested === "true") return;
-      image.dataset.requested = "true";
-      image.addEventListener("load", () => {
-        image.hidden = false;
-        panel.classList.remove("is-image-missing");
-      }, { once: true });
-      image.addEventListener("error", () => {
-        image.hidden = true;
-        panel.classList.add("is-image-missing");
-      }, { once: true });
-      image.src = image.dataset.src;
     });
   }
 
   evidenceTabs.forEach((tab, index) => {
-    tab.addEventListener("click", () => selectEvidence(index));
+    tab.addEventListener("click", () => {
+      selectEvidence(index);
+    });
     tab.addEventListener("keydown", (event) => {
       let next = null;
       if (event.key === "ArrowDown" || event.key === "ArrowRight") next = evidenceIndex + 1;
       else if (event.key === "ArrowUp" || event.key === "ArrowLeft") next = evidenceIndex - 1;
       else if (event.key === "Home") next = 0;
       else if (event.key === "End") next = evidenceTabs.length - 1;
-      if (next !== null) { event.preventDefault(); selectEvidence(next, true); }
+      if (next !== null) {
+        event.preventDefault();
+        selectEvidence(next, true);
+      }
     });
   });
   evidenceMobileQuery.addEventListener?.("change", () => selectEvidence(evidenceIndex));
   selectEvidence(evidenceIndex);
+  if (evidenceSection) {
+    if ("IntersectionObserver" in window) {
+      const evidenceAssetObserver = new IntersectionObserver((entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        loadEvidenceAssets();
+        evidenceAssetObserver.disconnect();
+      }, { rootMargin: "1000px 0px" });
+      evidenceAssetObserver.observe(evidenceSection);
+    } else loadEvidenceAssets();
+  }
 
   /* Research cases consume the local static dataset. */
   const caseData = window.HomeResearchCases || [];
@@ -395,6 +430,15 @@
     caseDetail?.style.removeProperty("--case-swipe-x");
   }
 
+  function renderCasePicture(src, alt) {
+    const source = String(src);
+    const match = source.match(/^(.*?)(\.png)(\?.*)?$/);
+    const base = match?.[1] || source.replace(/\.png$/, "");
+    const query = match?.[3] || "";
+    const sizes = "(max-width: 767px) calc(100vw - 40px), 720px";
+    return `<picture><source type="image/avif" srcset="${base}@1x.avif${query} 1x, ${base}@2x.avif${query} 2x" sizes="${sizes}"><source type="image/webp" srcset="${base}@1x.webp${query} 1x, ${base}@2x.webp${query} 2x" sizes="${sizes}"><img src="${base}@1x.png${query}" srcset="${base}@1x.png${query} 1x, ${base}@2x.png${query} 2x" sizes="${sizes}" alt="${alt}" width="720" height="405" loading="lazy" decoding="async" fetchpriority="low"></picture>`;
+  }
+
   function renderCase(index, focusTab = false, requestedDirection = 0) {
     if (!caseData.length || !caseDetail) return;
     window.clearTimeout(caseRenderTimer);
@@ -417,7 +461,7 @@
     resetCaseMotion();
     caseDetail.classList.add(slideDirection > 0 ? "is-slide-out-left" : slideDirection < 0 ? "is-slide-out-right" : "is-switching");
     const update = () => {
-      caseDetail.innerHTML = `<div class="case-copy"><span class="case-field">${item.primaryField} · ${item.secondaryField}</span><h3>${item.title}</h3><p>${item.highlight}</p></div><div class="case-media"><img src="${item.image}" alt="${item.imageAlt}" decoding="async" ${activeCase ? 'loading="lazy"' : ""}></div><dl class="case-meta"><div><dt>联合单位：</dt><dd>${item.partners}</dd></div></dl>`;
+      caseDetail.innerHTML = `<div class="case-copy"><span class="case-field">${item.primaryField} · ${item.secondaryField}</span><h3>${item.title}</h3><p>${item.highlight}</p></div><div class="case-media">${renderCasePicture(item.image, item.imageAlt)}</div><dl class="case-meta"><div><dt>联合单位：</dt><dd>${item.partners}</dd></div></dl>`;
       resetCaseMotion();
       if (!slideDirection || reducedMotion.matches) return;
       caseDetail.classList.add(slideDirection > 0 ? "is-slide-in-right" : "is-slide-in-left");
@@ -522,6 +566,98 @@
     syncCaseTabsOrientation();
     caseMobileQuery.addEventListener?.("change", syncCaseTabsOrientation);
     bindCaseSwipe();
+  }
+
+  /* Ecological cooperation cases: horizontal text tabs, no swipe carousel. */
+  const cooperationData = window.HomeCooperationCases || [];
+  const cooperationTabs = document.querySelector("[data-cooperation-tabs]");
+  const cooperationCase = document.querySelector("[data-cooperation-case]");
+  let activeCooperation = 0;
+
+  function escapeCooperationText(value) {
+    return String(value ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  function renderCooperationPicture(item) {
+    const source = escapeCooperationText(String(item.image || ""));
+    const sizes = "(max-width: 767px) calc(100vw - 40px), 720px";
+    const safeAlt = escapeCooperationText(item.imageAlt);
+    const width = Number(item.imageWidth) || 1024;
+    const height = Number(item.imageHeight) || 642;
+    return `<picture><img src="${source}" sizes="${sizes}" alt="${safeAlt}" width="${width}" height="${height}" loading="lazy" decoding="async"></picture>`;
+  }
+
+  function renderCooperationCase(index, focusTab = false) {
+    if (!cooperationData.length || !cooperationCase || !cooperationTabs) return;
+    activeCooperation = (index + cooperationData.length) % cooperationData.length;
+    const item = cooperationData[activeCooperation];
+    cooperationTabs.querySelectorAll(".cooperation-tab").forEach((tab, tabIndex) => {
+      const active = tabIndex === activeCooperation;
+      tab.classList.toggle("is-active", active);
+      tab.setAttribute("aria-selected", String(active));
+      tab.tabIndex = active ? 0 : -1;
+      if (active) cooperationCase.setAttribute("aria-labelledby", tab.id);
+      if (active && focusTab) tab.focus();
+    });
+    const lines = item.titleLines || [];
+    const kicker = lines[0] ? `<span class="cooperation-case-kicker">${escapeCooperationText(lines[0])}</span>` : "";
+    const displayTitle = escapeCooperationText(lines[1] || lines[0] || "");
+    const titleHtml = `${kicker}${lines[1] ? displayTitle : ""}`;
+    const tagsHtml = (item.tags || []).map((tag) => `<li>${escapeCooperationText(tag)}</li>`).join("");
+    const featuresHtml = (item.features || []).map((feature) => (
+      `<li><span class="cooperation-feature-icon" style="--feature-icon: url('${escapeCooperationText(feature.icon)}')" aria-hidden="true"></span><div><strong>${escapeCooperationText(feature.title)}</strong><p>${escapeCooperationText(feature.description)}</p></div></li>`
+    )).join("");
+    const hideNames = Boolean(item.hideOrgNames) || !(item.orgName || item.orgNameEn);
+    const logoWide = Boolean(item.logoWide) || hideNames;
+    const logoClass = `cooperation-case-org-logo${logoWide ? " is-wide" : ""}`;
+    const logoDark = item.logoDark
+      ? ` data-theme-src-light="${escapeCooperationText(item.logo)}" data-theme-src-dark="${escapeCooperationText(item.logoDark)}"`
+      : "";
+    const logoSrc = item.logoDark && currentTheme() === "dark" ? item.logoDark : item.logo;
+    const logoAlt = hideNames ? escapeCooperationText(item.tabLabel || item.orgName || "") : "";
+    const logoWidth = Number(item.logoWidth) || (logoWide ? 220 : 36);
+    const logoHeight = Number(item.logoHeight) || (logoWide ? 48 : 36);
+    const logoMax = logoWide ? ` style="--logo-w: ${logoWidth}px; --logo-h: ${logoHeight}px"` : "";
+    const namesHtml = hideNames
+      ? ""
+      : `<div class="cooperation-case-org-names">${item.orgName ? `<strong>${escapeCooperationText(item.orgName)}</strong>` : ""}${item.orgNameEn ? `<span>${escapeCooperationText(item.orgNameEn)}</span>` : ""}</div>`;
+    const orgHtml = item.logo
+      ? `<div class="cooperation-case-org"><img class="${logoClass}" src="${escapeCooperationText(logoSrc)}"${logoDark} alt="${logoAlt}" width="${logoWidth}" height="${logoHeight}"${logoMax}>${namesHtml}</div>`
+      : "";
+    const mediaClass = `cooperation-case-media${item.imageStroke ? " has-stroke" : ""}`;
+    cooperationCase.innerHTML = `<div class="cooperation-case-copy">${orgHtml}<div class="cooperation-case-intro"><h3>${titleHtml}</h3><p>${escapeCooperationText(item.body)}</p><ul class="cooperation-case-tags">${tagsHtml}</ul></div><ul class="cooperation-case-features">${featuresHtml}</ul></div><div class="${mediaClass}">${renderCooperationPicture(item)}</div>`;
+  }
+
+  if (cooperationTabs && cooperationCase && cooperationData.length) {
+    cooperationCase.id ||= "cooperation-case-panel";
+    cooperationCase.setAttribute("role", "tabpanel");
+    cooperationData.forEach((item, index) => {
+      const tab = document.createElement("button");
+      tab.type = "button";
+      tab.className = `cooperation-tab${index === 0 ? " is-active" : ""}`;
+      tab.id = `cooperation-tab-${item.id}`;
+      tab.role = "tab";
+      tab.setAttribute("aria-controls", cooperationCase.id);
+      tab.setAttribute("aria-selected", String(index === 0));
+      tab.tabIndex = index === 0 ? 0 : -1;
+      tab.textContent = item.tabLabel;
+      tab.addEventListener("click", () => renderCooperationCase(index));
+      tab.addEventListener("keydown", (event) => {
+        let next = null;
+        if (event.key === "ArrowRight" || event.key === "ArrowDown") next = activeCooperation + 1;
+        else if (event.key === "ArrowLeft" || event.key === "ArrowUp") next = activeCooperation - 1;
+        else if (event.key === "Home") next = 0;
+        else if (event.key === "End") next = cooperationData.length - 1;
+        if (next !== null) { event.preventDefault(); renderCooperationCase(next, true); }
+      });
+      cooperationTabs.append(tab);
+    });
+    cooperationCase.setAttribute("aria-labelledby", `cooperation-tab-${cooperationData[0].id}`);
+    renderCooperationCase(0);
   }
 
   const localCooperationDialog = document.getElementById("home-local-cooperation-dialog");

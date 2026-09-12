@@ -3,16 +3,18 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
   <title>InternInkStone Design System</title>
+  <script src="../shared/js/theme.js?v=20260831-theme1"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&amp;family=Inter:wght@400;500;600;700&amp;family=Noto+Sans+SC:wght@400;500;600;700&amp;family=Noto+Serif+SC:wght@400;600&amp;display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../shared/css/tokens.css">
+  <link rel="stylesheet" href="../shared/css/tokens.css?v=20260904-dark-dot1">
   <link rel="stylesheet" href="../shared/css/base.css">
-  <link rel="stylesheet" href="../shared/css/shell.css">
+  <link rel="stylesheet" href="../shared/css/shell.css?v=20260831-theme1">
   <link rel="stylesheet" href="../shared/css/styles.css">
-  <link rel="stylesheet" href="../shared/css/design-system-overrides.css?v=20260821-5">
-  <link rel="stylesheet" href="./design-system.css?v=20260821-3">
+  <link rel="stylesheet" href="../shared/css/design-system-overrides.css?v=20260905-button-type1">
+  <link rel="stylesheet" href="./design-system.css?v=20260904-button-global1">
 </head>
 <body>
   <main class="ds-page">
@@ -20,15 +22,22 @@
       <p class="ds-eyebrow">InternInkStone</p>
       <h1 class="ds-title">Design System</h1>
       <p class="ds-summary">这里展示第一批已经获得 Figma 证据并完成代码映射的公共规范，以及项目统一的字体与适配基线。</p>
-      <nav class="ds-module-nav" aria-label="Design System 模块">
-        <a href="./index.html" aria-current="page">原子规范</a>
-        <a href="./components.html">组件规范</a>
-      </nav>
+      <div class="ds-hero-tools">
+        <nav class="ds-module-nav" aria-label="Design System 模块">
+          <a href="./index.html" aria-current="page">原子规范</a>
+          <a href="./components.html">组件规范</a>
+        </nav>
+        <button class="ds-theme-toggle" type="button" role="switch" aria-checked="false" aria-label="深色模式" data-theme-toggle>
+          <span>浅色</span>
+          <span class="ds-theme-toggle-track" aria-hidden="true"><span class="ds-theme-toggle-thumb"></span></span>
+          <span>深色</span>
+        </button>
+      </div>
     </header>
 
     <section class="ds-section" aria-labelledby="current-status">
       <h2 id="current-status">当前状态</h2>
-      <p>已实现 9 个颜色 Variable、3 个圆角 Variable、2 套字体栈和 1 个 Text Style；另登记 5 个组件状态色与 1 个胶囊圆角代码 Token，它们来自已批准的组件迁移，不计入 Figma Variable。完整 Collection、Modes、Alias、Effect Styles 与 Grid Styles 仍待精确数据，不在本页推测补齐。</p>
+      <p>当前展示 9 个现有基础颜色 Variable、从参考 Design System 迁入的 7 阶 Brand Scale 和 18 个 Semantic &amp; AI Colors 代码参数，并保留 5 个组件状态色兼容别名。Light 值严格沿用来源；Dark 是本项目按相同语义角色和对比度补全的代码 mode，不作为当前 Figma Mode 证据。圆角、字体、Text Style 与适配 Token 未新增 dark 参数。</p>
     </section>
 
     <section class="ds-section" aria-labelledby="component-color-tokens">
@@ -37,14 +46,14 @@
           <p class="ds-kicker">Code tokens</p>
           <h2 id="component-color-tokens">组件状态色</h2>
         </div>
-        <p>来源：参考组件迁移；非当前 Figma Variable</p>
+        <p>Light / Dark 均别名到已迁入的 Semantic 色阶；非当前 Figma Variable</p>
       </div>
       <div class="ds-token-grid ds-color-grid">
-        <article class="ds-token-card"><span class="ds-color-swatch" style="--ds-swatch: var(--state-danger)" aria-hidden="true"></span><strong class="ds-token-name">--state-danger</strong><span>#c03030</span></article>
-        <article class="ds-token-card"><span class="ds-color-swatch" style="--ds-swatch: var(--state-danger-strong)" aria-hidden="true"></span><strong class="ds-token-name">--state-danger-strong</strong><span>#9a2020</span></article>
-        <article class="ds-token-card"><span class="ds-color-swatch" style="--ds-swatch: var(--state-success)" aria-hidden="true"></span><strong class="ds-token-name">--state-success</strong><span>#34d399</span></article>
-        <article class="ds-token-card"><span class="ds-color-swatch" style="--ds-swatch: var(--state-warning)" aria-hidden="true"></span><strong class="ds-token-name">--state-warning</strong><span>#fbbf24</span></article>
-        <article class="ds-token-card"><span class="ds-color-swatch" style="--ds-swatch: var(--state-error)" aria-hidden="true"></span><strong class="ds-token-name">--state-error</strong><span>#f87171</span></article>
+        <article class="ds-token-card"><span class="ds-color-swatch" style="--ds-swatch: var(--state-danger)" aria-hidden="true"></span><strong class="ds-token-name">--state-danger</strong><span class="ds-token-values"><span><em>Light</em><code>#c03030</code></span><span><em>Dark</em><code>#ffb4ab</code></span></span></article>
+        <article class="ds-token-card"><span class="ds-color-swatch" style="--ds-swatch: var(--state-danger-strong)" aria-hidden="true"></span><strong class="ds-token-name">--state-danger-strong</strong><span class="ds-token-values"><span><em>Light</em><code>#9a2020</code></span><span><em>Dark</em><code>#ff8a80</code></span></span></article>
+        <article class="ds-token-card"><span class="ds-color-swatch" style="--ds-swatch: var(--state-success)" aria-hidden="true"></span><strong class="ds-token-name">--state-success</strong><span class="ds-token-values"><span><em>Light</em><code>#a4ad7e</code></span><span><em>Dark</em><code>#87965b</code></span></span></article>
+        <article class="ds-token-card"><span class="ds-color-swatch" style="--ds-swatch: var(--state-warning)" aria-hidden="true"></span><strong class="ds-token-name">--state-warning</strong><span class="ds-token-values"><span><em>Light</em><code>#cba87b</code></span><span><em>Dark</em><code>#b28a4f</code></span></span></article>
+        <article class="ds-token-card"><span class="ds-color-swatch" style="--ds-swatch: var(--state-error)" aria-hidden="true"></span><strong class="ds-token-name">--state-error</strong><span class="ds-token-values"><span><em>Light</em><code>#df7878</code></span><span><em>Dark</em><code>#d37a78</code></span></span></article>
       </div>
     </section>
 
@@ -54,46 +63,105 @@
           <p class="ds-kicker">Variables</p>
           <h2 id="color-tokens">颜色</h2>
         </div>
-        <p>来源节点：139:606、155:642、242:63219</p>
+        <p>Light 来源节点：139:606、155:642、242:63219；Dark 为本项目代码参数</p>
       </div>
       <div class="ds-token-grid ds-color-grid">
         <article class="ds-token-card">
           <span class="ds-color-swatch" style="--ds-swatch: var(--paper)" aria-hidden="true"></span>
-          <strong class="ds-token-name">--paper</strong><span>#ffffff</span>
+          <strong class="ds-token-name">--paper</strong><span class="ds-token-values"><span><em>Light</em><code>#ffffff</code></span><span><em>Dark</em><code>#1a1815</code></span></span>
         </article>
         <article class="ds-token-card">
           <span class="ds-color-swatch" style="--ds-swatch: var(--bg)" aria-hidden="true"></span>
-          <strong class="ds-token-name">--bg</strong><span>#fdfcf8</span>
+          <strong class="ds-token-name">--bg</strong><span class="ds-token-values"><span><em>Light</em><code>#fdfcf8</code></span><span><em>Dark</em><code>#1a1815</code></span></span>
         </article>
         <article class="ds-token-card">
           <span class="ds-color-swatch" style="--ds-swatch: var(--ink)" aria-hidden="true"></span>
-          <strong class="ds-token-name">--ink</strong><span>#1a2332</span>
+          <strong class="ds-token-name">--ink</strong><span class="ds-token-values"><span><em>Light</em><code>#1a2332</code></span><span><em>Dark</em><code>#ebe6dc</code></span></span>
         </article>
         <article class="ds-token-card">
           <span class="ds-color-swatch" style="--ds-swatch: var(--ink-soft)" aria-hidden="true"></span>
-          <strong class="ds-token-name">--ink-soft</strong><span>#3a4556</span>
+          <strong class="ds-token-name">--ink-soft</strong><span class="ds-token-values"><span><em>Light</em><code>#3a4556</code></span><span><em>Dark</em><code>#b8b1a3</code></span></span>
         </article>
         <article class="ds-token-card">
           <span class="ds-color-swatch" style="--ds-swatch: var(--bg-soft)" aria-hidden="true"></span>
-          <strong class="ds-token-name">--bg-soft</strong><span>#f7f4ec</span>
+          <strong class="ds-token-name">--bg-soft</strong><span class="ds-token-values"><span><em>Light</em><code>#f7f4ec</code></span><span><em>Dark</em><code>#252320</code></span></span>
         </article>
         <article class="ds-token-card">
           <span class="ds-color-swatch" style="--ds-swatch: var(--bg-soft-1)" aria-hidden="true"></span>
-          <strong class="ds-token-name">--bg-soft-1</strong><span>#faf8f2</span>
+          <strong class="ds-token-name">--bg-soft-1</strong><span class="ds-token-values"><span><em>Light</em><code>#faf8f2</code></span><span><em>Dark</em><code>#1f1d1a</code></span></span>
         </article>
         <article class="ds-token-card">
           <span class="ds-color-swatch" style="--ds-swatch: var(--line)" aria-hidden="true"></span>
-          <strong class="ds-token-name">--line</strong><span>#e8e4d9</span>
+          <strong class="ds-token-name">--line</strong><span class="ds-token-values"><span><em>Light</em><code>#e8e4d9</code></span><span><em>Dark</em><code>#3a3631</code></span></span>
         </article>
         <article class="ds-token-card">
           <span class="ds-color-swatch" style="--ds-swatch: var(--muted)" aria-hidden="true"></span>
-          <strong class="ds-token-name">--muted</strong><span>#7a8394</span>
+          <strong class="ds-token-name">--muted</strong><span class="ds-token-values"><span><em>Light</em><code>#7a8394</code></span><span><em>Dark</em><code>#8a8478</code></span></span>
         </article>
         <article class="ds-token-card">
           <span class="ds-color-swatch" style="--ds-swatch: var(--muted-2)" aria-hidden="true"></span>
-          <strong class="ds-token-name">--muted-2</strong><span>#a9b0bd</span>
+          <strong class="ds-token-name">--muted-2</strong><span class="ds-token-values"><span><em>Light</em><code>#a9b0bd</code></span><span><em>Dark</em><code>#5a554c</code></span></span>
         </article>
       </div>
+    </section>
+
+    <section class="ds-section" aria-labelledby="brand-scale">
+      <div class="ds-section-heading">
+        <div><p class="ds-kicker">Reference Design System</p><h2 id="brand-scale">Brand Scale</h2></div>
+        <p>vermilion blue 1–7；Light 精确迁移，Dark 按相同使用角色补全</p>
+      </div>
+      <div class="ds-token-grid ds-color-grid">
+        <article class="ds-token-card"><span class="ds-color-swatch" style="--ds-swatch: var(--vermilion-1)" aria-hidden="true"></span><strong class="ds-token-name">--vermilion-1</strong><span>极弱 tint</span><span class="ds-token-values"><span><em>Light</em><code>#f4f7fb</code></span><span><em>Dark</em><code>#151f2c</code></span></span></article>
+        <article class="ds-token-card"><span class="ds-color-swatch" style="--ds-swatch: var(--vermilion-2)" aria-hidden="true"></span><strong class="ds-token-name">--vermilion-2</strong><span>禁用 / 弱底</span><span class="ds-token-values"><span><em>Light</em><code>#dde7f4</code></span><span><em>Dark</em><code>#1b2d43</code></span></span></article>
+        <article class="ds-token-card"><span class="ds-color-swatch" style="--ds-swatch: var(--vermilion-3)" aria-hidden="true"></span><strong class="ds-token-name">--vermilion-3</strong><span>小面积填充</span><span class="ds-token-values"><span><em>Light</em><code>#b8ceea</code></span><span><em>Dark</em><code>#294665</code></span></span></article>
+        <article class="ds-token-card"><span class="ds-color-swatch" style="--ds-swatch: var(--vermilion-4)" aria-hidden="true"></span><strong class="ds-token-name">--vermilion-4 / --accent-soft</strong><span>边线 / 引导</span><span class="ds-token-values"><span><em>Light</em><code>#88addd</code></span><span><em>Dark</em><code>#4f779f</code></span></span></article>
+        <article class="ds-token-card"><span class="ds-color-swatch" style="--ds-swatch: var(--vermilion-5)" aria-hidden="true"></span><strong class="ds-token-name">--vermilion-5 / --accent-2</strong><span>hover 强调</span><span class="ds-token-values"><span><em>Light</em><code>#3f7dcf</code></span><span><em>Dark</em><code>#aacaf0</code></span></span></article>
+        <article class="ds-token-card"><span class="ds-color-swatch" style="--ds-swatch: var(--vermilion-6)" aria-hidden="true"></span><strong class="ds-token-name">--vermilion-6 / --accent</strong><span>品牌强调</span><span class="ds-token-values"><span><em>Light</em><code>#1554a8</code></span><span><em>Dark</em><code>#8db8e9</code></span></span></article>
+        <article class="ds-token-card"><span class="ds-color-swatch" style="--ds-swatch: var(--vermilion-7)" aria-hidden="true"></span><strong class="ds-token-name">--vermilion-7</strong><span>pressed</span><span class="ds-token-values"><span><em>Light</em><code>#0c3c80</code></span><span><em>Dark</em><code>#6f9bd2</code></span></span></article>
+      </div>
+      <p class="ds-note">编号 Token 是迁入后的主定义；当前库已有的 <code>--accent-soft</code> / <code>--accent</code> 保留为别名，并补齐来源展示中已有的 <code>--accent-2</code>。</p>
+    </section>
+
+    <section class="ds-section" aria-labelledby="semantic-ai-colors">
+      <div class="ds-section-heading">
+        <div><p class="ds-kicker">Reference Design System</p><h2 id="semantic-ai-colors">Semantic &amp; AI Colors</h2></div>
+        <p>state / trust / recording；Light 精确迁移，Dark 按承载面补全</p>
+      </div>
+
+      <h3 class="ds-subheading">Success</h3>
+      <div class="ds-token-grid ds-color-grid">
+        <article class="ds-token-card"><span class="ds-color-swatch" style="--ds-swatch: var(--success)" aria-hidden="true"></span><strong class="ds-token-name">--success</strong><span>完成 / 可信 / 高置信</span><span class="ds-token-values"><span><em>Light</em><code>#6b7a3a</code></span><span><em>Dark</em><code>#b7c87d</code></span></span></article>
+        <article class="ds-token-card"><span class="ds-color-swatch" style="--ds-swatch: var(--success-soft)" aria-hidden="true"></span><strong class="ds-token-name">--success-soft</strong><span class="ds-token-values"><span><em>Light</em><code>#a4ad7e</code></span><span><em>Dark</em><code>#87965b</code></span></span></article>
+        <article class="ds-token-card"><span class="ds-color-swatch" style="--ds-swatch: var(--success-bg)" aria-hidden="true"></span><strong class="ds-token-name">--success-bg</strong><span class="ds-token-values"><span><em>Light</em><code>#f1f3e8</code></span><span><em>Dark</em><code>#242a1c</code></span></span></article>
+        <article class="ds-token-card"><span class="ds-color-swatch" style="--ds-swatch: var(--success-deep)" aria-hidden="true"></span><strong class="ds-token-name">--success-deep</strong><span class="ds-token-values"><span><em>Light</em><code>#4d5826</code></span><span><em>Dark</em><code>#d2df9b</code></span></span></article>
+      </div>
+
+      <h3 class="ds-subheading">Warning</h3>
+      <div class="ds-token-grid ds-color-grid">
+        <article class="ds-token-card"><span class="ds-color-swatch" style="--ds-swatch: var(--warning)" aria-hidden="true"></span><strong class="ds-token-name">--warning</strong><span>提醒 / 待确认 / 中置信</span><span class="ds-token-values"><span><em>Light</em><code>#a8864b</code></span><span><em>Dark</em><code>#e8c27a</code></span></span></article>
+        <article class="ds-token-card"><span class="ds-color-swatch" style="--ds-swatch: var(--warning-soft)" aria-hidden="true"></span><strong class="ds-token-name">--warning-soft</strong><span class="ds-token-values"><span><em>Light</em><code>#cba87b</code></span><span><em>Dark</em><code>#b28a4f</code></span></span></article>
+        <article class="ds-token-card"><span class="ds-color-swatch" style="--ds-swatch: var(--warning-bg)" aria-hidden="true"></span><strong class="ds-token-name">--warning-bg</strong><span class="ds-token-values"><span><em>Light</em><code>#f8f1e3</code></span><span><em>Dark</em><code>#33291a</code></span></span></article>
+        <article class="ds-token-card"><span class="ds-color-swatch" style="--ds-swatch: var(--warning-deep)" aria-hidden="true"></span><strong class="ds-token-name">--warning-deep</strong><span class="ds-token-values"><span><em>Light</em><code>#7a5e2c</code></span><span><em>Dark</em><code>#f4d18a</code></span></span></article>
+      </div>
+
+      <h3 class="ds-subheading">Error</h3>
+      <div class="ds-token-grid ds-color-grid">
+        <article class="ds-token-card"><span class="ds-color-swatch" style="--ds-swatch: var(--error)" aria-hidden="true"></span><strong class="ds-token-name">--error</strong><span>失败 / 错误 / 破坏性</span><span class="ds-token-values"><span><em>Light</em><code>#c03030</code></span><span><em>Dark</em><code>#ffb4ab</code></span></span></article>
+        <article class="ds-token-card"><span class="ds-color-swatch" style="--ds-swatch: var(--error-soft)" aria-hidden="true"></span><strong class="ds-token-name">--error-soft</strong><span class="ds-token-values"><span><em>Light</em><code>#df7878</code></span><span><em>Dark</em><code>#d37a78</code></span></span></article>
+        <article class="ds-token-card"><span class="ds-color-swatch" style="--ds-swatch: var(--error-bg)" aria-hidden="true"></span><strong class="ds-token-name">--error-bg</strong><span class="ds-token-values"><span><em>Light</em><code>#fdeaea</code></span><span><em>Dark</em><code>#3b2021</code></span></span></article>
+        <article class="ds-token-card"><span class="ds-color-swatch" style="--ds-swatch: var(--error-deep)" aria-hidden="true"></span><strong class="ds-token-name">--error-deep</strong><span class="ds-token-values"><span><em>Light</em><code>#9a2020</code></span><span><em>Dark</em><code>#ff8a80</code></span></span></article>
+      </div>
+
+      <h3 class="ds-subheading">AI trust / tint / recording</h3>
+      <div class="ds-token-grid ds-color-grid">
+        <article class="ds-token-card"><span class="ds-color-swatch" style="--ds-swatch: var(--ai-trust-high)" aria-hidden="true"></span><strong class="ds-token-name">--ai-trust-high</strong><span>alias: --success</span><span class="ds-token-values"><span><em>Light</em><code>#6b7a3a</code></span><span><em>Dark</em><code>#b7c87d</code></span></span></article>
+        <article class="ds-token-card"><span class="ds-color-swatch" style="--ds-swatch: var(--ai-trust-mid)" aria-hidden="true"></span><strong class="ds-token-name">--ai-trust-mid</strong><span>alias: --warning</span><span class="ds-token-values"><span><em>Light</em><code>#a8864b</code></span><span><em>Dark</em><code>#e8c27a</code></span></span></article>
+        <article class="ds-token-card"><span class="ds-color-swatch" style="--ds-swatch: var(--ai-trust-low)" aria-hidden="true"></span><strong class="ds-token-name">--ai-trust-low</strong><span>alias: --muted</span><span class="ds-token-values"><span><em>Light</em><code>#7a8394</code></span><span><em>Dark</em><code>#8a8478</code></span></span></article>
+        <article class="ds-token-card"><span class="ds-color-swatch" style="--ds-swatch: var(--ai-tint)" aria-hidden="true"></span><strong class="ds-token-name">--ai-tint</strong><span>AI 消息底</span><span class="ds-token-values"><span><em>Light</em><code>#f5f8fc</code></span><span><em>Dark</em><code>#172333</code></span></span></article>
+        <article class="ds-token-card"><span class="ds-color-swatch" style="--ds-swatch: var(--ai-tint-rule)" aria-hidden="true"></span><strong class="ds-token-name">--ai-tint-rule</strong><span>AI 消息边线</span><span class="ds-token-values"><span><em>Light</em><code>#d8e4f3</code></span><span><em>Dark</em><code>#496985</code></span></span></article>
+        <article class="ds-token-card"><span class="ds-color-swatch" style="--ds-swatch: var(--rec-red)" aria-hidden="true"></span><strong class="ds-token-name">--rec-red</strong><span>仅 live / recording</span><span class="ds-token-values"><span><em>Light</em><code>#e74c3c</code></span><span><em>Dark</em><code>#ff887a</code></span></span></article>
+      </div>
+      <p class="ds-note">成功与错误不能只靠色相区分，组件仍需同时提供图标或文字。AI 低置信沿用当前库等价的 <code>--muted</code>，未额外引入来源项目的 <code>--ink-mute</code>。</p>
     </section>
 
     <section class="ds-section" aria-labelledby="radius-tokens">
