@@ -568,6 +568,101 @@
     bindCaseSwipe();
   }
 
+  /* Ecological cooperation cases: horizontal text tabs, no swipe carousel. */
+  const cooperationData = window.HomeCooperationCases || [];
+  const cooperationTabs = document.querySelector("[data-cooperation-tabs]");
+  const cooperationCase = document.querySelector("[data-cooperation-case]");
+  let activeCooperation = 0;
+
+  function escapeCooperationText(value) {
+    return String(value ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  function renderCooperationPicture(item) {
+    const source = escapeCooperationText(String(item.image || ""));
+    const sizes = "(max-width: 767px) calc(100vw - 40px), 720px";
+    const safeAlt = escapeCooperationText(item.imageAlt);
+    const width = Number(item.imageWidth) || 1024;
+    const height = Number(item.imageHeight) || 642;
+    return `<picture><img src="${source}" sizes="${sizes}" alt="${safeAlt}" width="${width}" height="${height}" loading="lazy" decoding="async"></picture>`;
+  }
+
+  function renderCooperationCase(index, focusTab = false) {
+    if (!cooperationData.length || !cooperationCase || !cooperationTabs) return;
+    activeCooperation = (index + cooperationData.length) % cooperationData.length;
+    const item = cooperationData[activeCooperation];
+    cooperationTabs.querySelectorAll(".cooperation-tab").forEach((tab, tabIndex) => {
+      const active = tabIndex === activeCooperation;
+      tab.classList.toggle("is-active", active);
+      tab.setAttribute("aria-selected", String(active));
+      tab.tabIndex = active ? 0 : -1;
+      if (active) cooperationCase.setAttribute("aria-labelledby", tab.id);
+      if (active && focusTab) tab.focus();
+    });
+    const lines = item.titleLines || [];
+    const kicker = lines[0] ? `<span class="cooperation-case-kicker">${escapeCooperationText(lines[0])}</span>` : "";
+    const displayTitle = escapeCooperationText(lines[1] || lines[0] || "");
+    const titleHtml = `${kicker}${lines[1] ? displayTitle : ""}`;
+    const tagsHtml = (item.tags || []).map((tag) => `<li>${escapeCooperationText(tag)}</li>`).join("");
+    const featuresHtml = (item.features || []).map((feature) => {
+      const icon = feature.icon
+        ? `<img src="${escapeCooperationText(feature.icon)}" alt="" width="24" height="24">`
+        : "";
+      return `<li><span class="cooperation-feature-icon" aria-hidden="true">${icon}</span><div><strong>${escapeCooperationText(feature.title)}</strong><p>${escapeCooperationText(feature.description)}</p></div></li>`;
+    }).join("");
+    const hideNames = Boolean(item.hideOrgNames) || !(item.orgName || item.orgNameEn);
+    const logoWide = Boolean(item.logoWide) || hideNames;
+    const logoClass = `cooperation-case-org-logo${logoWide ? " is-wide" : ""}`;
+    const logoDark = item.logoDark
+      ? ` data-theme-src-light="${escapeCooperationText(item.logo)}" data-theme-src-dark="${escapeCooperationText(item.logoDark)}"`
+      : "";
+    const logoSrc = item.logoDark && currentTheme() === "dark" ? item.logoDark : item.logo;
+    const logoAlt = hideNames ? escapeCooperationText(item.tabLabel || item.orgName || "") : "";
+    const logoWidth = Number(item.logoWidth) || (logoWide ? 220 : 36);
+    const logoHeight = Number(item.logoHeight) || (logoWide ? 48 : 36);
+    const logoMax = logoWide ? ` style="--logo-w: ${logoWidth}px; --logo-h: ${logoHeight}px"` : "";
+    const namesHtml = hideNames
+      ? ""
+      : `<div class="cooperation-case-org-names">${item.orgName ? `<strong>${escapeCooperationText(item.orgName)}</strong>` : ""}${item.orgNameEn ? `<span>${escapeCooperationText(item.orgNameEn)}</span>` : ""}</div>`;
+    const orgHtml = item.logo
+      ? `<div class="cooperation-case-org"><img class="${logoClass}" src="${escapeCooperationText(logoSrc)}"${logoDark} alt="${logoAlt}" width="${logoWidth}" height="${logoHeight}"${logoMax}>${namesHtml}</div>`
+      : "";
+    const mediaClass = `cooperation-case-media${item.imageStroke ? " has-stroke" : ""}`;
+    cooperationCase.innerHTML = `<div class="cooperation-case-copy">${orgHtml}<div class="cooperation-case-intro"><h3>${titleHtml}</h3><p>${escapeCooperationText(item.body)}</p><ul class="cooperation-case-tags">${tagsHtml}</ul></div><ul class="cooperation-case-features">${featuresHtml}</ul></div><div class="${mediaClass}">${renderCooperationPicture(item)}</div>`;
+  }
+
+  if (cooperationTabs && cooperationCase && cooperationData.length) {
+    cooperationCase.id ||= "cooperation-case-panel";
+    cooperationCase.setAttribute("role", "tabpanel");
+    cooperationData.forEach((item, index) => {
+      const tab = document.createElement("button");
+      tab.type = "button";
+      tab.className = `cooperation-tab${index === 0 ? " is-active" : ""}`;
+      tab.id = `cooperation-tab-${item.id}`;
+      tab.role = "tab";
+      tab.setAttribute("aria-controls", cooperationCase.id);
+      tab.setAttribute("aria-selected", String(index === 0));
+      tab.tabIndex = index === 0 ? 0 : -1;
+      tab.textContent = item.tabLabel;
+      tab.addEventListener("click", () => renderCooperationCase(index));
+      tab.addEventListener("keydown", (event) => {
+        let next = null;
+        if (event.key === "ArrowRight" || event.key === "ArrowDown") next = activeCooperation + 1;
+        else if (event.key === "ArrowLeft" || event.key === "ArrowUp") next = activeCooperation - 1;
+        else if (event.key === "Home") next = 0;
+        else if (event.key === "End") next = cooperationData.length - 1;
+        if (next !== null) { event.preventDefault(); renderCooperationCase(next, true); }
+      });
+      cooperationTabs.append(tab);
+    });
+    cooperationCase.setAttribute("aria-labelledby", `cooperation-tab-${cooperationData[0].id}`);
+    renderCooperationCase(0);
+  }
+
   const localCooperationDialog = document.getElementById("home-local-cooperation-dialog");
   const localCooperationForm = localCooperationDialog?.querySelector("[data-local-cooperation-form]");
   const localCooperationToast = document.getElementById("home-local-cooperation-toast");

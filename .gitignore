@@ -1,0 +1,4 @@
+node_modules/
+.figwright/
+.agents/
+.cursor/

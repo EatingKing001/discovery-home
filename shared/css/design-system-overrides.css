@@ -217,6 +217,10 @@
   background: var(--component-text-button-bg-hover);
 }
 
+.download-nav-link { gap: 6px; }
+.download-nav-icon { display: block; width: 16px; height: 16px; flex: 0 0 16px; }
+:root[data-theme="dark"] .download-nav-icon { filter: invert(1); }
+
 /*
  * Text link button. The supplied Figma node ids 242:63225 and 242:63226 are
  * currently absent from the file, so typography inherits the verified

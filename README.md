@@ -42,4 +42,6 @@ discovery-home-fe/
 .\product\sync-from-design.ps1
 ```
 
+神策埋点见 [product/README.md](product/README.md)「埋点」：壳页负责 `$pageview`；Home iframe 只报点击（关闭 autoTrack）；vendor 包已提交 `product/vendor/migo-analytics.bundle.js`。
+
 步骤与检查清单见 [docs/DESIGN_SYNC.md](docs/DESIGN_SYNC.md)、[product/README.md](product/README.md)。
