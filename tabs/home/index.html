@@ -18,16 +18,16 @@
   <link rel="stylesheet" href="../../shared/css/base.css?v=20260824-home76">
   <link rel="stylesheet" href="../../shared/css/shell.css?v=20260831-theme1">
   <link rel="stylesheet" href="../../shared/css/styles.css?v=20260824-home76">
-  <link rel="stylesheet" href="../../shared/css/design-system-overrides.css?v=20260905-button-type1">
- <link rel="stylesheet" href="home.css?v=20260911-coop16">
+  <link rel="stylesheet" href="../../shared/css/design-system-overrides.css?v=20260912-download-icon1">
+ <link rel="stylesheet" href="home.css?v=20260912-coop17">
 <link rel="stylesheet" href="../../product/cooperation-cta-hide.css?v=20260826-biz1">
 <script src="../../product/vendor/migo-analytics.bundle.js?v=20260831-analytics1" defer></script>
 <script src="../../product/analytics-bootstrap.js?v=20260831-analytics1" defer></script>
 <script src="../../product/site-links.js?v=20260826-biz1" defer></script>
 <script src="data/research-cases.data.js?v=20260907-research-cases1" defer></script>
-<script src="data/cooperation-cases.data.js?v=20260911-coop16" defer></script>
+<script src="data/cooperation-cases.data.js?v=20260912-coop17" defer></script>
   <script src="data/partner-logos.data.js?v=20260904-partner-dark3" defer></script>
-  <script src="home.js?v=20260911-coop16" defer></script>
+  <script src="home.js?v=20260912-coop17" defer></script>
 <script src="../../product/protocol-links.js?v=20260826-biz1" defer></script>
 <script src="../../product/downloads.js?v=20260826-biz1" defer></script>
 <script src="../../product/cooperation-submit.js?v=20260826-biz1" defer></script>
@@ -36,7 +36,7 @@
   <header class="standalone-header" aria-label="独立页面导航">
     <button class="standalone-brand" type="button" data-refresh-page aria-label="刷新书生·端砚官网"><img src="../../shared/assets/logos/duanyan-default.svg" data-theme-src-light="../../shared/assets/logos/duanyan-default.svg" alt="" width="115" height="32"></button>
     <nav class="standalone-nav" aria-label="官网导航">
-      <a class="btn-text" href="#home-advantages" data-home-anchor="home-advantages">平台核心优势</a><a class="btn-text" href="#home-research-foundation" data-home-anchor="home-research-foundation">科研基座</a><a class="btn-text" href="#home-research-cases" data-home-anchor="home-research-cases">科研成果</a><a class="btn-text" href="#home-cooperation" data-home-anchor="home-cooperation">生态合作案例</a><a class="btn-text" href="#home-downloads" data-home-anchor="home-downloads">下载客户端</a>
+      <a class="btn-text" href="#home-advantages" data-home-anchor="home-advantages">平台核心优势</a><a class="btn-text" href="#home-research-foundation" data-home-anchor="home-research-foundation">科研基座</a><a class="btn-text" href="#home-research-cases" data-home-anchor="home-research-cases">科研成果</a><a class="btn-text" href="#home-cooperation" data-home-anchor="home-cooperation">生态合作案例</a><a class="btn-text download-nav-link" href="#home-downloads" data-home-anchor="home-downloads"><img class="download-nav-icon" src="../../shared/assets/icons/download.svg" alt="" aria-hidden="true" width="16" height="16">下载客户端</a>
     </nav>
     <a class="btn-primary" data-discovery-link href="https://discovery.intern-ai.org.cn/" target="_blank" rel="noopener noreferrer" data-analytics-event="online_use_click" data-analytics-prop-entry="header">在线使用</a>
   </header>
@@ -534,7 +534,7 @@ branch_df &lt;- tribble(
           <article class="cooperation-case" id="cooperation-case-panel" data-cooperation-case>
             <div class="cooperation-case-copy">
               <div class="cooperation-case-org">
-                <img class="cooperation-case-org-logo is-wide" src="assets/images/cooperation/logo-casc.svg?v=20260911-coop9" alt="中国航天科技集团" width="245" height="36" style="--logo-w: 245px; --logo-h: 36px">
+                <img class="cooperation-case-org-logo is-wide" src="assets/images/cooperation/logo-casc.png?v=20260912-coop17" alt="中国航天科技体系与创新研究院" width="245" height="43" style="--logo-w: 245px; --logo-h: 43px">
               </div>
               <div class="cooperation-case-intro">
                 <h3><span class="cooperation-case-kicker">书生·端砚 × 天玄·千枢</span>航天科学发现平台</h3>
@@ -542,12 +542,12 @@ branch_df &lt;- tribble(
                 <ul class="cooperation-case-tags"><li>电磁超材料</li><li>合金设计</li><li>飞行器气动设计</li><li>发动机研发</li></ul>
               </div>
               <ul class="cooperation-case-features">
-                <li><span class="cooperation-feature-icon" style="--feature-icon: url('assets/icons/cooperation/feature-knowledge.svg')" aria-hidden="true"></span><div><strong>知识驱动科研</strong><p>融合航天知识库与科研语料，支撑智能问答与知识发现</p></div></li>
-                <li><span class="cooperation-feature-icon" style="--feature-icon: url('assets/icons/cooperation/feature-tools.svg')" aria-hidden="true"></span><div><strong>多学科工具集成</strong><p>覆盖超材料、合金设计、气动仿真、CAD/CAE 等专业工具链</p></div></li>
-                <li><span class="cooperation-feature-icon" style="--feature-icon: url('assets/icons/cooperation/feature-collab.svg')" aria-hidden="true"></span><div><strong>智能科研协同</strong><p>科研助手、对话探索、实验与仿真一体化，提升研发效率</p></div></li>
+                <li><span class="cooperation-feature-icon" aria-hidden="true"><img src="assets/icons/cooperation/feature-knowledge.svg" alt="" width="24" height="24"></span><div><strong>知识驱动科研</strong><p>融合航天知识库与科研语料，支撑智能问答与知识发现</p></div></li>
+                <li><span class="cooperation-feature-icon" aria-hidden="true"><img src="assets/icons/cooperation/feature-tools.svg" alt="" width="24" height="24"></span><div><strong>多学科工具集成</strong><p>覆盖超材料、合金设计、气动仿真、CAD/CAE 等专业工具链</p></div></li>
+                <li><span class="cooperation-feature-icon" aria-hidden="true"><img src="assets/icons/cooperation/feature-collab.svg" alt="" width="24" height="24"></span><div><strong>智能科研协同</strong><p>科研助手、对话探索、实验与仿真一体化，提升研发效率</p></div></li>
               </ul>
             </div>
-            <div class="cooperation-case-media"><picture><img src="assets/images/cooperation/image-cooperation-aerospace.png?v=20260911-coop16" sizes="(max-width: 767px) calc(100vw - 40px), 720px" alt="天玄·千枢航天科学发现平台" width="1024" height="642" loading="lazy" decoding="async"></picture></div>
+            <div class="cooperation-case-media"><picture><img src="assets/images/cooperation/image-cooperation-aerospace.png?v=20260912-coop17" sizes="(max-width: 767px) calc(100vw - 40px), 720px" alt="天玄·千枢航天科学发现平台" width="1470" height="920" loading="lazy" decoding="async"></picture></div>
           </article>
         </div>
         <div class="partner-wall" aria-label="合作机构">

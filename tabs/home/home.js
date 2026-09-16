@@ -608,9 +608,12 @@
     const displayTitle = escapeCooperationText(lines[1] || lines[0] || "");
     const titleHtml = `${kicker}${lines[1] ? displayTitle : ""}`;
     const tagsHtml = (item.tags || []).map((tag) => `<li>${escapeCooperationText(tag)}</li>`).join("");
-    const featuresHtml = (item.features || []).map((feature) => (
-      `<li><span class="cooperation-feature-icon" style="--feature-icon: url('${escapeCooperationText(feature.icon)}')" aria-hidden="true"></span><div><strong>${escapeCooperationText(feature.title)}</strong><p>${escapeCooperationText(feature.description)}</p></div></li>`
-    )).join("");
+    const featuresHtml = (item.features || []).map((feature) => {
+      const icon = feature.icon
+        ? `<img src="${escapeCooperationText(feature.icon)}" alt="" width="24" height="24">`
+        : "";
+      return `<li><span class="cooperation-feature-icon" aria-hidden="true">${icon}</span><div><strong>${escapeCooperationText(feature.title)}</strong><p>${escapeCooperationText(feature.description)}</p></div></li>`;
+    }).join("");
     const hideNames = Boolean(item.hideOrgNames) || !(item.orgName || item.orgNameEn);
     const logoWide = Boolean(item.logoWide) || hideNames;
     const logoClass = `cooperation-case-org-logo${logoWide ? " is-wide" : ""}`;
