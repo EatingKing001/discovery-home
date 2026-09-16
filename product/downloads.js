@@ -7,6 +7,7 @@
   /** @type {Record<string, Promise<{ url: string, packageVersion: string, reason?: string, manifestUrl?: string }>>} */
   const packageUrlByKey = Object.create(null);
 
+  const DOWNLOAD_NETWORK_TOAST = "下载服务暂时无法访问，请检查网络或关闭 VPN 后重试";
   const DOWNLOAD_UNAVAILABLE_TOAST = "下载服务暂时无法访问，请稍后重试";
 
   function showToast(message) {
@@ -168,7 +169,7 @@
         const reason = (result && result.reason) || "missing_package";
         const manifestUrl = (result && result.manifestUrl) || manifestUrlFor(key);
         console.info(`[discovery-home] 下载不可用 reason=${reason} key=${key}`, manifestUrl);
-        showToast(DOWNLOAD_UNAVAILABLE_TOAST);
+        showToast(reason === "network" ? DOWNLOAD_NETWORK_TOAST : DOWNLOAD_UNAVAILABLE_TOAST);
         return;
       }
       triggerBrowserDownload(url);
