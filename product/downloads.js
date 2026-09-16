@@ -4,8 +4,10 @@
   const toastIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v6"></path><circle cx="12" cy="16" r="1" fill="currentColor" stroke="none"></circle></svg>';
   let toastTimer = 0;
 
-  /** @type {Record<string, Promise<{ url: string, packageVersion: string }>>} */
+  /** @type {Record<string, Promise<{ url: string, packageVersion: string, reason?: string, manifestUrl?: string }>>} */
   const packageUrlByKey = Object.create(null);
+
+  const DOWNLOAD_UNAVAILABLE_TOAST = "下载服务暂时无法访问，请稍后重试";
 
   function showToast(message) {
     const toast = document.getElementById("home-local-cooperation-toast") || document.getElementById("shell-toast");
@@ -82,9 +84,15 @@
   }
 
   function loadPackageUrl(key) {
-    const empty = { url: "", packageVersion: "" };
     const manifestUrl = manifestUrlFor(key);
-    if (!manifestUrl) return Promise.resolve(empty);
+    if (!manifestUrl) {
+      return Promise.resolve({
+        url: "",
+        packageVersion: "",
+        reason: "missing_package",
+        manifestUrl: ""
+      });
+    }
 
     return fetch(manifestUrl, { credentials: "omit", cache: "no-cache" })
       .then((res) => {
@@ -94,13 +102,18 @@
       .then((manifest) => {
         const result = packageUrlFromManifest(manifest, key);
         if (!result.url) {
-          console.info(`[discovery-home] release-manifest 无 ${packageFormatFor(key)}：${key}`, manifestUrl);
+          return {
+            url: "",
+            packageVersion: result.packageVersion || "",
+            reason: "missing_package",
+            manifestUrl
+          };
         }
-        return result;
+        return { ...result, manifestUrl };
       })
       .catch((err) => {
-        console.info(`[discovery-home] 拉取 release-manifest 失败：${key}`, manifestUrl, err);
-        return empty;
+        console.info(`[discovery-home] 拉取 release-manifest 失败 reason=network key=${key}`, manifestUrl, err);
+        return { url: "", packageVersion: "", reason: "network", manifestUrl };
       });
   }
 
@@ -152,8 +165,10 @@
     resolvePackageUrl(key).then((result) => {
       const url = result && result.url;
       if (!url) {
-        console.info(`[discovery-home] 下载地址未配置：${key}`);
-        showToast("下载地址未配置");
+        const reason = (result && result.reason) || "missing_package";
+        const manifestUrl = (result && result.manifestUrl) || manifestUrlFor(key);
+        console.info(`[discovery-home] 下载不可用 reason=${reason} key=${key}`, manifestUrl);
+        showToast(DOWNLOAD_UNAVAILABLE_TOAST);
         return;
       }
       triggerBrowserDownload(url);
