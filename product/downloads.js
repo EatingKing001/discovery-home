@@ -170,6 +170,14 @@
         const manifestUrl = (result && result.manifestUrl) || manifestUrlFor(key);
         console.info(`[discovery-home] 下载不可用 reason=${reason} key=${key}`, manifestUrl);
         showToast(reason === "network" ? DOWNLOAD_NETWORK_TOAST : DOWNLOAD_UNAVAILABLE_TOAST);
+        if (window.DiscoveryAnalytics && typeof window.DiscoveryAnalytics.track === "function") {
+          const eventName =
+            reason === "network" ? "home_download_network_error_toast" : "home_download_response_error";
+          const props = { version: trackVersionFor(key) };
+          const packageVersion = result.packageVersion || "";
+          if (packageVersion) props.package_version = packageVersion;
+          window.DiscoveryAnalytics.track(eventName, props);
+        }
         return;
       }
       triggerBrowserDownload(url);
