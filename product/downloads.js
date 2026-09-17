@@ -229,7 +229,7 @@
         if (window.DiscoveryAnalytics && typeof window.DiscoveryAnalytics.track === "function") {
           const eventName =
             reason === "network" ? "home_download_network_error_toast" : "home_download_response_error";
-          const props = { version: trackVersionFor(key) };
+          const props = { version: trackVersionFor(resolvedKey) };
           const packageVersion = result.packageVersion || "";
           if (packageVersion) props.package_version = packageVersion;
           window.DiscoveryAnalytics.track(eventName, props);
@@ -313,8 +313,21 @@
     });
   }
 
+  function bindChipButton(button) {
+    if (!button || button.dataset.businessDownloadBound === "1") return;
+    const key = String(button.getAttribute("data-download-key") || "").toLowerCase();
+    if (key !== "mac-arm" && key !== "mac-intel") return;
+    button.dataset.businessDownloadBound = "1";
+    button.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      onDownloadCardActivate(key);
+    });
+  }
+
   function init() {
     resolveDownloadCards().forEach(({ el, key }) => bindCard(el, key));
+    document.querySelectorAll("button.download-chip-btn[data-download-key]").forEach(bindChipButton);
     document.querySelectorAll("[data-download-nav]").forEach(bindNavDownload);
     updatePlatformDownloadCta();
   }
