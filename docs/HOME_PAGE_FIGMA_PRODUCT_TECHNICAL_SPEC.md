@@ -614,7 +614,7 @@ shell 首次校验后通过 `home:cooperation-dialog:submit` 把 `{ requestId, f
 Figma 组件 `242:63272` 的卡片基线为 160×160px、16px 圆角、`--bg-soft` 背景；默认无描边，hover 只增加 1px `--muted-2` 描边，不上浮、不添加阴影、不改变背景色。网页版默认文案是“网页版”，hover 文案变为“点击进入网页版”，图标保持 48×48px。
 
 - 网页版卡片是完整可点击 `<a>`，新开 `https://discovery.intern-ai.org.cn/`，hover、`:focus-visible` 与键盘激活使用同一交互状态；布局不能因文案变化发生位移。
-- Mac Intel、Mac ARM64、Linux 可复用组件中的默认/hover 视觉：默认分别显示 `Intel x64`、`Mac ARM64` 或 Linux 标题；hover 切换为真实 `download.svg` 图标与“适用于 macOS 13 及以上”/“适用于 Ubuntu 22.04 及以上”。真实安装包 URL 未确认前不创建空链接、不触发下载；确认 URL 后再转为 `<a download>` 或真实下载导航，并补统计需求。
+- 下载卡默认/hover 视觉：只保留一个 Mac 客户端卡片，默认显示 Mac 图标与标题，hover 切换为真实 `download.svg` 图标与“适用于 macOS 13 及以上”；Mac 点击按芯片自动选择 Intel/Apple Silicon 安装包。Windows 卡显示 Windows 图标与标题，Linux 继续为不可用态。真实安装包 URL 未确认前不创建空链接、不触发下载；确认 URL 后再转为 `<a download>` 或真实下载导航，并补统计需求。
 - Windows 卡片保持 Figma 静态“敬请期待”样式：使用非交互 `<article>`，无 pointer cursor、无 hover 描边、无 tabindex、无点击处理。不能用 disabled `<a>` 模拟。
 - Grid 按 9.3 重排，所有卡固定 160px 自然尺寸，在窄屏以容器居中或两列排布，不为塞满宽度非等比拉伸卡片。
 
@@ -686,7 +686,7 @@ Footer 中黑色文字链接全部作为页内锚点：平台核心能力→`hom
 ## 14. 待后续产品确认
 
 - 合作申请的提交接口、鉴权 / 防刷策略、隐私同意文案、字段最大长度、成功与失败业务文案。
-- Mac Intel、Mac ARM64、Linux 的真实下载 URL、版本号、平台检测和下载统计；Windows 何时从“敬请期待”转为可交互另行确认。
+- Mac Intel、Mac ARM64、Windows、Linux 的真实下载 URL、版本号、平台检测和下载统计；Mac 卡的芯片检测优先使用 UA-CH 并回退 WebGL renderer，无法读取时使用兼容性 Intel fallback。
 - Footer 公众号、平台服务协议、个人信息保护政策的最终地址，以及二维码目标与替代文本。
 - 是否需要把科研案例 active 状态同步到 URL、是否采集导航 / Tab / CTA / 下载埋点；当前实现合同不默认加入。
 - 10 张科研案例源 PNG 的上线压缩格式与质量阈值，在 1440 / 1024 / 390px 截图对照后确定。

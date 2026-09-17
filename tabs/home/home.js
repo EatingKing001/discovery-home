@@ -181,18 +181,66 @@
     } else window.addEventListener("resize", resizeEvidence, { passive: true });
   }
 
-  const revealObserver = new IntersectionObserver((entries) => {
+  /* Gentle section reveals: keep the page readable while giving each module a
+     small, one-time entrance as it reaches the viewport. */
+  const motionSectionSelectors = new Map([
+    ["advantage-section", [".section-heading", ".feature-card"]],
+    ["workflow-section", [".section-heading"]],
+    ["discipline-section", [".section-heading"]],
+    ["outputs-section", [".section-heading", ".output-card"]],
+    ["evidence-section", [".section-heading", ".evidence-layout"]],
+    ["security-section", [".section-heading", ".security-figure"]],
+    ["ecosystem-section", [".section-heading", ".ecosystem-figure"]],
+    ["foundation-section", [".section-heading", ".foundation-art", ".capability-grid > article"]],
+    ["cases-section", [".section-heading", ".case-showcase"]],
+    ["cooperation-section", [".section-heading", ".cooperation-showcase"]],
+    ["downloads-section", [".downloads-heading", ".download-grid"]]
+  ]);
+  const motionItems = [];
+  motionSectionSelectors.forEach((selectors, sectionClass) => {
+    const section = document.querySelector(`.${sectionClass}`);
+    if (!section) return;
+    section.classList.add("motion-section");
+    let sectionMotionIndex = 0;
+    selectors.forEach((selector) => {
+      section.querySelectorAll(selector).forEach((element) => {
+        element.classList.add("motion-item");
+        element.style.setProperty("--motion-index", String(Math.min(sectionMotionIndex++, 5)));
+        motionItems.push(element);
+      });
+    });
+  });
+  const motionObserver = "IntersectionObserver" in window ? new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       if (!entry.isIntersecting) return;
-      if (entry.target.matches(".workflow-section")) entry.target.classList.add("is-revealed");
-      else entry.target.classList.add("is-revealed");
+      entry.target.classList.add("is-visible");
+      motionObserver.unobserve(entry.target);
+    });
+  }, { threshold: 0.16, rootMargin: "0px 0px -8%" }) : null;
+  if (motionObserver) {
+    document.documentElement.classList.add("motion-ready");
+    motionItems.forEach((item) => motionObserver.observe(item));
+  }
+  document.addEventListener("focusin", (event) => {
+    const item = event.target.closest(".motion-item");
+    if (!item) return;
+    item.classList.add("is-visible");
+    motionObserver?.unobserve(item);
+  });
+
+  const revealObserver = "IntersectionObserver" in window ? new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add("is-revealed");
       revealObserver.unobserve(entry.target);
     });
-  }, { threshold: 0.22 });
+  }, { threshold: 0.22 }) : null;
   const workflow = document.querySelector(".workflow-section");
   const disciplines = document.querySelector("[data-discipline-reveal]");
-  if (workflow) revealObserver.observe(workflow);
-  if (disciplines) revealObserver.observe(disciplines);
+  [workflow, disciplines].filter(Boolean).forEach((section) => {
+    if (revealObserver) revealObserver.observe(section);
+    else section.classList.add("is-revealed");
+  });
 
   const partnerData = window.HomePartnerLogos || { line1: [], line2: [], line3: [] };
   const partnerPixelsPerSecond = 22;
@@ -291,14 +339,14 @@
         introduction.style.opacity = "";
         introduction.style.pointerEvents = "auto";
       } else {
-        const progress = clamp(scrollY / 430);
+        const progress = clamp(scrollY / 446);
         introduction.style.transform = `translate3d(0, ${progress * 96}px, 0) scale(${1 - progress * 0.3})`;
         introduction.style.filter = `blur(${progress * 12}px)`;
         introduction.style.opacity = String(1 - progress);
         introduction.style.pointerEvents = progress > 0.8 ? "none" : "auto";
       }
     }
-    const heroScroll = clamp(scrollY, 0, 1294);
+    const heroScroll = clamp(scrollY, 0, 1306);
     parallaxItems.forEach((item) => {
       if (reducedMotion.matches) { item.style.transform = ""; return; }
       const speed = Number(item.dataset.parallaxSpeed || 0);
@@ -573,6 +621,8 @@
   const cooperationTabs = document.querySelector("[data-cooperation-tabs]");
   const cooperationCase = document.querySelector("[data-cooperation-case]");
   let activeCooperation = 0;
+  let renderedCooperation = false;
+  let cooperationMotionTimer = 0;
 
   function escapeCooperationText(value) {
     return String(value ?? "")
@@ -593,7 +643,15 @@
 
   function renderCooperationCase(index, focusTab = false) {
     if (!cooperationData.length || !cooperationCase || !cooperationTabs) return;
-    activeCooperation = (index + cooperationData.length) % cooperationData.length;
+    const nextCooperation = (index + cooperationData.length) % cooperationData.length;
+    if (renderedCooperation && nextCooperation === activeCooperation) {
+      if (focusTab) cooperationTabs.querySelector(".cooperation-tab.is-active")?.focus();
+      return;
+    }
+    const isSwitching = renderedCooperation && nextCooperation !== activeCooperation && !reducedMotion.matches;
+    window.clearTimeout(cooperationMotionTimer);
+    cooperationCase.classList.remove("is-switching");
+    activeCooperation = nextCooperation;
     const item = cooperationData[activeCooperation];
     cooperationTabs.querySelectorAll(".cooperation-tab").forEach((tab, tabIndex) => {
       const active = tabIndex === activeCooperation;
@@ -609,8 +667,12 @@
     const titleHtml = `${kicker}${lines[1] ? displayTitle : ""}`;
     const tagsHtml = (item.tags || []).map((tag) => `<li>${escapeCooperationText(tag)}</li>`).join("");
     const featuresHtml = (item.features || []).map((feature) => {
-      const icon = feature.icon
-        ? `<img src="${escapeCooperationText(feature.icon)}" alt="" width="24" height="24">`
+      const iconSrc = feature.iconDark && currentTheme() === "dark" ? feature.iconDark : feature.icon;
+      const iconThemeAttrs = feature.icon
+        ? ` data-theme-src-light="${escapeCooperationText(feature.icon)}"${feature.iconDark ? ` data-theme-src-dark="${escapeCooperationText(feature.iconDark)}"` : ""}`
+        : "";
+      const icon = iconSrc
+        ? `<img src="${escapeCooperationText(iconSrc)}"${iconThemeAttrs} alt="" width="24" height="24">`
         : "";
       return `<li><span class="cooperation-feature-icon" aria-hidden="true">${icon}</span><div><strong>${escapeCooperationText(feature.title)}</strong><p>${escapeCooperationText(feature.description)}</p></div></li>`;
     }).join("");
@@ -633,6 +695,11 @@
       : "";
     const mediaClass = `cooperation-case-media${item.imageStroke ? " has-stroke" : ""}`;
     cooperationCase.innerHTML = `<div class="cooperation-case-copy">${orgHtml}<div class="cooperation-case-intro"><h3>${titleHtml}</h3><p>${escapeCooperationText(item.body)}</p><ul class="cooperation-case-tags">${tagsHtml}</ul></div><ul class="cooperation-case-features">${featuresHtml}</ul></div><div class="${mediaClass}">${renderCooperationPicture(item)}</div>`;
+    renderedCooperation = true;
+    if (isSwitching) {
+      cooperationCase.classList.add("is-switching");
+      cooperationMotionTimer = window.setTimeout(() => cooperationCase.classList.remove("is-switching"), 620);
+    }
   }
 
   if (cooperationTabs && cooperationCase && cooperationData.length) {
