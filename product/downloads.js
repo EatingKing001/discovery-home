@@ -256,15 +256,21 @@
     return "";
   }
 
-  function updatePlatformIcons() {
-    const icons = Array.from(document.querySelectorAll("[data-download-platform-icon]"));
-    if (!icons.length) return;
+  function heroDownloadLabelFor(platform) {
+    if (platform === "win") return "下载 Windows 版";
+    if (platform === "mac") return "下载 Mac 版";
+    return "下载客户端";
+  }
 
+  function updatePlatformDownloadCta() {
     const platform = detectDesktopPlatform();
-    icons.forEach((icon) => {
+    document.querySelectorAll("[data-download-platform-icon]").forEach((icon) => {
       icon.hidden = !platform;
       if (platform) icon.dataset.platform = platform;
       else delete icon.dataset.platform;
+    });
+    document.querySelectorAll("[data-download-platform-label]").forEach((label) => {
+      label.textContent = heroDownloadLabelFor(platform);
     });
   }
 
@@ -310,7 +316,7 @@
   function init() {
     resolveDownloadCards().forEach(({ el, key }) => bindCard(el, key));
     document.querySelectorAll("[data-download-nav]").forEach(bindNavDownload);
-    updatePlatformIcons();
+    updatePlatformDownloadCta();
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
