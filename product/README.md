@@ -23,7 +23,7 @@
 | `site-links.js` | `SiteLinkConfig`（`basePath` / 外链 / 下载频道 / 协议 / 合作 API） |
 | `base-path.js` | 子路径挂载：无尾斜杠跳转、`<base>`、Home iframe 绝对 `src`（壳 `index.html`） |
 | `cooperation-submit.js` | 合作表单提交 |
-| `downloads.js` | Mac / Windows 下载：按频道拉 OSS `release-manifest` 取 dmg / exe；下载真正开始时 `download_click` |
+| `downloads.js` | Mac / Windows 下载：按频道拉 OSS `release-manifest` 取 dmg / exe；下载真正开始时 `download_click`；失败 toast 时 `home_download_network_error_toast` / `home_download_response_error` |
 | `protocol-links.js` | Footer 协议外链 |
 | `cooperation-cta-hide.css` | 无 `cooperationSubmitUrl` 时隐藏 logo 墙下申请合作 CTA；有接口后删除本文件及 HTML 注入即可 |
 | `sync-from-design.ps1` | 设计同步 + HTML 注入 |
@@ -40,7 +40,7 @@
 
 - **PV/UV**：壳页（及独立打开的 Home）初始化后神策 `quick('autoTrack')` → `$pageview`；UV 由神策侧按匿名 `distinct_id` 统计。官网无登录，bootstrap 后 `setIdentity({ resolving: false, userId: null })`。
 - **iframe 策略**：`?embedded=1` 或 `parent!==self` 时仍初始化 DOM 点击采集，但 `startAutoTrack` 置空，避免与壳页重复 `$pageview`。独立打开 `/tabs/home/` 走完整 autoTrack。
-- **事件**：`online_use_click`（`entry`: `header` \| `banner` \| `downloads_web`）；`download_click`（`version`: `web` \| `mac_intel` \| `mac_arm` \| `windows`；Mac / Windows 另带 `package_version` 来自 release-manifest）。网页版卡片一次点击同时打两个事件（collector 单节点只能绑一个 event，故用 bootstrap 内监听；无 `package_version`）。
+- **事件**：`online_use_click`（`entry`: `header` \| `banner` \| `downloads_web`）；`download_click`（`version`: `web` \| `mac_intel` \| `mac_arm` \| `windows`；Mac / Windows 另带 `package_version` 来自 release-manifest）；下载失败 toast：`home_download_network_error_toast`（`reason=network`）/ `home_download_response_error`（其它，含 `missing_package`），业务字段与 Mac / Windows `download_click` 一致（`version` + 有值时的 `package_version`）。网页版卡片一次点击同时打两个事件（collector 单节点只能绑一个 event，故用 bootstrap 内监听；无 `package_version`）。
 - **客户端包路径**：`{releaseBase}{arch}/{channel}/release-manifest.json`；arch 为 `mac_x64` / `mac_arm` / `win`，channel 为 `staging` | `prod`；安装包 format 分别为 `dmg` / `exe`。
 - **isDev**：hostname ≠ `discovery-home.intern-ai.org.cn` 时为 `true`（上报神策测试项目 `default`）。
 
