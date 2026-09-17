@@ -97,7 +97,7 @@ npx http-server -p 8023 -c-1
 ## 同步后检查清单
 
 1. **业务 script 是否仍指向 `product/`**，且位于设计 `shell.js` / `home.js` 的合理位置（site-links → base-path → shell，业务薄层在后）。
-2. **钩子是否改名**：`[data-cooperation-form]`、`[data-local-cooperation-form]`、`.footer-policy-link`、文案「平台服务协议」「个人信息保护政策」、下载卡 `article.download-card` 及文案 `Intel x64` / `ARM64` / `Windows 客户端`、`.is-coming`（Linux 仍敬请期待）。钩子变了就改 `product/`，不要改设计仓逻辑硬塞业务。若同步把 Windows 卡盖回 `is-coming`，需在正式仓改回 `is-hoverable`。
+2. **钩子是否改名**：`[data-cooperation-form]`、`[data-local-cooperation-form]`、`.footer-policy-link`、文案「平台服务协议」「个人信息保护政策」、下载卡 `article.download-card[data-download-platform="mac"]` / `[data-download-platform="win"]`、`.is-coming`（Linux 仍敬请期待）。钩子变了就改 `product/`，不要改设计仓逻辑硬塞业务。若同步把 Windows 卡盖回 `is-coming`，需在正式仓改回 `is-hoverable`。
 3. **Toast 容器是否还在**：`#shell-toast`、`#home-local-cooperation-toast`。
 4. **`product/site-links.js` 是否仍为正式仓配置**（含 `basePath` / `downloads.releaseBase` / `downloadChannel` / `protocols` / `cooperationSubmitUrl`）；`basePath` 与部署 path 一致，壳是否仍引用 `product/base-path.js`。
 5. 本地起静态服务，抽测：Footer 协议新开页、Mac / Windows 卡点击（桌面走 staging manifest→dmg/exe / 窄屏 toast「请使用电脑下载」）、合作表单未配置时 toast「提交通道未配置」且 console 有 payload。
