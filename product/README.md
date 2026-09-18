@@ -66,7 +66,7 @@ npm run vendor:analytics
 
 - `[data-cooperation-form]` / `[data-local-cooperation-form]`
 - `.footer-policy-link` 与文案「平台服务协议」「个人信息保护政策」
-- `article.download-card` + `Intel x64` / `ARM64` / `Windows 客户端` / `.is-coming`（Linux 仍 `is-coming`）
+- `article.download-card[data-download-platform="mac"]`（单一 Mac 卡片，按芯片自动选择 Intel/Apple Silicon 安装包）与 `article.download-card[data-download-platform="win"]`；`.is-coming` 仍用于 Linux
 - Toast：`#shell-toast`、`#home-local-cooperation-toast`
 - 埋点：`.site-header-action`、`.hero-action`、`a.download-card[data-discovery-link]`
 
