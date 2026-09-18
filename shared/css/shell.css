@@ -1,6 +1,6 @@
 /* Top navigation, shell layout, iframe container, and shell overlay styles belong here. */
 
-:root { --site-header-height: 69px; }
+:root { --site-header-height: 61px; }
 
 .site-shell {
   height: 100vh;
@@ -14,6 +14,7 @@
   inset: 0 0 auto;
   z-index: 100;
   display: grid;
+  box-sizing: border-box;
   height: var(--site-header-height);
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
@@ -23,7 +24,7 @@
 
 .site-brand-button {
   display: grid;
-  width: 128px;
+  width: 123px;
   height: 48px;
   margin-left: 24px;
   padding: 8px 4px;
@@ -35,7 +36,7 @@
 }
 
 .site-brand-button:hover { background: var(--bg-soft); }
-.site-brand-button img { display: block; width: 120px; height: 32px; }
+.site-brand-button img { display: block; width: 115px; height: 32px; }
 :root[data-theme="dark"] .site-brand-button img:not([data-theme-src-dark]) { filter: brightness(0) invert(1); }
 
 .site-nav {
@@ -47,6 +48,9 @@
 
 .site-nav .btn-text {
   min-width: auto;
+  height: 36px;
+  font-size: 15px;
+  line-height: 24px;
   padding-inline: 12px;
   white-space: nowrap;
 }
@@ -56,9 +60,41 @@
   color: var(--ink);
 }
 
+.site-header-actions {
+  display: flex;
+  align-items: center;
+  justify-self: end;
+  gap: 8px;
+  margin-right: 24px;
+  overflow: visible;
+}
+
+.site-header-actions .site-header-doc {
+  gap: 4px;
+  font-size: 15px;
+}
+.site-header-doc img { display: block; width: 16px; height: 16px; object-fit: contain; }
+:root[data-theme="dark"] .site-header-doc img { filter: brightness(0) invert(1); }
+.site-header-actions .site-header-action {
+  height: 32px;
+  padding: 4px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 16px;
+  line-height: 24px;
+}
+.site-header-actions .site-header-download {
+  height: 32px;
+  padding: 8px 12px;
+  border-radius: var(--radius-card);
+  font-size: 14px;
+  line-height: 16px;
+}
+
 .site-header .site-header-action {
   justify-self: end;
-  margin-right: 24px;
 }
 
 .site-header .site-menu-button { display: none; justify-self: end; margin-right: 12px; }
@@ -85,6 +121,8 @@
 
 @media (max-width: 959px) {
   .site-header { grid-template-columns: 1fr auto auto; }
+  .site-header-actions { margin-right: 12px; }
+  .site-header-doc, .site-header-download, .site-header-actions [data-download-cta] { display: none; }
   .site-nav {
     position: absolute;
     top: calc(100% + 1px);
@@ -107,5 +145,5 @@
 @media (max-width: 599px) {
   .site-brand-button { width: 112px; margin-left: 8px; }
   .site-brand-button img { width: 105px; height: auto; }
-  .site-header-action { display: none; }
+  .site-header-actions { display: none; }
 }

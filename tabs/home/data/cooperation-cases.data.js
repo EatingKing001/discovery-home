@@ -16,16 +16,19 @@
       features: [
         {
           icon: "assets/icons/cooperation/feature-knowledge.svg",
+          iconDark: "assets/icons/cooperation/feature-knowledge-dark.svg",
           title: "知识驱动科研",
           description: "融合航天知识库与科研语料，支撑智能问答与知识发现"
         },
         {
           icon: "assets/icons/cooperation/feature-tools.svg",
+          iconDark: "assets/icons/cooperation/feature-tools-dark.svg",
           title: "多学科工具集成",
           description: "覆盖超材料、合金设计、气动仿真、CAD/CAE 等专业工具链"
         },
         {
           icon: "assets/icons/cooperation/feature-collab.svg",
+          iconDark: "assets/icons/cooperation/feature-collab-dark.svg",
           title: "智能科研协同",
           description: "科研助手、对话探索、实验与仿真一体化，提升研发效率"
         }
@@ -49,16 +52,19 @@
       features: [
         {
           icon: "assets/icons/cooperation/feature-dna.svg",
+          iconDark: "assets/icons/cooperation/feature-dna-dark.svg",
           title: "智能联合选种",
           description: "整合多源育种数据，评估遗传价值、环境效应与群体风险"
         },
         {
           icon: "assets/icons/cooperation/feature-piggy-bank.svg",
+          iconDark: "assets/icons/cooperation/feature-piggy-bank-dark.svg",
           title: "全群智能选配",
           description: "综合育种值、亲缘与生产条件，生成配种方案并推演多代遗传风险"
         },
         {
           icon: "assets/icons/cooperation/feature-workflow.svg",
+          iconDark: "assets/icons/cooperation/feature-workflow-dark.svg",
           title: "育种能力持续进化",
           description: "将有效方法沉淀为 Skill 或 Workflow，形成可复用的育种科研能力"
         }
