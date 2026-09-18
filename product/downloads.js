@@ -199,7 +199,24 @@
     return "";
   }
 
+  function isLocalDownloadPreview() {
+    const isLoopback = (host) => {
+      const h = String(host || "").toLowerCase();
+      return h === "localhost" || h === "127.0.0.1" || h === "::1";
+    };
+    if (isLoopback(location.hostname)) return true;
+    try {
+      if (window.parent && window.parent !== window) {
+        return isLoopback(window.parent.location.hostname);
+      }
+    } catch (error) {
+      // Cross-origin parent access may throw; ignore.
+    }
+    return false;
+  }
+
   function downloadOsOverride() {
+    if (!isLocalDownloadPreview()) return "";
     return normalizeDownloadOs(readQueryParam("downloadOs"));
   }
 
