@@ -400,7 +400,7 @@
       el.hidden = platform !== "linux";
     });
 
-    document.querySelectorAll(".hero-online").forEach((link) => {
+    document.querySelectorAll(".hero-online, .site-header-action, .standalone-action").forEach((link) => {
       if (platform === "linux") {
         link.classList.remove("btn");
         link.classList.add("btn-primary");
