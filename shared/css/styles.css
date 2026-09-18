@@ -105,3 +105,21 @@ html[data-download-os="linux"] [data-download-cta="nav"],
 html[data-download-os="linux"] [data-download-cta="hero"] {
   display: none;
 }
+
+html[data-download-os="linux"] .site-header-action,
+html[data-download-os="linux"] .standalone-action {
+  height: 32px;
+  padding: 8px 12px;
+  border: 1px solid var(--component-button-primary-bg);
+  background: var(--component-button-primary-bg);
+  color: var(--component-button-primary-fg);
+  font-size: 14px;
+  line-height: 16px;
+}
+
+html[data-download-os="linux"] .site-header-action:hover:not(:disabled),
+html[data-download-os="linux"] .standalone-action:hover:not(:disabled) {
+  border-color: var(--component-button-primary-bg-hover);
+  background: var(--component-button-primary-bg-hover);
+  color: var(--component-button-primary-fg);
+}
