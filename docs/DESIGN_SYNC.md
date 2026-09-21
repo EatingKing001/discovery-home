@@ -29,7 +29,7 @@
 ### `product/` 业务文件
 
 - `product/vendor/migo-analytics.bundle.js` — 已发布 `@migo/analytics` UMD（静态部署直接 COPY）
-- `product/analytics-bootstrap.js` — 神策初始化；iframe 关闭 auto `$pageview`；合并渠道 `commonProperties`
+- `product/analytics-bootstrap.js` — 神策初始化；iframe 关闭 auto `$pageview`
 - `product/channel-track.js` — 渠道参数 sessionStorage + 产品站外链透传（`DiscoveryChannelTrack`）
 - `product/site-links.js` — 外链、下载频道/`releaseBase`、协议、合作提交 API、`basePath`（`SiteLinkConfig`；须与 `values/*.yml` ingress path 对齐，现为 `/home`）
 - `product/base-path.js` — 子路径：无尾斜杠跳转、`<base>`、壳 iframe 绝对 `src`（仅壳 `index.html`）
