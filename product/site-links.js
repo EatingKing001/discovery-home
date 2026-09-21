@@ -17,7 +17,7 @@
    */
   window.SiteLinkConfig = Object.freeze({
     basePath: "/home",
-    discoveryWebApp: "https://discovery.intern-ai.org.cn/",
+    discoveryWebApp: "https://discovery.intern-ai.org.cn/chat",
     downloads: Object.freeze({
       releaseBase: "https://openxlab.oss-cn-shanghai.aliyuncs.com/releases/inkstone/",
       downloadChannel: ""
