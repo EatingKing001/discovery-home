@@ -238,7 +238,7 @@ Figma 中“全链贯通”“安全可控”“科研基座能力”和合作 C
 | `BrandLogo` | Header / Footer / compact 品牌图 | 资源共享，结构各自拥有 | 尺寸变体和替代文本 |
 | `PrimaryButton` | 在线使用、申请合作等深色按钮 | 消费现有 Design System `.btn-primary`；产品接入后登记 shell / Home 消费者 | 高度、padding、圆角、hover / focus / active |
 | `ShellDialogHost` | 覆盖 Navigation 与 iframe 的 Dialog、焦点与遮罩 | shell；视觉复用现有 Design System Dialog，业务 schema 由 Home 提供 | 宽度、最大高度、关闭规则、焦点恢复 |
-| `SiteLinkConfig` | 网页版统一外链 `https://discovery.intern-ai.org.cn/` | `shared/js/site-links.js`（规划中）；shell 与 Home 两个真实消费者 | URL、打开方式、后续统计挂点 |
+| `SiteLinkConfig` | 网页版统一外链 `https://discovery.intern-ai.org.cn/chat` | `shared/js/site-links.js`（规划中）；shell 与 Home 两个真实消费者 | URL、打开方式、后续统计挂点 |
 
 ### 7.2 Home 布局与视觉原语
 
@@ -482,7 +482,7 @@ Home iframe 自身是内容滚动容器；shell 只固定 Navigation、承载 if
 - shell Navigation 点击锚点后发送 `home:anchor:scroll`，载荷为 `{ requestId, anchorId, behavior: "smooth" }`；Home 完成定位后返回 `home:anchor:scrolled`。协议实现前必须登记到 `ITERATION_ARCHITECTURE_MAP.md`，shell 校验消息来源，Home 只接受上述白名单 ID。
 - Footer 位于 Home 内，直接调用同一个 `HomeAnchorController.scrollTo(anchorId)`，不绕行 `postMessage`。锚点使用 `scroll-margin-block-start`；shell 模式按 iframe 顶部实际布局偏移，独立模式按本地 Navigation 69px 加阅读留白计算。
 - 平滑滚动使用浏览器原生 `scrollIntoView({ behavior: "smooth", block: "start" })`；`prefers-reduced-motion: reduce` 时切换为即时定位。定位完成后把焦点移到目标区块标题，但不造成第二次滚动，确保键盘和读屏用户知道位置已变化。
-- 所有“在线使用”“网页版”统一读取 `SiteLinkConfig.discoveryWebApp`，值为 `https://discovery.intern-ai.org.cn/`。真实链接使用 `<a target="_blank" rel="noopener noreferrer">`，不以 `window.open()` 伪装链接，也不为没有 URL 的卡片制造空链接。
+- 所有“在线使用”“网页版”统一读取 `SiteLinkConfig.discoveryWebApp`，值为 `https://discovery.intern-ai.org.cn/chat`。真实链接使用 `<a target="_blank" rel="noopener noreferrer">`，不以 `window.open()` 伪装链接，也不为没有 URL 的卡片制造空链接。
 - Home 只注册一个被动 scroll listener，并在 `requestAnimationFrame` 中计算当帧所有 scroll-linked 进度；入场触发使用 `IntersectionObserver`，尺寸变化使用 `ResizeObserver`。CSS 最终只接收 `--scroll-progress`、`--parallax-y` 等数值，避免每个模块各装一套高频监听器。
 - 响应式等比缩放和动画 transform 必须分层：外层 canvas 只控制设计画布缩放，内层 motion wrapper 才控制 translate / scale / opacity。两类 transform 不得写在同一元素上。
 
@@ -613,7 +613,7 @@ shell 首次校验后通过 `home:cooperation-dialog:submit` 把 `{ requestId, f
 
 Figma 组件 `242:63272` 的卡片基线为 160×160px、16px 圆角、`--bg-soft` 背景；默认无描边，hover 只增加 1px `--muted-2` 描边，不上浮、不添加阴影、不改变背景色。网页版默认文案是“网页版”，hover 文案变为“点击进入网页版”，图标保持 48×48px。
 
-- 网页版卡片是完整可点击 `<a>`，新开 `https://discovery.intern-ai.org.cn/`，hover、`:focus-visible` 与键盘激活使用同一交互状态；布局不能因文案变化发生位移。
+- 网页版卡片是完整可点击 `<a>`，新开 `https://discovery.intern-ai.org.cn/chat`，hover、`:focus-visible` 与键盘激活使用同一交互状态；布局不能因文案变化发生位移。
 - 下载卡默认/hover 视觉：只保留一个 Mac 客户端卡片，默认显示 Mac 图标与标题，hover 切换为真实 `download.svg` 图标与“适用于 macOS 13 及以上”；Mac 点击按芯片自动选择 Intel/Apple Silicon 安装包。Windows 卡显示 Windows 图标与标题，Linux 继续为不可用态。真实安装包 URL 未确认前不创建空链接、不触发下载；确认 URL 后再转为 `<a download>` 或真实下载导航，并补统计需求。
 - Windows 卡片保持 Figma 静态“敬请期待”样式：使用非交互 `<article>`，无 pointer cursor、无 hover 描边、无 tabindex、无点击处理。不能用 disabled `<a>` 模拟。
 - Grid 按 9.3 重排，所有卡固定 160px 自然尺寸，在窄屏以容器居中或两列排布，不为塞满宽度非等比拉伸卡片。

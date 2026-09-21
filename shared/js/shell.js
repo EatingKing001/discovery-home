@@ -7,7 +7,7 @@
   const dialog = document.getElementById("cooperation-dialog");
   const form = dialog?.querySelector("[data-cooperation-form]");
   const toast = document.getElementById("shell-toast");
-  const discoveryBase = window.SiteLinkConfig?.discoveryWebApp || "https://discovery.intern-ai.org.cn/";
+  const discoveryBase = window.SiteLinkConfig?.discoveryWebApp || "https://discovery.intern-ai.org.cn/chat";
   const discoveryUrl =
     window.DiscoveryChannelTrack && typeof window.DiscoveryChannelTrack.appendToUrl === "function"
       ? window.DiscoveryChannelTrack.appendToUrl(discoveryBase)
