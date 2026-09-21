@@ -174,16 +174,76 @@
     return key;
   }
 
+  function readQueryParam(name) {
+    const fromSearch = (search) => {
+      const value = new URLSearchParams(search || "").get(name);
+      return value == null ? "" : String(value).trim();
+    };
+    const own = fromSearch(location.search);
+    if (own) return own;
+    try {
+      if (window.parent && window.parent !== window) {
+        return fromSearch(window.parent.location.search);
+      }
+    } catch (error) {
+      // Cross-origin parent access may throw; ignore.
+    }
+    return "";
+  }
+
+  function normalizeDownloadOs(value) {
+    const raw = String(value || "").trim().toLowerCase();
+    if (raw === "windows") return "win";
+    if (raw === "macos") return "mac";
+    if (raw === "win" || raw === "mac" || raw === "linux") return raw;
+    return "";
+  }
+
+  function isLocalDownloadPreview() {
+    const isLoopback = (host) => {
+      const h = String(host || "").toLowerCase();
+      return h === "localhost" || h === "127.0.0.1" || h === "::1";
+    };
+    if (isLoopback(location.hostname)) return true;
+    try {
+      if (window.parent && window.parent !== window) {
+        return isLoopback(window.parent.location.hostname);
+      }
+    } catch (error) {
+      // Cross-origin parent access may throw; ignore.
+    }
+    return false;
+  }
+
+  function downloadOsOverride() {
+    if (!isLocalDownloadPreview()) return "";
+    return normalizeDownloadOs(readQueryParam("downloadOs"));
+  }
+
   function detectDesktopPlatform() {
+    const override = downloadOsOverride();
+    if (override) return override;
     if (isMobileDevice()) return "";
-    const platform = String(navigator.userAgentData?.platform || navigator.platform || navigator.userAgent || "");
-    if (/mac/i.test(platform)) return "mac";
-    if (/win/i.test(platform)) return "win";
+    const uaDataPlatform = String(navigator.userAgentData?.platform || "");
+    const navPlatform = String(navigator.platform || "");
+    const userAgent = String(navigator.userAgent || "");
+    const haystack = `${uaDataPlatform} ${navPlatform} ${userAgent}`;
+    if (/android/i.test(haystack)) return "";
+    if (/mac/i.test(haystack)) return "mac";
+    if (/win/i.test(haystack)) return "win";
+    if (/linux/i.test(haystack)) return "linux";
     return "";
   }
 
   async function resolveMacArchitectureDownloadKey() {
-    if (isMobileDevice()) return "";
+    const osOverride = downloadOsOverride();
+    if (osOverride === "mac") {
+      const chip = String(readQueryParam("downloadChip") || "").trim().toLowerCase();
+      if (chip === "arm") return "mac-arm";
+      if (chip === "intel") return "mac-intel";
+    } else if (isMobileDevice()) {
+      return "";
+    }
     // A non-Mac device cannot identify the chip of the intended Mac.
     if (detectDesktopPlatform() !== "mac") return "mac-intel";
 
@@ -258,39 +318,196 @@
 
   function heroDownloadLabelFor(platform) {
     if (platform === "win") return "下载 Windows 版";
-    if (platform === "mac") return "下载 Mac 版";
+    if (platform === "mac") return "下载 macOS 版";
     return "下载客户端";
+  }
+
+  function chipItemsOf(cta) {
+    return Array.from(cta.querySelectorAll("[data-download-key]"));
+  }
+
+  function setDownloadCtaOpen(cta, open) {
+    const trigger = cta.querySelector("[data-download-nav]");
+    const menu = cta.querySelector("[data-download-menu]");
+    cta.classList.toggle("is-open", open);
+    if (open) cta.classList.remove("is-dismissed");
+    if (trigger?.hasAttribute("aria-haspopup")) {
+      trigger.setAttribute("aria-expanded", String(open));
+    }
+    if (menu) menu.setAttribute("aria-hidden", String(!open));
+    if (!open) chipItemsOf(cta).forEach((item) => { item.tabIndex = -1; });
+  }
+
+  function dismissDownloadCta(cta) {
+    setDownloadCtaOpen(cta, false);
+    cta.classList.add("is-dismissed");
+  }
+
+  function closeAllDownloadCtas(except) {
+    document.querySelectorAll("[data-download-cta].is-open").forEach((cta) => {
+      if (cta !== except) setDownloadCtaOpen(cta, false);
+    });
+  }
+
+  function focusChipItem(cta, index) {
+    const items = chipItemsOf(cta);
+    if (!items.length) return;
+    const next = (index + items.length) % items.length;
+    items.forEach((item, itemIndex) => {
+      item.tabIndex = itemIndex === next ? 0 : -1;
+    });
+    items[next].focus();
+  }
+
+  function activateResolvedDownload(key) {
+    if (!key) {
+      showToast(isMobileDevice() ? "请使用电脑下载" : "暂不支持当前系统下载");
+      return;
+    }
+    onDownloadCardActivate(key, { skipMobileCheck: true });
   }
 
   function updatePlatformDownloadCta() {
     const platform = detectDesktopPlatform();
+    document.documentElement.setAttribute("data-download-os", platform);
+
+    const showHeroIcon = platform === "mac" || platform === "win";
     document.querySelectorAll("[data-download-platform-icon]").forEach((icon) => {
-      icon.hidden = !platform;
-      if (platform) icon.dataset.platform = platform;
+      icon.hidden = !showHeroIcon;
+      if (showHeroIcon) icon.dataset.platform = platform;
       else delete icon.dataset.platform;
     });
     document.querySelectorAll("[data-download-platform-label]").forEach((label) => {
       label.textContent = heroDownloadLabelFor(platform);
+    });
+
+    document.querySelectorAll("[data-download-cta]").forEach((cta) => {
+      cta.hidden = platform === "linux";
+      const trigger = cta.querySelector("[data-download-nav]");
+      if (!trigger) return;
+      if (platform === "mac") {
+        trigger.setAttribute("aria-haspopup", "menu");
+        trigger.setAttribute("aria-expanded", "false");
+      } else {
+        trigger.removeAttribute("aria-haspopup");
+        trigger.removeAttribute("aria-expanded");
+        setDownloadCtaOpen(cta, false);
+        cta.classList.remove("is-dismissed");
+      }
+    });
+
+    document.querySelectorAll("[data-linux-download]").forEach((el) => {
+      el.hidden = platform !== "linux";
+    });
+
+    document.querySelectorAll(".hero-online, .site-header-action, .standalone-action").forEach((link) => {
+      if (platform === "linux") {
+        link.classList.remove("btn");
+        link.classList.add("btn-primary");
+      } else {
+        link.classList.add("btn");
+        link.classList.remove("btn-primary");
+      }
     });
   }
 
   function bindNavDownload(button) {
     if (!button || button.dataset.businessDownloadBound === "1") return;
     button.dataset.businessDownloadBound = "1";
-    const activate = (event) => {
+    button.addEventListener("click", (event) => {
+      if (event.target.closest("[data-download-key]")) return;
       event.preventDefault();
-      resolveDesktopDownloadKey().then((key) => {
-        if (!key) {
-          showToast(isMobileDevice() ? "请使用电脑下载" : "暂不支持当前系统下载");
-          return;
-        }
-        onDownloadCardActivate(key, { skipMobileCheck: true });
-      });
+      resolveDesktopDownloadKey().then(activateResolvedDownload);
+    });
+  }
+
+  function bindChipDownload(button) {
+    if (!button || button.dataset.businessDownloadBound === "1") return;
+    button.dataset.businessDownloadBound = "1";
+    button.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      const key = String(button.getAttribute("data-download-key") || "");
+      activateResolvedDownload(key);
+      const cta = button.closest("[data-download-cta]");
+      if (cta) dismissDownloadCta(cta);
+    });
+  }
+
+  function bindDownloadCta(cta) {
+    if (!cta || cta.dataset.businessDownloadMenuBound === "1") return;
+    cta.dataset.businessDownloadMenuBound = "1";
+    const trigger = cta.querySelector("[data-download-nav]");
+    const menu = cta.querySelector("[data-download-menu]");
+    if (!trigger || !menu) return;
+
+    const openIfMac = () => {
+      if (detectDesktopPlatform() !== "mac") return;
+      closeAllDownloadCtas(cta);
+      setDownloadCtaOpen(cta, true);
     };
-    button.addEventListener("click", activate);
-    button.addEventListener("keydown", (event) => {
-      if (event.key !== "Enter" && event.key !== " ") return;
-      activate(event);
+
+    cta.addEventListener("mouseenter", openIfMac);
+    cta.addEventListener("mouseleave", () => {
+      setDownloadCtaOpen(cta, false);
+      cta.classList.remove("is-dismissed");
+    });
+    cta.addEventListener("focusin", openIfMac);
+    cta.addEventListener("focusout", (event) => {
+      if (cta.contains(event.relatedTarget)) return;
+      setDownloadCtaOpen(cta, false);
+      cta.classList.remove("is-dismissed");
+    });
+
+    trigger.addEventListener("keydown", (event) => {
+      if (detectDesktopPlatform() !== "mac") return;
+      if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+        event.preventDefault();
+        openIfMac();
+        focusChipItem(cta, event.key === "ArrowUp" ? chipItemsOf(cta).length - 1 : 0);
+      } else if (event.key === "Escape") {
+        event.preventDefault();
+        dismissDownloadCta(cta);
+      }
+    });
+
+    menu.addEventListener("keydown", (event) => {
+      if (detectDesktopPlatform() !== "mac") return;
+      const items = chipItemsOf(cta);
+      const current = items.indexOf(document.activeElement);
+      if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+        event.preventDefault();
+        const delta = event.key === "ArrowDown" ? 1 : -1;
+        focusChipItem(cta, current < 0 ? 0 : current + delta);
+      } else if (event.key === "Home") {
+        event.preventDefault();
+        focusChipItem(cta, 0);
+      } else if (event.key === "End") {
+        event.preventDefault();
+        focusChipItem(cta, items.length - 1);
+      } else if (event.key === "Escape") {
+        event.preventDefault();
+        dismissDownloadCta(cta);
+        trigger.focus();
+      }
+    });
+  }
+
+  function bindDownloadMenuChrome() {
+    document.addEventListener("pointerdown", (event) => {
+      const inside = event.target.closest("[data-download-cta]");
+      document.querySelectorAll("[data-download-cta]").forEach((cta) => {
+        if (cta === inside) return;
+        setDownloadCtaOpen(cta, false);
+        cta.classList.remove("is-dismissed");
+      });
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key !== "Escape") return;
+      document.querySelectorAll("[data-download-cta].is-open").forEach((cta) => {
+        dismissDownloadCta(cta);
+        cta.querySelector("[data-download-nav]")?.focus();
+      });
     });
   }
 
@@ -329,6 +546,9 @@
     resolveDownloadCards().forEach(({ el, key }) => bindCard(el, key));
     document.querySelectorAll("button.download-chip-btn[data-download-key]").forEach(bindChipButton);
     document.querySelectorAll("[data-download-nav]").forEach(bindNavDownload);
+    document.querySelectorAll("[data-download-menu] [data-download-key]").forEach(bindChipDownload);
+    document.querySelectorAll("[data-download-cta]").forEach(bindDownloadCta);
+    bindDownloadMenuChrome();
     updatePlatformDownloadCta();
   }
 
