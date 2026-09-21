@@ -46,14 +46,9 @@
     }
   };
 
-  var channelProps =
-    window.DiscoveryChannelTrack && typeof window.DiscoveryChannelTrack.getStored === "function"
-      ? window.DiscoveryChannelTrack.getStored()
-      : {};
-
   var common = {
     identity: { status: "resolving" },
-    commonProperties: Object.assign({ app_id: APP_ID }, channelProps)
+    commonProperties: { app_id: APP_ID }
   };
 
   var analytics;
