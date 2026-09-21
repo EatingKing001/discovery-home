@@ -4,7 +4,11 @@
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   const embedded = window.parent !== window && new URLSearchParams(window.location.search).has("embedded");
   const clamp = (value, min = 0, max = 1) => Math.min(max, Math.max(min, value));
-  const discoveryUrl = window.SiteLinkConfig?.discoveryWebApp || "https://discovery.intern-ai.org.cn/";
+  const discoveryBase = window.SiteLinkConfig?.discoveryWebApp || "https://discovery.intern-ai.org.cn/";
+  const discoveryUrl =
+    window.DiscoveryChannelTrack && typeof window.DiscoveryChannelTrack.appendToUrl === "function"
+      ? window.DiscoveryChannelTrack.appendToUrl(discoveryBase)
+      : discoveryBase;
   const isLocalFileContext = window.location.protocol === "file:" || window.location.origin === "null";
   const messageTargetOrigin = isLocalFileContext ? "*" : window.location.origin;
   const allowedAnchors = new Set(["home-hero", "home-advantages", "home-workflow", "home-research-foundation", "home-research-cases", "home-cooperation", "home-downloads"]);

@@ -7,7 +7,11 @@
   const dialog = document.getElementById("cooperation-dialog");
   const form = dialog?.querySelector("[data-cooperation-form]");
   const toast = document.getElementById("shell-toast");
-  const discoveryUrl = window.SiteLinkConfig?.discoveryWebApp || "https://discovery.intern-ai.org.cn/";
+  const discoveryBase = window.SiteLinkConfig?.discoveryWebApp || "https://discovery.intern-ai.org.cn/";
+  const discoveryUrl =
+    window.DiscoveryChannelTrack && typeof window.DiscoveryChannelTrack.appendToUrl === "function"
+      ? window.DiscoveryChannelTrack.appendToUrl(discoveryBase)
+      : discoveryBase;
   const allowedAnchors = new Set(["home-advantages", "home-workflow", "home-research-foundation", "home-research-cases", "home-cooperation", "home-downloads"]);
   const isLocalFileContext = window.location.protocol === "file:" || window.location.origin === "null";
   const messageTargetOrigin = isLocalFileContext ? "*" : window.location.origin;
