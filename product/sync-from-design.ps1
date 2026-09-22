@@ -17,7 +17,8 @@ param(
 $ErrorActionPreference = "Stop"
 $Dest = Split-Path -Parent $PSScriptRoot
 $BizVer = "20260826-biz1"
-$AnalyticsVer = "20260831-analytics1"
+$AnalyticsVer = "20260921-channel1"
+$ChannelVer = "20260921-channel1"
 
 function Write-Utf8NoBom {
   param([string]$Path, [string]$Content)
@@ -143,33 +144,47 @@ function Patch-IndexHtml([string]$Path) {
     else { $html = $next; $injected += "index.html → product/vendor/migo-analytics.bundle.js" }
   }
 
-  if (-not (Has-Src $html "product/analytics-bootstrap.js")) {
-    $vendorRe = '(?m)^\s*<script\b[^>]*\bsrc\s*=\s*["''][^"'']*product/vendor/migo-analytics\.bundle\.js[^"'']*["''][^>]*>\s*</script>\s*$'
-    $next = Insert-AfterMatch $html "<script src=`"product/analytics-bootstrap.js?v=$AnalyticsVer`" defer></script>" $vendorRe
-    if ($null -eq $next) {
-      $next = Insert-BeforeMatch $html "<script src=`"product/analytics-bootstrap.js?v=$AnalyticsVer`" defer></script>" $shellRe
-    }
-    if ($null -eq $next) { Write-Warning "index.html：未找到 vendor/shell，无法注入 analytics-bootstrap.js" }
-    else { $html = $next; $injected += "index.html → product/analytics-bootstrap.js" }
-  }
-
   if (-not (Has-Src $html "product/site-links.js")) {
-    $bootstrapRe = '(?m)^\s*<script\b[^>]*\bsrc\s*=\s*["''][^"'']*product/analytics-bootstrap\.js[^"'']*["''][^>]*>\s*</script>\s*$'
-    $next = Insert-AfterMatch $html "<script src=`"product/site-links.js?v=$BizVer`" defer></script>" $bootstrapRe
+    $vendorRe = '(?m)^\s*<script\b[^>]*\bsrc\s*=\s*["''][^"'']*product/vendor/migo-analytics\.bundle\.js[^"'']*["''][^>]*>\s*</script>\s*$'
+    $next = Insert-AfterMatch $html "<script src=`"product/site-links.js?v=$BizVer`" defer></script>" $vendorRe
     if ($null -eq $next) {
       $next = Insert-BeforeMatch $html "<script src=`"product/site-links.js?v=$BizVer`" defer></script>" $shellRe
     }
-    if ($null -eq $next) { Write-Warning "index.html：未找到 shell.js，无法注入 site-links.js" }
+    if ($null -eq $next) { Write-Warning "index.html：未找到 vendor/shell，无法注入 site-links.js" }
     else { $html = $next; $injected += "index.html → product/site-links.js" }
   }
 
-  if (-not (Has-Src $html "product/base-path.js")) {
+  if (-not (Has-Src $html "product/channel-track.js")) {
     $siteLinksRe = '(?m)^\s*<script\b[^>]*\bsrc\s*=\s*["''][^"'']*product/site-links\.js[^"'']*["''][^>]*>\s*</script>\s*$'
-    $next = Insert-AfterMatch $html "<script src=`"product/base-path.js?v=$BizVer`" defer></script>" $siteLinksRe
+    $next = Insert-AfterMatch $html "<script src=`"product/channel-track.js?v=$ChannelVer`" defer></script>" $siteLinksRe
+    if ($null -eq $next) {
+      $next = Insert-BeforeMatch $html "<script src=`"product/channel-track.js?v=$ChannelVer`" defer></script>" $shellRe
+    }
+    if ($null -eq $next) { Write-Warning "index.html：未找到 site-links/shell，无法注入 channel-track.js" }
+    else { $html = $next; $injected += "index.html → product/channel-track.js" }
+  }
+
+  if (-not (Has-Src $html "product/analytics-bootstrap.js")) {
+    $channelRe = '(?m)^\s*<script\b[^>]*\bsrc\s*=\s*["''][^"'']*product/channel-track\.js[^"'']*["''][^>]*>\s*</script>\s*$'
+    $next = Insert-AfterMatch $html "<script src=`"product/analytics-bootstrap.js?v=$AnalyticsVer`" defer></script>" $channelRe
+    if ($null -eq $next) {
+      $siteLinksRe = '(?m)^\s*<script\b[^>]*\bsrc\s*=\s*["''][^"'']*product/site-links\.js[^"'']*["''][^>]*>\s*</script>\s*$'
+      $next = Insert-AfterMatch $html "<script src=`"product/analytics-bootstrap.js?v=$AnalyticsVer`" defer></script>" $siteLinksRe
+    }
+    if ($null -eq $next) {
+      $next = Insert-BeforeMatch $html "<script src=`"product/analytics-bootstrap.js?v=$AnalyticsVer`" defer></script>" $shellRe
+    }
+    if ($null -eq $next) { Write-Warning "index.html：未找到 channel-track/site-links/shell，无法注入 analytics-bootstrap.js" }
+    else { $html = $next; $injected += "index.html → product/analytics-bootstrap.js" }
+  }
+
+  if (-not (Has-Src $html "product/base-path.js")) {
+    $bootstrapRe = '(?m)^\s*<script\b[^>]*\bsrc\s*=\s*["''][^"'']*product/analytics-bootstrap\.js[^"'']*["''][^>]*>\s*</script>\s*$'
+    $next = Insert-AfterMatch $html "<script src=`"product/base-path.js?v=$BizVer`" defer></script>" $bootstrapRe
     if ($null -eq $next) {
       $next = Insert-BeforeMatch $html "<script src=`"product/base-path.js?v=$BizVer`" defer></script>" $shellRe
     }
-    if ($null -eq $next) { Write-Warning "index.html：未找到 site-links.js / shell.js，无法注入 base-path.js" }
+    if ($null -eq $next) { Write-Warning "index.html：未找到 analytics-bootstrap / shell.js，无法注入 base-path.js" }
     else { $html = $next; $injected += "index.html → product/base-path.js" }
   }
 
@@ -213,24 +228,38 @@ function Patch-HomeHtml([string]$Path) {
     else { $html = $next; $injected += "tabs/home/index.html → product/vendor/migo-analytics.bundle.js" }
   }
 
-  if (-not (Has-Src $html "product/analytics-bootstrap.js")) {
+  if (-not (Has-Src $html "product/site-links.js")) {
     $vendorRe = '(?m)^\s*<script\b[^>]*\bsrc\s*=\s*["''][^"'']*product/vendor/migo-analytics\.bundle\.js[^"'']*["''][^>]*>\s*</script>\s*$'
-    $next = Insert-AfterMatch $html "<script src=`"../../product/analytics-bootstrap.js?v=$AnalyticsVer`" defer></script>" $vendorRe
+    $next = Insert-AfterMatch $html "<script src=`"../../product/site-links.js?v=$BizVer`" defer></script>" $vendorRe
+    if ($null -eq $next) {
+      $next = Insert-BeforeMatch $html "<script src=`"../../product/site-links.js?v=$BizVer`" defer></script>" $earlyRe
+    }
+    if ($null -eq $next) { Write-Warning "tabs/home/index.html：未找到 vendor/home.js，无法注入 site-links.js" }
+    else { $html = $next; $injected += "tabs/home/index.html → product/site-links.js" }
+  }
+
+  if (-not (Has-Src $html "product/channel-track.js")) {
+    $siteLinksRe = '(?m)^\s*<script\b[^>]*\bsrc\s*=\s*["''][^"'']*product/site-links\.js[^"'']*["''][^>]*>\s*</script>\s*$'
+    $next = Insert-AfterMatch $html "<script src=`"../../product/channel-track.js?v=$ChannelVer`" defer></script>" $siteLinksRe
+    if ($null -eq $next) {
+      $next = Insert-BeforeMatch $html "<script src=`"../../product/channel-track.js?v=$ChannelVer`" defer></script>" $earlyRe
+    }
+    if ($null -eq $next) { Write-Warning "tabs/home/index.html：无法注入 channel-track.js" }
+    else { $html = $next; $injected += "tabs/home/index.html → product/channel-track.js" }
+  }
+
+  if (-not (Has-Src $html "product/analytics-bootstrap.js")) {
+    $channelRe = '(?m)^\s*<script\b[^>]*\bsrc\s*=\s*["''][^"'']*product/channel-track\.js[^"'']*["''][^>]*>\s*</script>\s*$'
+    $next = Insert-AfterMatch $html "<script src=`"../../product/analytics-bootstrap.js?v=$AnalyticsVer`" defer></script>" $channelRe
+    if ($null -eq $next) {
+      $siteLinksRe = '(?m)^\s*<script\b[^>]*\bsrc\s*=\s*["''][^"'']*product/site-links\.js[^"'']*["''][^>]*>\s*</script>\s*$'
+      $next = Insert-AfterMatch $html "<script src=`"../../product/analytics-bootstrap.js?v=$AnalyticsVer`" defer></script>" $siteLinksRe
+    }
     if ($null -eq $next) {
       $next = Insert-BeforeMatch $html "<script src=`"../../product/analytics-bootstrap.js?v=$AnalyticsVer`" defer></script>" $earlyRe
     }
     if ($null -eq $next) { Write-Warning "tabs/home/index.html：无法注入 analytics-bootstrap.js" }
     else { $html = $next; $injected += "tabs/home/index.html → product/analytics-bootstrap.js" }
-  }
-
-  if (-not (Has-Src $html "product/site-links.js")) {
-    $bootstrapRe = '(?m)^\s*<script\b[^>]*\bsrc\s*=\s*["''][^"'']*product/analytics-bootstrap\.js[^"'']*["''][^>]*>\s*</script>\s*$'
-    $next = Insert-AfterMatch $html "<script src=`"../../product/site-links.js?v=$BizVer`" defer></script>" $bootstrapRe
-    if ($null -eq $next) {
-      $next = Insert-BeforeMatch $html "<script src=`"../../product/site-links.js?v=$BizVer`" defer></script>" $earlyRe
-    }
-    if ($null -eq $next) { Write-Warning "tabs/home/index.html：未找到 home.js/data 脚本，无法注入 site-links.js" }
-    else { $html = $next; $injected += "tabs/home/index.html → product/site-links.js" }
   }
 
   $biz = @(

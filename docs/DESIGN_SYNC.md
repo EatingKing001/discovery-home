@@ -30,6 +30,7 @@
 
 - `product/vendor/migo-analytics.bundle.js` — 已发布 `@migo/analytics` UMD（静态部署直接 COPY）
 - `product/analytics-bootstrap.js` — 神策初始化；iframe 关闭 auto `$pageview`
+- `product/channel-track.js` — 渠道参数 sessionStorage + 产品站外链透传（`DiscoveryChannelTrack`）
 - `product/site-links.js` — 外链、下载频道/`releaseBase`、协议、合作提交 API、`basePath`（`SiteLinkConfig`；须与 `values/*.yml` ingress path 对齐，现为 `/home`）
 - `product/base-path.js` — 子路径：无尾斜杠跳转、`<base>`、壳 iframe 绝对 `src`（仅壳 `index.html`）
 - `product/cooperation-submit.js` — 合作表单可插拔提交
@@ -48,8 +49,9 @@
 
 ```html
 <script src="product/vendor/migo-analytics.bundle.js?v=…" defer></script>
-<script src="product/analytics-bootstrap.js?v=…" defer></script>
 <script src="product/site-links.js?v=…" defer></script>
+<script src="product/channel-track.js?v=…" defer></script>
+<script src="product/analytics-bootstrap.js?v=…" defer></script>
 <script src="product/base-path.js?v=…" defer></script>
 <script src="shared/js/shell.js?v=…" defer></script>
 <script src="product/cooperation-submit.js?v=…" defer></script>
@@ -61,8 +63,9 @@
 <link rel="stylesheet" href="home.css?v=…">
 <link rel="stylesheet" href="../../product/cooperation-cta-hide.css?v=…">
 <script src="../../product/vendor/migo-analytics.bundle.js?v=…" defer></script>
-<script src="../../product/analytics-bootstrap.js?v=…" defer></script>
 <script src="../../product/site-links.js?v=…" defer></script>
+<script src="../../product/channel-track.js?v=…" defer></script>
+<script src="../../product/analytics-bootstrap.js?v=…" defer></script>
 <!-- data/*.js + home.js 保持设计侧顺序 -->
 <script src="home.js?v=…" defer></script>
 <script src="../../product/protocol-links.js?v=…" defer></script>
@@ -96,7 +99,7 @@ npx http-server -p 8023 -c-1
 
 ## 同步后检查清单
 
-1. **业务 script 是否仍指向 `product/`**，且位于设计 `shell.js` / `home.js` 的合理位置（site-links → base-path → shell，业务薄层在后）。
+1. **业务 script 是否仍指向 `product/`**，且位于设计 `shell.js` / `home.js` 的合理位置（site-links → channel-track → analytics-bootstrap → base-path → shell，业务薄层在后）。
 2. **钩子是否改名**：`[data-cooperation-form]`、`[data-local-cooperation-form]`、`.footer-policy-link`、文案「平台服务协议」「个人信息保护政策」、下载卡 `article.download-card[data-download-platform="mac"]` / `[data-download-platform="win"]`、`.is-coming`（Linux 仍敬请期待）。钩子变了就改 `product/`，不要改设计仓逻辑硬塞业务。若同步把 Windows 卡盖回 `is-coming`，需在正式仓改回 `is-hoverable`。
 3. **Toast 容器是否还在**：`#shell-toast`、`#home-local-cooperation-toast`。
 4. **`product/site-links.js` 是否仍为正式仓配置**（含 `basePath` / `downloads.releaseBase` / `downloadChannel` / `protocols` / `cooperationSubmitUrl`）；`basePath` 与部署 path 一致，壳是否仍引用 `product/base-path.js`。

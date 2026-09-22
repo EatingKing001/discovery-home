@@ -20,6 +20,7 @@
 |------|------|
 | `vendor/migo-analytics.bundle.js` | 已发布 `@migo/analytics` UMD（提交进仓，Docker 无需 npm） |
 | `analytics-bootstrap.js` | 神策初始化 + 身份匿名 + 网页版双事件；iframe 内关闭 auto `$pageview` |
+| `channel-track.js` | 渠道参数捕获（sessionStorage）+ 产品站外链透传；`DiscoveryChannelTrack` |
 | `site-links.js` | `SiteLinkConfig`（`basePath` / 外链 / 下载频道 / 协议 / 合作 API） |
 | `base-path.js` | 子路径挂载：无尾斜杠跳转、`<base>`、Home iframe 绝对 `src`（壳 `index.html`） |
 | `cooperation-submit.js` | 合作表单提交 |
@@ -50,6 +51,17 @@
 npm install
 npm run vendor:analytics
 ```
+
+## 渠道透传
+
+打开官网时，从 URL 捕获并写入 `sessionStorage`（`discovery-home:channel-track`）：
+
+`utm_campaign` / `utm_source` / `utm_medium` / `utm_term` / `utm_content` / `_channel_track_key`
+
+- 本次 URL 无上述参数时，沿用同一会话内已存储的值。
+- 壳页与 Home（含 iframe）都会 load；iframe 内优先读 `window.top.location`（同域），并与壳页共享 sessionStorage。
+- 「在线使用」「网页版」等产品站外链经 `appendToUrl` **原样拼回整组参数**（不可只留 `_channel_track_key`）。
+- **产品站进 SSO 时需自行继续透传本组参数**（本仓只覆盖官网侧）。
 
 ## 子路径 `basePath`
 
