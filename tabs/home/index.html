@@ -11,23 +11,27 @@
   <link rel="preload" href="../../shared/assets/fonts/source-han-serif-sc/inkstone-han-serif-sc-home-700.woff2?v=20260825-font2" as="font" type="font/woff2" crossorigin>
   <script>
     if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+    if (!location.hash) window.scrollTo(0, 0);
     if (new URLSearchParams(location.search).has("embedded")) document.documentElement.classList.add("is-embedded");
+    // Mark motion before the first stylesheet can paint, so Hero starts in its
+    // initial animation state instead of flashing fully visible first.
+    if ("IntersectionObserver" in window) document.documentElement.classList.add("motion-ready");
   </script>
   <script src="../../shared/js/theme.js?v=20260831-theme1"></script>
   <link rel="stylesheet" href="../../shared/css/tokens.css?v=20260904-dark-dot1">
   <link rel="stylesheet" href="../../shared/css/base.css?v=20260824-home76">
-  <link rel="stylesheet" href="../../shared/css/shell.css?v=20260917-hero-cta1">
+  <link rel="stylesheet" href="../../shared/css/shell.css?v=20260920-nav-action1">
   <link rel="stylesheet" href="../../shared/css/styles.css?v=20260918-linux-cta1">
   <link rel="stylesheet" href="../../shared/css/design-system-overrides.css?v=20260912-download-icon1">
-  <link rel="stylesheet" href="home.css?v=20260918-linux-cta1">
+    <link rel="stylesheet" href="home.css?v=20260929-discipline-cards6">
 <link rel="stylesheet" href="../../product/cooperation-cta-hide.css?v=20260826-biz1">
 <script src="../../product/vendor/migo-analytics.bundle.js?v=20260831-analytics1" defer></script>
 <script src="../../product/analytics-bootstrap.js?v=20260831-analytics1" defer></script>
 <script src="../../product/site-links.js?v=20260826-biz1" defer></script>
 <script src="data/research-cases.data.js?v=20260907-research-cases1" defer></script>
-<script src="data/cooperation-cases.data.js?v=20260914-coop-icons2" defer></script>
+<script src="data/cooperation-cases.data.js?v=20260920-coop18" defer></script>
   <script src="data/partner-logos.data.js?v=20260904-partner-dark3" defer></script>
-  <script src="home.js?v=20260915-hero2" defer></script>
+  <script src="home.js?v=20260929-discipline-cards6" defer></script>
 <script src="../../product/protocol-links.js?v=20260826-biz1" defer></script>
 <script src="../../product/downloads.js?v=20260918-linux-cta1" defer></script>
 <script src="../../product/cooperation-submit.js?v=20260826-biz1" defer></script>
@@ -61,7 +65,14 @@
           <div class="hero-action-row">
             <div class="download-cta" data-download-cta="hero">
               <button class="btn-primary hero-action hero-download" type="button" data-download-nav>
-                <span class="hero-download-icon" data-download-platform-icon aria-hidden="true" hidden></span>
+                <span class="hero-download-icon" data-download-platform-icon aria-hidden="true" hidden>
+                  <svg class="hero-download-icon-svg" data-platform-icon-svg="mac" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+                    <path d="M9.72824 6.01862C8.99824 6.01862 7.86822 5.18862 6.67822 5.21862C5.10822 5.23862 3.66822 6.12862 2.85822 7.53862C1.22822 10.3686 2.43822 14.5486 4.02822 16.8486C4.80822 17.9686 5.72822 19.2286 6.94822 19.1886C8.11822 19.1386 8.55824 18.4286 9.97824 18.4286C11.3882 18.4286 11.7882 19.1886 13.0282 19.1586C14.2882 19.1386 15.0882 18.0186 15.8582 16.8886C16.7482 15.5886 17.1182 14.3286 17.1382 14.2586C17.1082 14.2486 14.6882 13.3186 14.6582 10.5186C14.6382 8.17862 16.5682 7.05862 16.6582 7.00862C15.5582 5.39862 13.8682 5.21862 13.2782 5.17862C11.7382 5.05862 10.4482 6.01862 9.72824 6.01862ZM12.3282 3.65862C12.9782 2.87862 13.4082 1.78862 13.2882 0.708618C12.3582 0.74862 11.2382 1.32862 10.5682 2.10862C9.96824 2.79862 9.44824 3.90862 9.58824 4.96862C10.6182 5.04862 11.6782 4.43862 12.3282 3.65862Z" />
+                  </svg>
+                  <svg class="hero-download-icon-svg" data-platform-icon-svg="win" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+                    <path d="M2.50122 4.56585L8.64857 3.71875V9.6585H2.50122V4.56585ZM2.50122 15.4342L8.64857 16.2812V10.4152H2.50122V15.4342ZM9.3249 16.3717L17.5012 17.5V10.4152H9.3249V16.3717ZM9.3249 3.62835V9.6585H17.5012V2.5L9.3249 3.62835Z" />
+                  </svg>
+                </span>
                 <span data-download-platform-label>下载客户端</span>
               </button>
               <div class="download-chip-menu" data-download-menu role="menu" aria-hidden="true">
@@ -93,7 +104,7 @@
         </picture>
         <div class="hero-browser" data-parallax-speed="0.025">
           <div class="browser-bar" aria-hidden="true"><i></i><i></i><i></i><span>discovery.intern-ai.org.cn</span></div>
-          <picture><source type="image/avif" srcset="assets/images/hero/image-herosection-screen@1x.avif?v=20260914-hero-live1 1x, assets/images/hero/image-herosection-screen@2x.avif?v=20260914-hero-live1 2x" sizes="1056px"><source type="image/webp" srcset="assets/images/hero/image-herosection-screen@1x.webp?v=20260914-hero-live1 1x, assets/images/hero/image-herosection-screen@2x.webp?v=20260914-hero-live1 2x" sizes="1056px"><img src="assets/images/hero/image-herosection-screen@1x.png?v=20260914-hero-live1" srcset="assets/images/hero/image-herosection-screen@1x.png?v=20260914-hero-live1 1x, assets/images/hero/image-herosection-screen@2x.png?v=20260914-hero-live1 2x" sizes="1056px" alt="书生·端砚科研工作台界面" width="1056" height="574" fetchpriority="high" decoding="async"></picture>
+          <picture><source type="image/avif" srcset="assets/images/hero/image-herosection-screen@1x.avif?v=20260920-hero-screen-2423341 1x, assets/images/hero/image-herosection-screen@2x.avif?v=20260920-hero-screen-2423341 2x" sizes="1056px"><source type="image/webp" srcset="assets/images/hero/image-herosection-screen@1x.webp?v=20260920-hero-screen-2423341 1x, assets/images/hero/image-herosection-screen@2x.webp?v=20260920-hero-screen-2423341 2x" sizes="1056px"><img src="assets/images/hero/image-herosection-screen@1x.png?v=20260920-hero-screen-2423341" srcset="assets/images/hero/image-herosection-screen@1x.png?v=20260920-hero-screen-2423341 1x, assets/images/hero/image-herosection-screen@2x.png?v=20260920-hero-screen-2423341 2x" sizes="1056px" alt="书生·端砚科研工作台界面" width="1056" height="574" fetchpriority="high" decoding="async"></picture>
         </div>
       </div>
     </section>
@@ -159,66 +170,67 @@
               <div class="subject-bubble subject-math"><img src="assets/icons/disciplines/math-basic.svg" data-theme-src-light="assets/icons/disciplines/math-basic.svg" data-theme-src-dark="assets/icons/disciplines/math-basic-dark.svg" alt="" loading="lazy" decoding="async"><span>数学</span></div>
               <div class="subject-bubble subject-neuro"><img src="assets/icons/disciplines/brain1.svg" data-theme-src-light="assets/icons/disciplines/brain1.svg" data-theme-src-dark="assets/icons/disciplines/brain1-dark.svg" alt="" loading="lazy" decoding="async"><span>神经科学</span></div>
               <svg class="subject-tail-svg" viewBox="0 0 435 453.176" aria-hidden="true" focusable="false">
-                <path class="subject-tail-path subject-tail-path-top" d="M366.735 210.587H391.5A8 8 0 0 0 399.5 202.587V57.984A8 8 0 0 1 407.5 49.984H435"></path>
+                <path class="subject-tail-path subject-tail-path-top" d="M366.735 210.587H391.5A8 8 0 0 0 399.5 202.587V78A8 8 0 0 1 407.5 70H435"></path>
                 <path class="subject-tail-path subject-tail-path-mid" d="M367.568 226.587H435"></path>
-                <path class="subject-tail-path subject-tail-path-bottom" d="M366.735 242.587H391.5A8 8 0 0 1 399.5 250.587V428.39A8 8 0 0 0 407.5 436.39H435"></path>
+                <path class="subject-tail-path subject-tail-path-bottom" d="M366.735 242.587H391.5A8 8 0 0 1 399.5 250.587V391A8 8 0 0 0 407.5 399H435"></path>
               </svg>
             </div>
           </div>
-          <div class="discipline-streams">
-            <div class="discipline-stream"><h3>科研应用</h3><div class="discipline-card-row">
-              <article class="app-card">
-                <div class="app-card-cover"><picture><source type="image/avif" srcset="assets/images/discipline/card-app-protein@1x.avif 1x, assets/images/discipline/card-app-protein@2x.avif 2x" sizes="255px"><source type="image/webp" srcset="assets/images/discipline/card-app-protein@1x.webp 1x, assets/images/discipline/card-app-protein@2x.webp 2x" sizes="255px"><img src="assets/images/discipline/card-app-protein@1x.png" srcset="assets/images/discipline/card-app-protein@1x.png 1x, assets/images/discipline/card-app-protein@2x.png 2x" sizes="255px" alt="蛋白质结构插图" loading="lazy" decoding="async"></picture><strong>VenusPod</strong></div>
-                <div class="resource-body"><h4>蛋白质检索引擎</h4><p>VenusPod 构建全球最大 150 亿序列数据集，破解 AI 蛋白质设计数据瓶颈</p></div>
-                <footer class="resource-footer"><picture><source type="image/avif" srcset="assets/icons/disciplines/cards/org-app-venuspod@1x.avif 1x, assets/icons/disciplines/cards/org-app-venuspod@2x.avif 2x" sizes="11px"><source type="image/webp" srcset="assets/icons/disciplines/cards/org-app-venuspod@1x.webp 1x, assets/icons/disciplines/cards/org-app-venuspod@2x.webp 2x" sizes="11px"><img src="assets/icons/disciplines/cards/org-app-venuspod@1x.png" srcset="assets/icons/disciplines/cards/org-app-venuspod@1x.png 1x, assets/icons/disciplines/cards/org-app-venuspod@2x.png 2x" sizes="11px" alt="" width="11" height="11" loading="lazy" decoding="async"></picture><span>上海交通大学</span></footer>
-              </article>
-              <article class="app-card">
-                <div class="app-card-cover"><picture><source type="image/avif" srcset="assets/images/discipline/card-app-earth@1x.avif 1x, assets/images/discipline/card-app-earth@2x.avif 2x" sizes="437px"><source type="image/webp" srcset="assets/images/discipline/card-app-earth@1x.webp 1x, assets/images/discipline/card-app-earth@2x.webp 2x" sizes="437px"><img src="assets/images/discipline/card-app-earth@1x.png" srcset="assets/images/discipline/card-app-earth@1x.png 1x, assets/images/discipline/card-app-earth@2x.png 2x" sizes="437px" alt="地球系统插图" loading="lazy" decoding="async"></picture><strong>EarthLink</strong></div>
-                <div class="resource-body"><h4>地球科学家</h4><p>解析地质、气候与环境数据，探索地球系统的奥秘</p></div>
-                <footer class="resource-footer"><picture><source type="image/avif" srcset="assets/icons/disciplines/cards/org-app-earthlink@1x.avif 1x, assets/icons/disciplines/cards/org-app-earthlink@2x.avif 2x" sizes="11px"><source type="image/webp" srcset="assets/icons/disciplines/cards/org-app-earthlink@1x.webp 1x, assets/icons/disciplines/cards/org-app-earthlink@2x.webp 2x" sizes="11px"><img src="assets/icons/disciplines/cards/org-app-earthlink@1x.png" srcset="assets/icons/disciplines/cards/org-app-earthlink@1x.png 1x, assets/icons/disciplines/cards/org-app-earthlink@2x.png 2x" sizes="11px" alt="" width="11" height="11" loading="lazy" decoding="async"></picture><span>上海交通大学</span></footer>
-              </article>
-              <article class="app-card">
-                <div class="app-card-cover"><picture><source type="image/avif" srcset="assets/images/discipline/card-app-chemistry@1x.avif 1x, assets/images/discipline/card-app-chemistry@2x.avif 2x" sizes="268px"><source type="image/webp" srcset="assets/images/discipline/card-app-chemistry@1x.webp 1x, assets/images/discipline/card-app-chemistry@2x.webp 2x" sizes="268px"><img src="assets/images/discipline/card-app-chemistry@1x.png" srcset="assets/images/discipline/card-app-chemistry@1x.png 1x, assets/images/discipline/card-app-chemistry@2x.png 2x" sizes="268px" alt="化学实验器材插图" loading="lazy" decoding="async"></picture><strong>Migo-Chem</strong></div>
-                <div class="resource-body"><h4>化学科研助手</h4><p>助你快速设计实验、分析数据，提升化学研究效率</p></div>
-                <footer class="resource-footer"><picture><source type="image/avif" srcset="assets/icons/disciplines/cards/org-app-migo-chem@1x.avif 1x, assets/icons/disciplines/cards/org-app-migo-chem@2x.avif 2x" sizes="11px"><source type="image/webp" srcset="assets/icons/disciplines/cards/org-app-migo-chem@1x.webp 1x, assets/icons/disciplines/cards/org-app-migo-chem@2x.webp 2x" sizes="11px"><img src="assets/icons/disciplines/cards/org-app-migo-chem@1x.png" srcset="assets/icons/disciplines/cards/org-app-migo-chem@1x.png 1x, assets/icons/disciplines/cards/org-app-migo-chem@2x.png 2x" sizes="11px" alt="" width="11" height="11" loading="lazy" decoding="async"></picture><span>上海交通大学</span></footer>
-              </article>
-            </div></div>
-            <div class="discipline-stream"><h3>科研数据</h3><div class="discipline-card-row">
-              <article class="data-card">
-                <div class="data-card-cover"><picture><source type="image/avif" srcset="assets/images/discipline/card-data-otp@1x.avif 1x, assets/images/discipline/card-data-otp@2x.avif 2x" sizes="344px"><source type="image/webp" srcset="assets/images/discipline/card-data-otp@1x.webp 1x, assets/images/discipline/card-data-otp@2x.webp 2x" sizes="344px"><img src="assets/images/discipline/card-data-otp@1x.png" srcset="assets/images/discipline/card-data-otp@1x.png 1x, assets/images/discipline/card-data-otp@2x.png 2x" sizes="344px" alt="开放靶标平台数据插图" loading="lazy" decoding="async"></picture><strong>OPEN-TARGETS-<br>PLATFORM</strong></div>
-                <div class="resource-body"><h4>开放靶标平台 OTP</h4><p>开放靶标平台（Open Targets Platform）是一个整合了基因组学、化学和药物数据的综合性平台，旨在加速药物靶标发现和验证。</p></div>
-                <footer class="resource-footer"><picture><source type="image/avif" srcset="assets/icons/disciplines/cards/org-data-ai-lab@1x.avif 1x, assets/icons/disciplines/cards/org-data-ai-lab@2x.avif 2x" sizes="11px"><source type="image/webp" srcset="assets/icons/disciplines/cards/org-data-ai-lab@1x.webp 1x, assets/icons/disciplines/cards/org-data-ai-lab@2x.webp 2x" sizes="11px"><img src="assets/icons/disciplines/cards/org-data-ai-lab@1x.png" srcset="assets/icons/disciplines/cards/org-data-ai-lab@1x.png 1x, assets/icons/disciplines/cards/org-data-ai-lab@2x.png 2x" sizes="11px" alt="" width="11" height="11" loading="lazy" decoding="async"></picture><span>上海人工智能实验室</span></footer>
-              </article>
-              <article class="data-card">
-                <div class="data-card-cover"><picture><source type="image/avif" srcset="assets/images/discipline/card-data-cellxgene@1x.avif 1x, assets/images/discipline/card-data-cellxgene@2x.avif 2x" sizes="457px"><source type="image/webp" srcset="assets/images/discipline/card-data-cellxgene@1x.webp 1x, assets/images/discipline/card-data-cellxgene@2x.webp 2x" sizes="457px"><img src="assets/images/discipline/card-data-cellxgene@1x.png" srcset="assets/images/discipline/card-data-cellxgene@1x.png 1x, assets/images/discipline/card-data-cellxgene@2x.png 2x" sizes="457px" alt="单细胞转录组数据插图" loading="lazy" decoding="async"></picture><strong>CZ-CELLXGENE-SINGLE-CELL-<br>TRANSCRIPTOMICS-DATABASE</strong></div>
-                <div class="resource-body"><h4>CZ CELLxGENE 单细胞转录组数据库</h4><p>CZ CELLxGENE 是一个专注于单细胞转录组学数据的开放平台，提供高质量的单细胞 RNA 测序数据集，支持科研人员进行细胞类型鉴定、基因表达分析和生物标记物发现等研究。</p></div>
-                <footer class="resource-footer"><picture><source type="image/avif" srcset="assets/icons/disciplines/cards/org-data-ai-lab@1x.avif 1x, assets/icons/disciplines/cards/org-data-ai-lab@2x.avif 2x" sizes="11px"><source type="image/webp" srcset="assets/icons/disciplines/cards/org-data-ai-lab@1x.webp 1x, assets/icons/disciplines/cards/org-data-ai-lab@2x.webp 2x" sizes="11px"><img src="assets/icons/disciplines/cards/org-data-ai-lab@1x.png" srcset="assets/icons/disciplines/cards/org-data-ai-lab@1x.png 1x, assets/icons/disciplines/cards/org-data-ai-lab@2x.png 2x" sizes="11px" alt="" width="11" height="11" loading="lazy" decoding="async"></picture><span>上海人工智能实验室</span></footer>
-              </article>
-              <article class="data-card">
-                <div class="data-card-cover"><picture><source type="image/avif" srcset="assets/images/discipline/card-data-gdc@1x.avif 1x, assets/images/discipline/card-data-gdc@2x.avif 2x" sizes="404px"><source type="image/webp" srcset="assets/images/discipline/card-data-gdc@1x.webp 1x, assets/images/discipline/card-data-gdc@2x.webp 2x" sizes="404px"><img src="assets/images/discipline/card-data-gdc@1x.png" srcset="assets/images/discipline/card-data-gdc@1x.png 1x, assets/images/discipline/card-data-gdc@2x.png 2x" sizes="404px" alt="NCI 基因组数据插图" loading="lazy" decoding="async"></picture><strong>NCI-GENOMIC-DATA-COMMONS-<br>TGGA-GBM-LGG</strong></div>
-                <div class="resource-body"><h4>NCI 基因组数据共享平台 GDC</h4><p>NCI Genomic Data Commons (GDC) 是美国国家癌症研究所（NCI）建立的基因组数据共享平台，旨在整合和标准化癌症基因组数据，为研究人员提供高质量的数据资源。</p></div>
-                <footer class="resource-footer"><picture><source type="image/avif" srcset="assets/icons/disciplines/cards/org-data-ai-lab@1x.avif 1x, assets/icons/disciplines/cards/org-data-ai-lab@2x.avif 2x" sizes="11px"><source type="image/webp" srcset="assets/icons/disciplines/cards/org-data-ai-lab@1x.webp 1x, assets/icons/disciplines/cards/org-data-ai-lab@2x.webp 2x" sizes="11px"><img src="assets/icons/disciplines/cards/org-data-ai-lab@1x.png" srcset="assets/icons/disciplines/cards/org-data-ai-lab@1x.png 1x, assets/icons/disciplines/cards/org-data-ai-lab@2x.png 2x" sizes="11px" alt="" width="11" height="11" loading="lazy" decoding="async"></picture><span>上海人工智能实验室</span></footer>
-              </article>
-            </div></div>
-            <div class="discipline-stream"><h3>科研工具</h3><div class="discipline-card-row discipline-card-row-tools">
-              <article class="tool-card">
-                <div class="resource-body"><h4><span class="tool-icon"><img src="assets/icons/disciplines/cards/tool-multiomics.svg" alt="" loading="lazy" decoding="async"></span>multiomics_integration</h4><p>多组学整合 - 整合多组学：基因表达、蛋白质数据、途径富集和代谢途径。使用此技能进行多组学任务，包括获取跨癌症的基因表达、通过加入获取 uniprotkb 条目、获取功能富集 kegg 获取。</p></div>
-                <footer class="resource-footer"><picture><source type="image/avif" srcset="assets/icons/disciplines/cards/org-tool-multiomics@1x.avif 1x, assets/icons/disciplines/cards/org-tool-multiomics@2x.avif 2x" sizes="11px"><source type="image/webp" srcset="assets/icons/disciplines/cards/org-tool-multiomics@1x.webp 1x, assets/icons/disciplines/cards/org-tool-multiomics@2x.webp 2x" sizes="11px"><img src="assets/icons/disciplines/cards/org-tool-multiomics@1x.png" srcset="assets/icons/disciplines/cards/org-tool-multiomics@1x.png 1x, assets/icons/disciplines/cards/org-tool-multiomics@2x.png 2x" sizes="11px" alt="" width="11" height="11" loading="lazy" decoding="async"></picture><span>上海人工智能实验室</span></footer>
-              </article>
-              <article class="tool-card">
-                <div class="resource-body"><h4><span class="tool-icon"><img src="assets/icons/disciplines/cards/tool-atmospheric.svg" alt="" loading="lazy" decoding="async"></span>atmospheric-science-calculations</h4><p>计算气象和气候科学的大气参数，包括科里奥利参数、地转风、热量指数、位温和露点。</p></div>
-                <footer class="resource-footer"><picture><source type="image/avif" srcset="assets/icons/disciplines/cards/org-tool-atmospheric@1x.avif 1x, assets/icons/disciplines/cards/org-tool-atmospheric@2x.avif 2x" sizes="11px"><source type="image/webp" srcset="assets/icons/disciplines/cards/org-tool-atmospheric@1x.webp 1x, assets/icons/disciplines/cards/org-tool-atmospheric@2x.webp 2x" sizes="11px"><img src="assets/icons/disciplines/cards/org-tool-atmospheric@1x.png" srcset="assets/icons/disciplines/cards/org-tool-atmospheric@1x.png 1x, assets/icons/disciplines/cards/org-tool-atmospheric@2x.png 2x" sizes="11px" alt="" width="11" height="11" loading="lazy" decoding="async"></picture><span>上海人工智能实验室</span></footer>
-              </article>
-              <article class="tool-card">
-                <div class="resource-body"><h4><span class="tool-icon"><img src="assets/icons/disciplines/cards/tool-nuwa.svg" alt="" loading="lazy" decoding="async"></span>nuwa-skill</h4><p>女娲学习方法论 Skill。它解决的是知识工作者输入过多、输出过少、读了很多论文但无法形成知识体系、无法持续输出的痛点，强调先建框架再填内容。</p></div>
-                <footer class="resource-footer"><picture><source type="image/avif" srcset="assets/icons/disciplines/cards/org-tool-nuwa@1x.avif 1x, assets/icons/disciplines/cards/org-tool-nuwa@2x.avif 2x" sizes="11px"><source type="image/webp" srcset="assets/icons/disciplines/cards/org-tool-nuwa@1x.webp 1x, assets/icons/disciplines/cards/org-tool-nuwa@2x.webp 2x" sizes="11px"><img src="assets/icons/disciplines/cards/org-tool-nuwa@1x.png" srcset="assets/icons/disciplines/cards/org-tool-nuwa@1x.png 1x, assets/icons/disciplines/cards/org-tool-nuwa@2x.png 2x" sizes="11px" alt="" width="11" height="11" loading="lazy" decoding="async"></picture><span>上海人工智能实验室</span></footer>
-              </article>
-            </div></div>
+          <div class="discipline-stream"><h3>科研应用</h3><div class="discipline-card-row">
+            <article class="app-card">
+              <div class="app-card-cover"><picture><img src="assets/images/discipline/card-app-protein-design@1x.png" srcset="assets/images/discipline/card-app-protein-design@1x.png 1x, assets/images/discipline/card-app-protein-design@2x.png 2x" alt="蛋白质结构插图" loading="lazy" decoding="async"></picture></div>
+              <div class="resource-body"><h4>蛋白质检索引擎</h4></div>
+              <footer class="resource-footer"><img src="assets/icons/disciplines/cards/org-app-sjtu-design.png" alt="" width="16" height="16" loading="lazy" decoding="async"><span>上海交通大学</span></footer>
+            </article>
+            <article class="app-card">
+              <div class="app-card-cover"><picture><img src="assets/images/discipline/card-app-earth-design@1x.png" srcset="assets/images/discipline/card-app-earth-design@1x.png 1x, assets/images/discipline/card-app-earth-design@2x.png 2x" alt="地球系统插图" loading="lazy" decoding="async"></picture></div>
+              <div class="resource-body"><h4>地球科学家</h4></div>
+              <footer class="resource-footer"><img src="assets/icons/disciplines/cards/org-ai-lab-design.png" alt="" width="16" height="16" loading="lazy" decoding="async"><span>上海人工智能实验室</span></footer>
+            </article>
+            <article class="app-card">
+              <div class="app-card-cover"><picture><img src="assets/images/discipline/card-app-chemistry-design@1x.png" srcset="assets/images/discipline/card-app-chemistry-design@1x.png 1x, assets/images/discipline/card-app-chemistry-design@2x.png 2x" alt="化学实验器材插图" loading="lazy" decoding="async"></picture></div>
+              <div class="resource-body"><h4>化学科研助手</h4></div>
+              <footer class="resource-footer"><img src="assets/icons/disciplines/cards/org-ai-lab-design.png" alt="" width="16" height="16" loading="lazy" decoding="async"><span>上海人工智能实验室</span></footer>
+            </article>
+            <a class="discipline-more-card" href="https://discovery.intern-ai.org.cn/app" target="_blank" rel="noopener noreferrer" aria-label="打开科研应用"><span class="more-count">20+</span><span class="more-label">查看<br>全部</span></a>
+          </div></div>
+          <div class="discipline-stream"><h3>科研数据</h3><div class="discipline-card-row">
+            <article class="data-card">
+              <div class="data-card-cover"><picture><img src="assets/images/discipline/card-data-openfold-design@1x.png" srcset="assets/images/discipline/card-data-openfold-design@1x.png 1x, assets/images/discipline/card-data-openfold-design@2x.png 2x" alt="OpenFold 联盟数据集插图" loading="lazy" decoding="async"></picture></div>
+              <div class="resource-body"><h4>OpenFold联盟数据集<br>(PDB子集)</h4></div>
+              <footer class="resource-footer"><img src="assets/icons/disciplines/cards/org-ai-lab-design.png" alt="" width="16" height="16" loading="lazy" decoding="async"><span>上海人工智能实验室</span></footer>
+            </article>
+            <article class="data-card">
+              <div class="data-card-cover"><picture><img src="assets/images/discipline/card-data-cellxgene-design@1x.png" srcset="assets/images/discipline/card-data-cellxgene-design@1x.png 1x, assets/images/discipline/card-data-cellxgene-design@2x.png 2x" alt="单细胞转录组数据插图" loading="lazy" decoding="async"></picture></div>
+              <div class="resource-body"><h4>CZ CELLxGENE<br>单细胞转录组数据库</h4></div>
+              <footer class="resource-footer"><img src="assets/icons/disciplines/cards/org-ai-lab-design.png" alt="" width="16" height="16" loading="lazy" decoding="async"><span>上海人工智能实验室</span></footer>
+            </article>
+            <article class="data-card">
+              <div class="data-card-cover"><picture><img src="assets/images/discipline/card-data-tcga-design@1x.png" srcset="assets/images/discipline/card-data-tcga-design@1x.png 1x, assets/images/discipline/card-data-tcga-design@2x.png 2x" alt="TCGA-GBM/LGG 基因组数据插图" loading="lazy" decoding="async"></picture></div>
+              <div class="resource-body"><h4>TCGA-GBM/LGG<br>基因组数据</h4></div>
+              <footer class="resource-footer"><img src="assets/icons/disciplines/cards/org-ai-lab-design.png" alt="" width="16" height="16" loading="lazy" decoding="async"><span>上海人工智能实验室</span></footer>
+            </article>
+            <a class="discipline-more-card" href="https://discovery.intern-ai.org.cn/dataset" target="_blank" rel="noopener noreferrer" aria-label="打开科研数据"><span class="more-count">250+</span><span class="more-label">查看<br>全部</span></a>
+          </div></div>
+          <div class="discipline-stream"><h3>科研工具</h3><div class="discipline-card-row discipline-card-row-tools">
+            <article class="tool-card">
+              <div class="resource-body"><h4><span class="tool-icon tool-icon-multiomics"><img src="assets/icons/disciplines/cards/tool-multiomics-design.svg" alt="" loading="lazy" decoding="async"></span><span>multiomics_integration</span></h4></div>
+              <footer class="resource-footer"><img src="assets/icons/disciplines/cards/org-ai-lab-design.png" alt="" width="16" height="16" loading="lazy" decoding="async"><span>上海人工智能实验室</span></footer>
+            </article>
+            <article class="tool-card">
+              <div class="resource-body"><h4><span class="tool-icon tool-icon-scigraph"><img src="assets/icons/disciplines/cards/tool-scigraph-design.svg" alt="" loading="lazy" decoding="async"></span><span>SciGraph</span></h4></div>
+              <footer class="resource-footer"><img src="assets/icons/disciplines/cards/org-zju-design.png" alt="" width="16" height="16" loading="lazy" decoding="async"><span>浙江大学</span></footer>
+            </article>
+            <article class="tool-card">
+              <div class="resource-body"><h4><span class="tool-icon tool-icon-drugsda"><img src="assets/icons/disciplines/cards/tool-drugsda-design.svg" alt="" loading="lazy" decoding="async"></span><span>DrugSDA-Tool</span></h4></div>
+              <footer class="resource-footer"><img src="assets/icons/disciplines/cards/org-pku-design.png" alt="" width="16" height="16" loading="lazy" decoding="async"><span>北京大学</span></footer>
+            </article>
+            <a class="discipline-more-card" href="https://discovery.intern-ai.org.cn/scp" target="_blank" rel="noopener noreferrer" aria-label="打开科研工具"><span class="more-count">1300+</span><span class="more-label">查看<br>全部</span></a>
+          </div></div>
           </div>
         </div>
       </div>
     </section>
-
     <section class="home-section outputs-section" id="home-outputs" data-home-section aria-labelledby="home-outputs-title">
       <div class="home-rail section-content">
         <header class="section-heading compact"><h2 id="home-outputs-title">产物原生</h2><p>交付图表、数据、代码、结构文件、实验方案和研究报告，而不是一段不可复用的回答</p></header>
@@ -573,7 +585,7 @@ branch_df &lt;- tribble(
                 <li><span class="cooperation-feature-icon" aria-hidden="true"><img src="assets/icons/cooperation/feature-collab.svg" data-theme-src-light="assets/icons/cooperation/feature-collab.svg" data-theme-src-dark="assets/icons/cooperation/feature-collab-dark.svg" alt="" width="24" height="24"></span><div><strong>智能科研协同</strong><p>科研助手、对话探索、实验与仿真一体化，提升研发效率</p></div></li>
               </ul>
             </div>
-            <div class="cooperation-case-media"><picture><img src="assets/images/cooperation/image-cooperation-aerospace.png?v=20260912-coop17" sizes="(max-width: 767px) calc(100vw - 40px), 720px" alt="天玄·千枢航天科学发现平台" width="1470" height="920" loading="lazy" decoding="async"></picture></div>
+            <div class="cooperation-case-media"><picture><img src="assets/images/cooperation/image-cooperation-aerospace.png?v=20260920-coop18" sizes="(max-width: 767px) calc(100vw - 40px), 720px" alt="天玄·千枢航天科学发现平台" width="1584" height="993" loading="lazy" decoding="async"></picture></div>
           </article>
         </div>
         <div class="partner-wall" aria-label="合作机构">
