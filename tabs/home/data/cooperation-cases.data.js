@@ -33,9 +33,9 @@
           description: "科研助手、对话探索、实验与仿真一体化，提升研发效率"
         }
       ],
-      image: "assets/images/cooperation/image-cooperation-aerospace.png?v=20260912-coop17",
-      imageWidth: 1470,
-      imageHeight: 920,
+      image: "assets/images/cooperation/image-cooperation-aerospace.png?v=20260920-coop18",
+      imageWidth: 1584,
+      imageHeight: 993,
       imageAlt: "天玄·千枢航天科学发现平台"
     },
     {
