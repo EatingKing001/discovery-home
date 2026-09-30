@@ -39,10 +39,47 @@
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
   }
 
+  function startHeroMotionAfterAssets() {
+    if (!document.documentElement.classList.contains("motion-ready")) return;
+    const heroImages = Array.from(document.querySelectorAll(".hero-stage img"));
+    const heroAssets = heroImages.map((image) => new Promise((resolve) => {
+      let settled = false;
+      const finish = () => {
+        if (settled) return;
+        settled = true;
+        image.removeEventListener("load", finish);
+        image.removeEventListener("error", finish);
+        resolve();
+      };
+      image.addEventListener("load", finish, { once: true });
+      image.addEventListener("error", finish, { once: true });
+      if (image.complete) finish();
+    }).then(() => (typeof image.decode === "function" ? image.decode().catch(() => undefined) : undefined)));
+
+    // Resolve the title's web font before revealing it to avoid a visible font swap.
+    const heroHeading = document.querySelector(".hero-introduction h1");
+    if (document.fonts && heroHeading) {
+      const headingStyle = window.getComputedStyle(heroHeading);
+      const headingFont = `${headingStyle.fontWeight} ${headingStyle.fontSize} ${headingStyle.fontFamily}`;
+      heroAssets.push(document.fonts.load(headingFont, heroHeading.textContent).catch(() => undefined));
+    }
+
+    let timeoutId;
+    const timeout = new Promise((resolve) => { timeoutId = window.setTimeout(resolve, 4000); });
+    Promise.race([Promise.all(heroAssets), timeout]).then(() => {
+      window.clearTimeout(timeoutId);
+      window.requestAnimationFrame(() => document.documentElement.classList.add("hero-assets-ready"));
+    });
+  }
+
+  // A defer script runs while readyState is "interactive", before theme.js swaps
+  // the picture sources at DOMContentLoaded. Wait a frame after that swap so
+  // load/decode observes the final themed image, including on cached revisits.
+  const queueHeroMotion = () => window.requestAnimationFrame(startHeroMotionAfterAssets);
+  if (document.readyState === "complete") queueHeroMotion();
+  else document.addEventListener("DOMContentLoaded", queueHeroMotion, { once: true });
+
   resetInitialScrollPosition();
-  window.addEventListener("pageshow", () => {
-    window.requestAnimationFrame(() => window.requestAnimationFrame(resetInitialScrollPosition));
-  }, { once: true });
 
   document.querySelectorAll("[data-discovery-link]").forEach((link) => { link.href = discoveryUrl; });
 
@@ -702,7 +739,7 @@
     renderedCooperation = true;
     if (isSwitching) {
       cooperationCase.classList.add("is-switching");
-      cooperationMotionTimer = window.setTimeout(() => cooperationCase.classList.remove("is-switching"), 620);
+      cooperationMotionTimer = window.setTimeout(() => cooperationCase.classList.remove("is-switching"), 820);
     }
   }
 
