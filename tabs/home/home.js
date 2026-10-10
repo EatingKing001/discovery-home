@@ -914,18 +914,84 @@
     setLocalResearchDirection(radios[nextIndex]);
     radios[nextIndex].focus();
   });
-  /* SCP-Lab 申请使用弹窗（设计稿 1172:92480）。 */
+  /* SCP-Lab 申请使用弹窗（静态邮件申请提示）。 */
   const localScpLabDialog = document.getElementById("home-local-scp-lab-dialog");
-  const localScpLabForm = localScpLabDialog?.querySelector("[data-local-scp-lab-form]");
   let lastScpLabApplyTrigger = null;
   let scpLabApplyRequestId = "";
   let scpLabApplyRetryTimer = 0;
 
-  function syncLocalScpLabCount(field) {
-    const wrap = field.closest(".scplab-count-wrap");
-    const counter = wrap?.querySelector("[data-scp-lab-count]");
-    if (!counter || field.maxLength < 0) return;
-    counter.textContent = String(field.value.length) + "/" + String(field.maxLength);
+  function copyTextWithFallback(text, onDone) {
+    if (navigator.clipboard?.writeText) {
+      navigator.clipboard.writeText(text).then(onDone).catch(() => legacyCopyText(text, onDone));
+    } else {
+      legacyCopyText(text, onDone);
+    }
+  }
+
+  function legacyCopyText(text, onDone) {
+    const helper = document.createElement("textarea");
+    helper.value = text;
+    helper.setAttribute("readonly", "");
+    helper.style.position = "fixed";
+    helper.style.opacity = "0";
+    document.body.appendChild(helper);
+    helper.select();
+    try {
+      document.execCommand("copy");
+      onDone();
+    } catch (error) {
+      console.info("[discovery-home] 复制失败：", error);
+    }
+    helper.remove();
+  }
+
+  const activeScpLabToasts = [];
+
+  function layoutScpLabToasts() {
+    let offset = 0;
+    activeScpLabToasts.forEach((item) => {
+      item._slotOffset = offset;
+      item.style.transform = `translate(-50%, ${offset}px)`;
+      offset += item.offsetHeight + 8;
+    });
+  }
+
+  function dismissScpLabToast(item) {
+    const index = activeScpLabToasts.indexOf(item);
+    if (index < 0) return;
+    activeScpLabToasts.splice(index, 1);
+    window.clearTimeout(item._toastTimer);
+    item.classList.remove("show");
+    item.style.transform = `translate(-50%, ${(item._slotOffset || 0) - 14}px)`;
+    window.setTimeout(() => item.remove(), 240);
+    layoutScpLabToasts();
+  }
+
+  /* 多条 toast 在弹窗所在层纵向堆叠：新的在最上方，未消失的顺势下移。 */
+  function showScpLabLocalToast(message) {
+    if (!localScpLabDialog) return;
+    const item = document.createElement("div");
+    item.className = "app-toast success";
+    item.setAttribute("role", "status");
+    item.innerHTML = `<span class="app-toast-ico">${successToastIcon}</span><span class="app-toast-msg"></span>`;
+    item.querySelector(".app-toast-msg").textContent = String(message || "");
+    localScpLabDialog.appendChild(item);
+    activeScpLabToasts.unshift(item);
+    item._slotOffset = 0;
+    item.style.transform = "translate(-50%, -14px)";
+    window.requestAnimationFrame(() => {
+      item.classList.add("show");
+      layoutScpLabToasts();
+    });
+    item._toastTimer = window.setTimeout(() => dismissScpLabToast(item), 1800);
+  }
+
+  function copyLocalScpLabPart(button) {
+    const part = button.closest(".scplab-template-part");
+    const text = part?.querySelector("[data-scp-lab-text]")?.textContent || "";
+    if (!text.trim()) return;
+    const label = part.querySelector(".scplab-part-label")?.textContent.trim() || "内容";
+    copyTextWithFallback(text, () => showScpLabLocalToast("已复制" + label));
   }
 
   function requestShellScpLabDialog(trigger) {
@@ -945,7 +1011,6 @@
     lastScpLabApplyTrigger = trigger || document.activeElement;
     localScpLabDialog.showModal();
     document.body.classList.add("has-open-dialog");
-    localScpLabForm?.querySelectorAll("input[maxlength], textarea[maxlength]").forEach(syncLocalScpLabCount);
     window.setTimeout(() => localScpLabDialog.querySelector("input, textarea, button")?.focus(), 0);
   }
 
@@ -953,30 +1018,19 @@
     if (!localScpLabDialog?.open) return;
     localScpLabDialog.close();
     document.body.classList.remove("has-open-dialog");
+    activeScpLabToasts.splice(0).forEach((item) => {
+      window.clearTimeout(item._toastTimer);
+      item.remove();
+    });
     if (lastScpLabApplyTrigger instanceof HTMLElement) lastScpLabApplyTrigger.focus();
     lastScpLabApplyTrigger = null;
   }
 
-  function validateLocalScpLabForm() {
-    if (!localScpLabForm) return false;
-    let valid = true;
-    localScpLabForm.querySelectorAll("[required]").forEach((field) => {
-      const invalid = !field.value.trim();
-      field.classList.toggle("is-error", invalid);
-      field.setAttribute("aria-invalid", String(invalid));
-      const wrap = field.closest(".tm-field");
-      const errorEl = wrap?.querySelector("[data-field-error]");
-      if (errorEl) {
-        const label = wrap.querySelector(".tm-label");
-        const title = label?.childNodes[0]?.textContent.trim() || "";
-        errorEl.textContent = invalid ? "请输入" + title : "";
-      }
-      valid = valid && !invalid;
-    });
-    return valid;
-  }
-
   localScpLabDialog?.addEventListener("click", (event) => {
+    if (event.target.closest("[data-scp-lab-copy]")) {
+      copyLocalScpLabPart(event.target.closest("[data-scp-lab-copy]"));
+      return;
+    }
     if (event.target.closest("[data-local-scp-lab-dialog-close]") || event.target === localScpLabDialog) {
       closeStandaloneScpLabDialog();
     }
@@ -985,23 +1039,5 @@
   localScpLabDialog?.addEventListener("cancel", (event) => {
     event.preventDefault();
     closeStandaloneScpLabDialog();
-  });
-
-  localScpLabForm?.addEventListener("submit", (event) => {
-    event.preventDefault();
-    if (!validateLocalScpLabForm()) return;
-    closeStandaloneScpLabDialog();
-    showLocalToast("提交成功");
-  });
-
-  localScpLabForm?.addEventListener("input", (event) => {
-    const field = event.target;
-    if (field instanceof HTMLInputElement || field instanceof HTMLTextAreaElement) {
-      field.classList.remove("is-error");
-      field.removeAttribute("aria-invalid");
-      const errorEl = field.closest(".tm-field")?.querySelector("[data-field-error]");
-      if (errorEl) errorEl.textContent = "";
-      if (field.maxLength > 0) syncLocalScpLabCount(field);
-    }
   });
 })();

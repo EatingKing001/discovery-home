@@ -20,7 +20,7 @@
   <script src="../../shared/js/theme.js?v=20260831-theme1"></script>
   <link rel="stylesheet" href="../../shared/css/tokens.css?v=20260904-dark-dot1">
   <link rel="stylesheet" href="../../shared/css/base.css?v=20260824-home76">
-  <link rel="stylesheet" href="../../shared/css/shell.css?v=20261010-scplab-errors1">
+  <link rel="stylesheet" href="../../shared/css/shell.css?v=20261010-scplab-style1">
   <link rel="stylesheet" href="../../shared/css/styles.css?v=20260918-linux-cta1">
   <link rel="stylesheet" href="../../shared/css/design-system-overrides.css?v=20260912-download-icon1">
     <link rel="stylesheet" href="home.css?v=20261010-scp-links1">
@@ -32,7 +32,7 @@
 <script src="data/research-cases.data.js?v=20260907-research-cases1" defer></script>
 <script src="data/cooperation-cases.data.js?v=20260920-coop18" defer></script>
   <script src="data/partner-logos.data.js?v=20260904-partner-dark3" defer></script>
-  <script src="home.js?v=20261010-scplab-errors1" defer></script>
+  <script src="home.js?v=20261010-scplab-style1" defer></script>
 <script src="../../product/protocol-links.js?v=20260826-biz1" defer></script>
 <script src="../../product/downloads.js?v=20260918-linux-cta1" defer></script>
 <script src="../../product/cooperation-submit.js?v=20260826-biz1" defer></script>
@@ -706,22 +706,37 @@ branch_df &lt;- tribble(
     </form>
   </dialog>
   <dialog class="home-local-dialog" id="home-local-scp-lab-dialog" aria-labelledby="home-local-scp-lab-title">
-    <form class="tm-panel scplab-panel" method="dialog" data-local-scp-lab-form novalidate>
+    <div class="tm-panel scplab-panel" role="dialog" aria-modal="true" aria-labelledby="home-local-scp-lab-title">
       <header class="scplab-header">
         <h2 class="scplab-title" id="home-local-scp-lab-title">申请使用 SCP-Lab</h2>
-        <button class="tm-close" type="button" data-local-scp-lab-dialog-close aria-label="关闭申请使用 SCP-Lab 表单">
+        <button class="tm-close" type="button" data-local-scp-lab-dialog-close aria-label="关闭申请使用 SCP-Lab 弹窗">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg>
         </button>
       </header>
       <div class="scplab-body">
-        <div class="tm-field"><label class="tm-label" for="home-local-scp-lab-name">姓名 <span class="tm-req">*</span></label><input class="tm-input" id="home-local-scp-lab-name" name="name" required autocomplete="name" placeholder="请输入姓名"><p class="scplab-field-error" data-field-error role="alert"></p></div>
-        <div class="tm-field"><label class="tm-label" for="home-local-scp-lab-email">联系邮箱 <span class="tm-req">*</span></label><input class="tm-input" id="home-local-scp-lab-email" name="email" type="email" required autocomplete="email" placeholder="请输入联系邮箱，便于我们联系您"><p class="scplab-field-error" data-field-error role="alert"></p></div>
-        <div class="tm-field"><label class="tm-label" for="home-local-scp-lab-phone">手机号</label><input class="tm-input" id="home-local-scp-lab-phone" name="phone" type="tel" autocomplete="tel" placeholder="请输入手机号，便于我们联系您"></div>
-        <div class="tm-field"><label class="tm-label" for="home-local-scp-lab-org">组织/单位 <span class="tm-req">*</span></label><div class="scplab-count-wrap"><input class="tm-input" id="home-local-scp-lab-org" name="organization" required autocomplete="organization" maxlength="50" placeholder="请输入您所属的组织或单位"><span class="scplab-count" data-scp-lab-count>0/50</span></div><p class="scplab-field-error" data-field-error role="alert"></p></div>
-        <div class="tm-field"><label class="tm-label" for="home-local-scp-lab-purpose">用途描述</label><div class="scplab-count-wrap"><textarea class="tm-textarea scplab-textarea" id="home-local-scp-lab-purpose" name="purpose" rows="3" maxlength="200" placeholder="请说明您希望用 SCP-Lab 完成什么工作或项目"></textarea><span class="scplab-count scplab-count-area" data-scp-lab-count>0/200</span></div></div>
+        <p class="scplab-hint">SCP-Lab 目前通过邮件申请开通使用。请按下方格式发送邮件至 interndiscovery@pjlab.org.cn，我们会尽快与你联系。</p>
+        <div class="scplab-template">
+          <div class="scplab-template-part">
+            <div class="scplab-part-text"><span class="scplab-part-label">邮箱地址</span><p class="scplab-part-content" data-scp-lab-text>interndiscovery@pjlab.org.cn</p></div>
+            <button class="scplab-copy" type="button" data-scp-lab-copy><img src="../../shared/assets/icons/copy.svg" alt="" width="16" height="16">复制</button>
+          </div>
+          <div class="scplab-template-divider" aria-hidden="true"></div>
+          <div class="scplab-template-part">
+            <div class="scplab-part-text"><span class="scplab-part-label">邮件标题</span><p class="scplab-part-content" data-scp-lab-text>【SCP-Lab 使用申请】姓名 – 组织/单位 – 年月日</p></div>
+            <button class="scplab-copy" type="button" data-scp-lab-copy><img src="../../shared/assets/icons/copy.svg" alt="" width="16" height="16">复制</button>
+          </div>
+          <div class="scplab-template-divider" aria-hidden="true"></div>
+          <div class="scplab-template-part">
+            <div class="scplab-part-text"><span class="scplab-part-label">邮件内容模板</span><pre class="scplab-part-content" data-scp-lab-text>组织/单位：
+联系邮箱：
+手机号：
+用途描述：</pre></div>
+            <button class="scplab-copy" type="button" data-scp-lab-copy><img src="../../shared/assets/icons/copy.svg" alt="" width="16" height="16">复制</button>
+          </div>
+        </div>
       </div>
-      <footer class="scplab-footer"><button class="tm-btn tm-btn-ghost" type="button" data-local-scp-lab-dialog-close>取消</button><button class="tm-btn tm-btn-primary" type="submit">提交</button></footer>
-    </form>
+      <footer class="scplab-footer"><button class="tm-btn tm-btn-ghost" type="button" data-local-scp-lab-dialog-close>取消</button></footer>
+    </div>
   </dialog>
 
   <div class="app-toast success" id="home-local-cooperation-toast" role="status" aria-live="polite" aria-atomic="true"></div>
