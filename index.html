@@ -13,7 +13,7 @@
   <script src="shared/js/theme.js?v=20260831-theme1"></script>
   <link rel="stylesheet" href="shared/css/tokens.css?v=20260904-dark-dot1">
   <link rel="stylesheet" href="shared/css/base.css?v=20260824-home76">
-  <link rel="stylesheet" href="shared/css/shell.css?v=20260920-nav-action1">
+  <link rel="stylesheet" href="shared/css/shell.css?v=20261010-scplab-errors1">
   <link rel="stylesheet" href="shared/css/styles.css?v=20260918-linux-cta1">
   <link rel="stylesheet" href="shared/css/design-system-overrides.css?v=20260912-download-icon1">
 <script src="product/vendor/migo-analytics.bundle.js?v=20260831-analytics1" defer></script>
@@ -21,7 +21,7 @@
 <script src="product/channel-track.js?v=20260921-channel1" defer></script>
 <script src="product/analytics-bootstrap.js?v=20260921-channel2" defer></script>
 <script src="product/base-path.js?v=20260826-biz1" defer></script>
-<script src="shared/js/shell.js?v=20260921-channel1" defer></script>
+<script src="shared/js/shell.js?v=20261010-scplab-errors1" defer></script>
 <script src="product/downloads.js?v=20260921-dl-merge" defer></script>
 <script src="product/cooperation-submit.js?v=20260826-biz1" defer></script>
 </head>
@@ -53,7 +53,7 @@
     </button>
   </header>
   <main class="site-main">
-    <iframe class="site-frame" data-home-frame src="tabs/home/index.html?embedded=1&amp;v=20260929-discipline-cards6" title="书生·端砚官网 Home"></iframe>
+    <iframe class="site-frame" data-home-frame src="tabs/home/index.html?embedded=1&amp;v=20261010-shusheng1" title="书生·端砚官网 Home"></iframe>
   </main>
 
   <div class="tm-overlay" id="cooperation-dialog" aria-hidden="true">
@@ -93,6 +93,25 @@
       <footer class="tm-footer"><button class="tm-btn tm-btn-ghost" type="button" data-dialog-close>取消</button><button class="tm-btn tm-btn-primary" type="submit">提交申请</button></footer>
     </form>
   </div>
+  <div class="tm-overlay" id="scp-lab-dialog" aria-hidden="true">
+    <form class="tm-panel scplab-panel" role="dialog" aria-modal="true" aria-labelledby="scp-lab-dialog-title" data-scp-lab-form novalidate>
+      <header class="scplab-header">
+        <h2 class="scplab-title" id="scp-lab-dialog-title">申请使用 SCP-Lab</h2>
+        <button class="tm-close" type="button" data-scp-lab-dialog-close aria-label="关闭申请使用 SCP-Lab 表单">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+        </button>
+      </header>
+      <div class="scplab-body">
+        <div class="tm-field"><label class="tm-label" for="scp-lab-name">姓名 <span class="tm-req">*</span></label><input class="tm-input" id="scp-lab-name" name="name" required autocomplete="name" placeholder="请输入姓名"><p class="scplab-field-error" data-field-error role="alert"></p></div>
+        <div class="tm-field"><label class="tm-label" for="scp-lab-email">联系邮箱 <span class="tm-req">*</span></label><input class="tm-input" id="scp-lab-email" name="email" type="email" required autocomplete="email" placeholder="请输入联系邮箱，便于我们联系您"><p class="scplab-field-error" data-field-error role="alert"></p></div>
+        <div class="tm-field"><label class="tm-label" for="scp-lab-phone">手机号</label><input class="tm-input" id="scp-lab-phone" name="phone" type="tel" autocomplete="tel" placeholder="请输入手机号，便于我们联系您"></div>
+        <div class="tm-field"><label class="tm-label" for="scp-lab-org">组织/单位 <span class="tm-req">*</span></label><div class="scplab-count-wrap"><input class="tm-input" id="scp-lab-org" name="organization" required autocomplete="organization" maxlength="50" placeholder="请输入您所属的组织或单位"><span class="scplab-count" data-scp-lab-count>0/50</span></div><p class="scplab-field-error" data-field-error role="alert"></p></div>
+        <div class="tm-field"><label class="tm-label" for="scp-lab-purpose">用途描述</label><div class="scplab-count-wrap"><textarea class="tm-textarea scplab-textarea" id="scp-lab-purpose" name="purpose" rows="3" maxlength="200" placeholder="请说明您希望用 SCP-Lab 完成什么工作或项目"></textarea><span class="scplab-count scplab-count-area" data-scp-lab-count>0/200</span></div></div>
+      </div>
+      <footer class="scplab-footer"><button class="tm-btn tm-btn-ghost" type="button" data-scp-lab-dialog-close>取消</button><button class="tm-btn tm-btn-primary" type="submit">提交</button></footer>
+    </form>
+  </div>
+
   <div class="app-toast success" id="shell-toast" role="status" aria-live="polite" aria-atomic="true"></div>
 </body>
 </html>

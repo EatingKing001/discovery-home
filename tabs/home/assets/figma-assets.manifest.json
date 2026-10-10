@@ -3,11 +3,11 @@
   "figmaFileKey": "ZaggbS0TYv1ljbBzqEwc7h",
   "rootNodeId": "198:27482",
   "checkedAt": "2026-08-24T00:00:00.0000000Z",
-  "assetCount": 221,
-  "figmaExportCount": 211,
+  "assetCount": 222,
+  "figmaExportCount": 212,
   "userProvidedAssetCount": 10,
   "sourceResolutionSummary": {
-    "exactFileNode": 22,
+    "exactFileNode": 23,
     "contextContainer": 116,
     "evidenceStateContainer": 73,
     "userProvidedFile": 10,
@@ -149,6 +149,20 @@
     }
   ],
   "assets": [
+    {
+      "nodeId": "1172:92463",
+      "layerName": "chevron-right",
+      "checkedAt": "2026-10-09T13:41:21.0000000Z",
+      "naturalSize": {
+        "width": 16.0,
+        "height": 16.0
+      },
+      "exportType": "figma-svg-fragment",
+      "sourceNodeResolution": "exact-file-node",
+      "outputPath": "tabs/home/assets/icons/capabilities/chevron-right.svg",
+      "bytes": 246,
+      "sha256": "b181f7d7a43285ba91fee9e83bcc07dd9b1bcb2b84840ea4e9ba63e065548a41"
+    },
     {
       "nodeId": "198:35635",
       "layerName": "research-foundation-capabilities",

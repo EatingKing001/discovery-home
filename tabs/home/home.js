@@ -162,6 +162,12 @@
     if (cooperationTrigger) {
       if (embedded) requestShellCooperationDialog(cooperationTrigger);
       else openStandaloneCooperationDialog(cooperationTrigger);
+      return;
+    }
+    const scpLabApplyTrigger = event.target.closest("[data-open-scp-lab-apply]");
+    if (scpLabApplyTrigger) {
+      if (embedded) requestShellScpLabDialog(scpLabApplyTrigger);
+      else openStandaloneScpLabDialog(scpLabApplyTrigger);
     }
   });
 
@@ -181,6 +187,14 @@
       shellCooperationRequestId = "";
       if (lastShellCooperationTrigger?.isConnected) lastShellCooperationTrigger.focus({ preventScroll: true });
       lastShellCooperationTrigger = null;
+    } else if (event.data.type === "home:scplab-dialog:opened" && event.data.requestId === scpLabApplyRequestId) {
+      window.clearTimeout(scpLabApplyRetryTimer);
+      scpLabApplyRequestId = "";
+    } else if (event.data.type === "home:scplab-dialog:closed") {
+      window.clearTimeout(scpLabApplyRetryTimer);
+      scpLabApplyRequestId = "";
+      if (lastScpLabApplyTrigger?.isConnected) lastScpLabApplyTrigger.focus({ preventScroll: true });
+      lastScpLabApplyTrigger = null;
     }
   });
 
@@ -442,6 +456,18 @@
     });
   }
 
+  /* Center the active tab inside the mobile tab strip only; never scroll the
+     page itself (scrollIntoView would drag the window to the evidence section
+     on load and on breakpoint changes). */
+  function centerEvidenceTab(tab) {
+    if (!evidenceTabList) return;
+    const stripRect = evidenceTabList.getBoundingClientRect();
+    const tabRect = tab.getBoundingClientRect();
+    const delta = tabRect.left + tabRect.width / 2 - (stripRect.left + stripRect.width / 2);
+    if (Math.abs(delta) < 1) return;
+    evidenceTabList.scrollBy({ left: delta, behavior: reducedMotion.matches ? "auto" : "smooth" });
+  }
+
   function selectEvidence(index, focusTab = false) {
     evidenceIndex = (index + evidenceTabs.length) % evidenceTabs.length;
     evidenceTabs.forEach((tab, tabIndex) => {
@@ -450,7 +476,7 @@
       tab.setAttribute("aria-selected", String(active));
       tab.tabIndex = active ? 0 : -1;
       if (active && focusTab) tab.focus();
-      if (active && evidenceMobileQuery.matches) tab.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+      if (active && evidenceMobileQuery.matches) centerEvidenceTab(tab);
     });
     if (evidenceMobileDescription) evidenceMobileDescription.textContent = evidenceTabs[evidenceIndex].querySelector("span")?.textContent || "";
     evidenceTabList?.setAttribute("aria-orientation", evidenceMobileQuery.matches ? "horizontal" : "vertical");
@@ -887,5 +913,95 @@
     event.preventDefault();
     setLocalResearchDirection(radios[nextIndex]);
     radios[nextIndex].focus();
+  });
+  /* SCP-Lab 申请使用弹窗（设计稿 1172:92480）。 */
+  const localScpLabDialog = document.getElementById("home-local-scp-lab-dialog");
+  const localScpLabForm = localScpLabDialog?.querySelector("[data-local-scp-lab-form]");
+  let lastScpLabApplyTrigger = null;
+  let scpLabApplyRequestId = "";
+  let scpLabApplyRetryTimer = 0;
+
+  function syncLocalScpLabCount(field) {
+    const wrap = field.closest(".scplab-count-wrap");
+    const counter = wrap?.querySelector("[data-scp-lab-count]");
+    if (!counter || field.maxLength < 0) return;
+    counter.textContent = String(field.value.length) + "/" + String(field.maxLength);
+  }
+
+  function requestShellScpLabDialog(trigger) {
+    lastScpLabApplyTrigger = trigger;
+    const requestId = "scplab-open-" + Date.now();
+    const request = { type: "home:scplab-dialog:open", requestId: requestId };
+    scpLabApplyRequestId = requestId;
+    window.clearTimeout(scpLabApplyRetryTimer);
+    postToShell(request);
+    scpLabApplyRetryTimer = window.setTimeout(() => {
+      if (scpLabApplyRequestId === requestId) postToShell(request);
+    }, 300);
+  }
+
+  function openStandaloneScpLabDialog(trigger) {
+    if (!localScpLabDialog || localScpLabDialog.open) return;
+    lastScpLabApplyTrigger = trigger || document.activeElement;
+    localScpLabDialog.showModal();
+    document.body.classList.add("has-open-dialog");
+    localScpLabForm?.querySelectorAll("input[maxlength], textarea[maxlength]").forEach(syncLocalScpLabCount);
+    window.setTimeout(() => localScpLabDialog.querySelector("input, textarea, button")?.focus(), 0);
+  }
+
+  function closeStandaloneScpLabDialog() {
+    if (!localScpLabDialog?.open) return;
+    localScpLabDialog.close();
+    document.body.classList.remove("has-open-dialog");
+    if (lastScpLabApplyTrigger instanceof HTMLElement) lastScpLabApplyTrigger.focus();
+    lastScpLabApplyTrigger = null;
+  }
+
+  function validateLocalScpLabForm() {
+    if (!localScpLabForm) return false;
+    let valid = true;
+    localScpLabForm.querySelectorAll("[required]").forEach((field) => {
+      const invalid = !field.value.trim();
+      field.classList.toggle("is-error", invalid);
+      field.setAttribute("aria-invalid", String(invalid));
+      const wrap = field.closest(".tm-field");
+      const errorEl = wrap?.querySelector("[data-field-error]");
+      if (errorEl) {
+        const label = wrap.querySelector(".tm-label");
+        const title = label?.childNodes[0]?.textContent.trim() || "";
+        errorEl.textContent = invalid ? "请输入" + title : "";
+      }
+      valid = valid && !invalid;
+    });
+    return valid;
+  }
+
+  localScpLabDialog?.addEventListener("click", (event) => {
+    if (event.target.closest("[data-local-scp-lab-dialog-close]") || event.target === localScpLabDialog) {
+      closeStandaloneScpLabDialog();
+    }
+  });
+
+  localScpLabDialog?.addEventListener("cancel", (event) => {
+    event.preventDefault();
+    closeStandaloneScpLabDialog();
+  });
+
+  localScpLabForm?.addEventListener("submit", (event) => {
+    event.preventDefault();
+    if (!validateLocalScpLabForm()) return;
+    closeStandaloneScpLabDialog();
+    showLocalToast("提交成功");
+  });
+
+  localScpLabForm?.addEventListener("input", (event) => {
+    const field = event.target;
+    if (field instanceof HTMLInputElement || field instanceof HTMLTextAreaElement) {
+      field.classList.remove("is-error");
+      field.removeAttribute("aria-invalid");
+      const errorEl = field.closest(".tm-field")?.querySelector("[data-field-error]");
+      if (errorEl) errorEl.textContent = "";
+      if (field.maxLength > 0) syncLocalScpLabCount(field);
+    }
   });
 })();

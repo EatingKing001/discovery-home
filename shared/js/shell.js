@@ -6,6 +6,8 @@
   const menuButton = document.querySelector("[data-site-menu]");
   const dialog = document.getElementById("cooperation-dialog");
   const form = dialog?.querySelector("[data-cooperation-form]");
+  const scpLabDialog = document.getElementById("scp-lab-dialog");
+  const scpLabForm = scpLabDialog?.querySelector("[data-scp-lab-form]");
   const toast = document.getElementById("shell-toast");
   const discoveryBase = window.SiteLinkConfig?.discoveryWebApp || "https://discovery.intern-ai.org.cn/chat";
   const discoveryUrl =
@@ -19,6 +21,7 @@
   let pendingAnchor = null;
   let lastAnchorRequestId = "";
   let lastDialogTrigger = null;
+  let lastScpLabTrigger = null;
   let toastTimer = 0;
   const successToastIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M8 12.5 L11 15.5 L16 9.5"></path></svg>';
 
@@ -106,6 +109,58 @@
     lastDialogTrigger = null;
   }
 
+  function syncScpLabCount(field) {
+    const wrap = field.closest(".scplab-count-wrap");
+    const counter = wrap?.querySelector("[data-scp-lab-count]");
+    if (!counter || field.maxLength < 0) return;
+    counter.textContent = `${field.value.length}/${field.maxLength}`;
+  }
+
+  function setScpLabFieldError(field, invalid) {
+    field.classList.toggle("is-error", invalid);
+    field.setAttribute("aria-invalid", String(invalid));
+    const wrap = field.closest(".tm-field");
+    const errorEl = wrap?.querySelector("[data-field-error]");
+    if (!errorEl) return;
+    const label = wrap?.querySelector(".tm-label");
+    const title = label?.childNodes[0]?.textContent.trim() || "";
+    errorEl.textContent = invalid ? `请输入${title}` : "";
+  }
+
+  function validateScpLabForm() {
+    if (!scpLabForm) return false;
+    let valid = true;
+    scpLabForm.querySelectorAll("[required]").forEach((field) => {
+      const invalid = !field.value.trim();
+      setScpLabFieldError(field, invalid);
+      valid = valid && !invalid;
+    });
+    return valid;
+  }
+
+  function openScpLabDialog(trigger) {
+    if (!scpLabDialog || scpLabDialog.classList.contains("is-open")) return;
+    lastScpLabTrigger = trigger || document.activeElement;
+    scpLabDialog.classList.add("is-open");
+    scpLabDialog.setAttribute("aria-hidden", "false");
+    inertBackground.forEach((element) => { element.inert = true; });
+    document.body.classList.add("has-open-dialog");
+    scpLabForm?.querySelectorAll("input[maxlength], textarea[maxlength]").forEach(syncScpLabCount);
+    window.setTimeout(() => scpLabDialog.querySelector("input, textarea, button")?.focus(), 0);
+  }
+
+  function closeScpLabDialog() {
+    if (!scpLabDialog) return;
+    const restoreFocusInHome = lastScpLabTrigger === frame;
+    scpLabDialog.classList.remove("is-open");
+    scpLabDialog.setAttribute("aria-hidden", "true");
+    inertBackground.forEach((element) => { element.inert = false; });
+    document.body.classList.remove("has-open-dialog");
+    if (restoreFocusInHome) postToHome({ type: "home:scplab-dialog:closed" });
+    else if (lastScpLabTrigger instanceof HTMLElement) lastScpLabTrigger.focus();
+    lastScpLabTrigger = null;
+  }
+
   function validateForm() {
     if (!form) return false;
     let valid = true;
@@ -163,8 +218,30 @@
       closeDialog();
       return;
     }
+    if (event.target.closest("[data-scp-lab-dialog-close]") || event.target === scpLabDialog) {
+      closeScpLabDialog();
+      return;
+    }
     const chip = event.target.closest('[role="radiogroup"] [role="radio"]');
     if (chip) setRadio(chip);
+  });
+
+  scpLabForm?.addEventListener("submit", (event) => {
+    event.preventDefault();
+    if (!validateScpLabForm()) return;
+    closeScpLabDialog();
+    showToast("提交成功");
+  });
+
+  scpLabForm?.addEventListener("input", (event) => {
+    const field = event.target;
+    if (field instanceof HTMLInputElement || field instanceof HTMLTextAreaElement) {
+      field.classList.remove("is-error");
+      field.removeAttribute("aria-invalid");
+      const errorEl = field.closest(".tm-field")?.querySelector("[data-field-error]");
+      if (errorEl) errorEl.textContent = "";
+      if (field.maxLength > 0) syncScpLabCount(field);
+    }
   });
 
   form?.addEventListener("submit", (event) => {
@@ -191,10 +268,17 @@
   });
 
   document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape" && dialog?.classList.contains("is-open")) {
-      event.preventDefault();
-      closeDialog();
-      return;
+    if (event.key === "Escape") {
+      if (scpLabDialog?.classList.contains("is-open")) {
+        event.preventDefault();
+        closeScpLabDialog();
+        return;
+      }
+      if (dialog?.classList.contains("is-open")) {
+        event.preventDefault();
+        closeDialog();
+        return;
+      }
     }
     const radio = event.target.closest?.('[role="radiogroup"] [role="radio"]');
     if (radio && ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Home", "End"].includes(event.key)) {
@@ -210,8 +294,10 @@
       radios[nextIndex].focus();
       return;
     }
-    if (event.key !== "Tab" || !dialog?.classList.contains("is-open")) return;
-    const focusable = Array.from(dialog.querySelectorAll('button:not([disabled]), input:not([disabled]), textarea:not([disabled])')).filter((item) => item.offsetParent !== null);
+    if (event.key !== "Tab") return;
+    const openOverlay = document.querySelector(".tm-overlay.is-open");
+    if (!openOverlay) return;
+    const focusable = Array.from(openOverlay.querySelectorAll('button:not([disabled]), input:not([disabled]), textarea:not([disabled])')).filter((item) => item.offsetParent !== null);
     if (!focusable.length) return;
     const first = focusable[0];
     const last = focusable.at(-1);
@@ -234,6 +320,10 @@
       const requestId = typeof event.data.requestId === "string" ? event.data.requestId : "";
       openDialog(document.querySelector("[data-home-frame]"));
       postToHome({ type: "home:cooperation-dialog:opened", requestId });
+    } else if (event.data.type === "home:scplab-dialog:open") {
+      const requestId = typeof event.data.requestId === "string" ? event.data.requestId : "";
+      openScpLabDialog(document.querySelector("[data-home-frame]"));
+      postToHome({ type: "home:scplab-dialog:opened", requestId });
     }
   });
 })();

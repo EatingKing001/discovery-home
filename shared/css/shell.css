@@ -119,6 +119,33 @@
 .cooperation-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; }
 .tm-error-message { min-height: 18px; margin: 0; color: var(--state-danger); font-size: 12px; line-height: 18px; }
 
+/* SCP-Lab 申请使用弹窗：设计稿 1172:92480 的紧凑表单变体（shell 与 Home 本地弹窗共用）。 */
+.tm-panel.scplab-panel {
+  max-width: 460px;
+  padding: 16px 20px;
+  gap: 16px;
+  box-shadow: 0 12px 28px 0 rgb(26 35 50 / 12%);
+}
+:root[data-theme="dark"] .tm-panel.scplab-panel { box-shadow: 0 12px 28px 0 rgb(0 0 0 / 56%); }
+.scplab-panel .scplab-header { display: flex; align-items: center; justify-content: space-between; }
+.scplab-panel .scplab-title { margin: 0; color: var(--ink); font: 500 16px/24px var(--font-sans); }
+.scplab-panel .tm-close svg { width: 16px; height: 16px; }
+.scplab-panel .scplab-body { display: flex; min-height: 0; flex-direction: column; gap: 24px; overflow-y: auto; }
+.scplab-panel .tm-field { gap: 6px; }
+.scplab-panel .tm-label { font-size: 14px; font-weight: 400; line-height: 20px; }
+.scplab-panel .scplab-field-error { margin: -2px 0 0; color: var(--state-danger); font-size: 12px; line-height: 18px; }
+.scplab-panel .scplab-field-error:empty { display: none; }
+.scplab-panel .tm-input { height: 36px; padding: 9px 12px; font-size: 13px; line-height: 20px; }
+.scplab-panel .tm-textarea { min-height: 82px; padding: 8px 12px 26px; border-radius: 6px; font-size: 13px; line-height: 20px; }
+.scplab-panel .scplab-count-wrap { position: relative; }
+.scplab-panel .scplab-count-wrap .tm-input { padding-right: 52px; }
+.scplab-panel .scplab-count { position: absolute; top: 50%; right: 12px; color: var(--muted-2); font: 500 12px/18px var(--font-sans); pointer-events: none; transform: translateY(-50%); }
+.scplab-panel .scplab-count-area { top: auto; right: 12px; bottom: 8px; font-weight: 400; transform: none; }
+.scplab-panel .scplab-footer { display: flex; justify-content: flex-end; gap: 12px; padding-top: 16px; }
+.scplab-panel .scplab-footer .tm-btn { height: 32px; padding: 6px 12px; border-radius: var(--radius); font-size: 13px; line-height: 20px; letter-spacing: 0; }
+
+#home-local-scp-lab-dialog { width: min(460px, calc(100% - 32px)); }
+
 @media (max-width: 959px) {
   .site-header { grid-template-columns: 1fr auto auto; }
   .site-header-actions { margin-right: 12px; }

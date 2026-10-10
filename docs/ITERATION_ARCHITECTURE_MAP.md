@@ -67,6 +67,9 @@ Home 与 shell 当前使用以下协议：
 | `home:cooperation-dialog:opened` | shell → Home | 原请求的 `requestId` | 无 | shell / Home | 已实现；用于停止打开请求重试 |
 | `home:cooperation-dialog:closed` | shell → Home | 无 | 无 | shell / Home | 已实现；用于恢复 Home 内触发按钮焦点 |
 | `home:cooperation-dialog:submit` | shell → Home | `requestId`、`formData` | 无；提交 API 待接入 | shell | 已实现消息，外部提交未启用 |
+| `home:scplab-dialog:open` | Home → shell | `requestId` | `home:scplab-dialog:opened` | Home / shell | 已实现；未确认时 Home 在 300ms 后重试一次 |
+| `home:scplab-dialog:opened` | shell → Home | 原请求的 `requestId` | 无 | shell / Home | 已实现；用于停止打开请求重试 |
+| `home:scplab-dialog:closed` | shell → Home | 无 | 无 | shell / Home | 已实现；用于恢复 Home 内触发按钮焦点 |
 
 通信实现至少满足：
 
