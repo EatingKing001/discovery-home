@@ -2226,6 +2226,7 @@ html[data-download-os="linux"] .hero-stage { top: 480px; }
     min-height: 0;
   }
   .capability-card-heading { min-height: 0; }
+  .capability-card-fill .capability-highlights > li { flex: 0 0 auto; }
 }
 
 @media (min-width: 768px) and (max-width: 1199px) {
