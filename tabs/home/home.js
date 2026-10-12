@@ -83,6 +83,19 @@
 
   document.querySelectorAll("[data-discovery-link]").forEach((link) => { link.href = discoveryUrl; });
 
+  let discoveryS2Base = discoveryBase;
+  try {
+    const s2Url = new URL(discoveryBase, window.location.href);
+    s2Url.searchParams.set("model", "S2");
+    s2Url.searchParams.set("show_model_tip", "1");
+    discoveryS2Base = s2Url.toString();
+  } catch (_) { /* keep discoveryBase */ }
+  const discoveryS2Url =
+    window.DiscoveryChannelTrack && typeof window.DiscoveryChannelTrack.appendToUrl === "function"
+      ? window.DiscoveryChannelTrack.appendToUrl(discoveryS2Base)
+      : discoveryS2Base;
+  document.querySelectorAll("[data-discovery-link-s2]").forEach((link) => { link.href = discoveryS2Url; });
+
   function postToShell(message) {
     if (!embedded) return;
     try {
