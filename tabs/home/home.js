@@ -86,7 +86,7 @@
   let discoveryS2Base = discoveryBase;
   try {
     const s2Url = new URL(discoveryBase, window.location.href);
-    s2Url.searchParams.set("model", "S2");
+    s2Url.searchParams.set("model", "书生-S2");
     s2Url.searchParams.set("show_model_tip", "1");
     discoveryS2Base = s2Url.toString();
   } catch (_) { /* keep discoveryBase */ }
