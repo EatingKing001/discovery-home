@@ -29,6 +29,7 @@ $nodeMap = [ordered]@{
   'images/research-base/image-worldmordel.png' = @('198:35630', 'image-worldmordel')
   'images/research-base/image-interns2.png' = @('198:35631', 'image-interns2')
   'images/footer/image-intern-qrcode.png' = @('220:62071', 'image-intern-QRcode')
+  'icons/capabilities/chevron-right.svg' = @('1172:92463', 'chevron-right')
 }
 
 1..6 | ForEach-Object { $nodeMap["images/highlights/image-highlight0$_.png"] = @((@('198:53844','198:53849','198:53847','198:53859','198:53861','198:53857'))[$_ - 1], "image-highlight0$_") }

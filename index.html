@@ -13,7 +13,7 @@
   <script src="shared/js/theme.js?v=20260831-theme1"></script>
   <link rel="stylesheet" href="shared/css/tokens.css?v=20260904-dark-dot1">
   <link rel="stylesheet" href="shared/css/base.css?v=20260824-home76">
-  <link rel="stylesheet" href="shared/css/shell.css?v=20260920-nav-action1">
+  <link rel="stylesheet" href="shared/css/shell.css?v=20261010-scplab-style1">
   <link rel="stylesheet" href="shared/css/styles.css?v=20260918-linux-cta1">
   <link rel="stylesheet" href="shared/css/design-system-overrides.css?v=20260912-download-icon1">
 <script src="product/vendor/migo-analytics.bundle.js?v=20260831-analytics1" defer></script>
@@ -21,7 +21,7 @@
 <script src="product/channel-track.js?v=20260921-channel1" defer></script>
 <script src="product/analytics-bootstrap.js?v=20260921-channel2" defer></script>
 <script src="product/base-path.js?v=20260826-biz1" defer></script>
-<script src="shared/js/shell.js?v=20260921-channel1" defer></script>
+<script src="shared/js/shell.js?v=20261010-scplab-style1" defer></script>
 <script src="product/downloads.js?v=20260921-dl-merge" defer></script>
 <script src="product/cooperation-submit.js?v=20260826-biz1" defer></script>
 </head>
@@ -53,7 +53,7 @@
     </button>
   </header>
   <main class="site-main">
-    <iframe class="site-frame" data-home-frame src="tabs/home/index.html?embedded=1&amp;v=20260929-discipline-cards6" title="书生·端砚官网 Home"></iframe>
+    <iframe class="site-frame" data-home-frame src="tabs/home/index.html?embedded=1&amp;v=20261010-scplab-style1" title="书生·端砚官网 Home"></iframe>
   </main>
 
   <div class="tm-overlay" id="cooperation-dialog" aria-hidden="true">
@@ -93,6 +93,40 @@
       <footer class="tm-footer"><button class="tm-btn tm-btn-ghost" type="button" data-dialog-close>取消</button><button class="tm-btn tm-btn-primary" type="submit">提交申请</button></footer>
     </form>
   </div>
+  <div class="tm-overlay" id="scp-lab-dialog" aria-hidden="true">
+    <div class="tm-panel scplab-panel" role="dialog" aria-modal="true" aria-labelledby="scp-lab-dialog-title">
+      <header class="scplab-header">
+        <h2 class="scplab-title" id="scp-lab-dialog-title">申请使用 SCP-Lab</h2>
+        <button class="tm-close" type="button" data-scp-lab-dialog-close aria-label="关闭申请使用 SCP-Lab 弹窗">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+        </button>
+      </header>
+      <div class="scplab-body">
+        <p class="scplab-hint">SCP-Lab 目前通过邮件申请开通使用。请按下方格式发送邮件至 interndiscovery@pjlab.org.cn，我们会尽快与你联系。</p>
+        <div class="scplab-template">
+          <div class="scplab-template-part">
+            <div class="scplab-part-text"><span class="scplab-part-label">邮箱地址</span><p class="scplab-part-content" data-scp-lab-text>interndiscovery@pjlab.org.cn</p></div>
+            <button class="scplab-copy" type="button" data-scp-lab-copy><img src="shared/assets/icons/copy.svg" alt="" width="16" height="16">复制</button>
+          </div>
+          <div class="scplab-template-divider" aria-hidden="true"></div>
+          <div class="scplab-template-part">
+            <div class="scplab-part-text"><span class="scplab-part-label">邮件标题</span><p class="scplab-part-content" data-scp-lab-text>【SCP-Lab 使用申请】姓名 – 组织/单位 – 年月日</p></div>
+            <button class="scplab-copy" type="button" data-scp-lab-copy><img src="shared/assets/icons/copy.svg" alt="" width="16" height="16">复制</button>
+          </div>
+          <div class="scplab-template-divider" aria-hidden="true"></div>
+          <div class="scplab-template-part">
+            <div class="scplab-part-text"><span class="scplab-part-label">邮件内容模板</span><pre class="scplab-part-content" data-scp-lab-text>组织/单位：
+联系邮箱：
+手机号：
+用途描述：</pre></div>
+            <button class="scplab-copy" type="button" data-scp-lab-copy><img src="shared/assets/icons/copy.svg" alt="" width="16" height="16">复制</button>
+          </div>
+        </div>
+      </div>
+      <footer class="scplab-footer"><button class="tm-btn tm-btn-ghost" type="button" data-scp-lab-dialog-close>取消</button></footer>
+    </div>
+  </div>
+
   <div class="app-toast success" id="shell-toast" role="status" aria-live="polite" aria-atomic="true"></div>
 </body>
 </html>
