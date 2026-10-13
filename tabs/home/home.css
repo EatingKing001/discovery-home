@@ -1636,6 +1636,30 @@ html[data-download-os="linux"] .hero-stage { top: 480px; }
     flex: 1 0 220px;
     scroll-snap-align: start;
   }
+  /* 跳转卡沿用桌面卡片视觉；触屏无 hover，默认态直接并列显示数量与「查看全部」。 */
+  .discipline-more-card {
+    display: flex;
+    box-sizing: border-box;
+    align-items: center;
+    align-self: stretch;
+    justify-content: center;
+    flex: 0 0 96px;
+    flex-direction: column;
+    gap: 2px;
+    padding: 12px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--home-discipline-card-bg);
+    color: var(--muted);
+    font: 500 13px/16px var(--font-sans);
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    scroll-snap-align: start;
+  }
+  .discipline-more-card .more-count { color: var(--ink); font-weight: 600; }
+  .discipline-more-card .more-label { white-space: nowrap; }
+  .discipline-more-card .more-label br { display: none; }
 }
 
 @media (max-width: 767px) {
@@ -2001,7 +2025,6 @@ html[data-download-os="linux"] .hero-stage { top: 480px; }
 /* Unified research-foundation section — Figma 973:22138. */
 .foundation-section {
   position: relative;
-  min-height: 985px;
   overflow: clip;
   background-color: var(--bg);
 }
@@ -2032,20 +2055,19 @@ html[data-download-os="linux"] .hero-stage { top: 480px; }
   top: 138px;
   right: 90px;
   width: 320px;
-  opacity: .3;
+  opacity: .5;
 }
 .foundation-content {
   position: relative;
   z-index: 1;
   width: min(100%, 1440px);
-  min-height: 985px;
   box-sizing: border-box;
-  padding: 80px 40px 81px;
+  padding: 160px 40px 80px;
   border-inline: 0;
 }
 .foundation-section .section-heading {
   width: min(720px, 100%);
-  margin: 0 auto 80px;
+  margin: 0 auto;
   text-align: center;
 }
 .foundation-section .section-heading h2 {
@@ -2068,12 +2090,13 @@ html[data-download-os="linux"] .hero-stage { top: 480px; }
 .foundation-section .capability-grid article {
   display: flex;
   min-width: 0;
-  min-height: 580px;
+  min-height: 0;
   padding: 32px;
   border: 1px solid var(--line);
   border-radius: 16px;
   background: var(--bg);
   flex-direction: column;
+  gap: 24px;
 }
 .foundation-section .capability-card-heading {
   display: flex;
@@ -2096,14 +2119,65 @@ html[data-download-os="linux"] .hero-stage { top: 480px; }
   font-size: 16px;
   line-height: 24px;
 }
-.foundation-section .capability-grid ul {
-  display: grid;
-  flex: 0 0 auto;
-  gap: 24px;
-  margin: 24px 0 0;
+.foundation-section .capability-grid .capability-highlights {
+  display: flex;
+  margin: 0;
   padding: 0;
+  flex-direction: column;
+  gap: 24px;
   list-style: none;
 }
+.capability-card-fill .capability-highlights { flex: 1 1 auto; }
+.capability-card-fill .capability-highlights > li { flex: 1 1 0; }
+.capability-groups { display: flex; flex-direction: column; gap: 24px; }
+.capability-group { display: flex; flex-direction: column; gap: 8px; }
+.capability-group .capability-highlights { gap: 8px; }
+.capability-group-heading { display: flex; align-items: center; gap: 8px; }
+.capability-group-heading h4 { flex: 1 1 auto; }
+.capability-group h4 {
+  margin: 0;
+  color: var(--ink);
+  font: 500 16px/24px var(--font-sans);
+}
+.capability-link-button {
+  display: inline-flex;
+  height: 24px;
+  padding: 6px 2px;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  color: var(--ink);
+  font: 400 14px/24px var(--font-sans);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.capability-link-button:hover { text-decoration: underline; }
+.capability-link-button:focus-visible { outline: 2px solid var(--component-focus-ring); outline-offset: 2px; }
+.capability-link-button img { display: block; width: 16px; height: 16px; }
+.capability-card-actions { display: flex; gap: 8px; }
+.capability-action {
+  display: inline-flex;
+  min-width: 0;
+  height: 48px;
+  padding: 0 24px;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  border: 1px solid var(--component-button-border);
+  border-radius: var(--radius-card);
+  background: var(--component-button-bg);
+  color: var(--ink);
+  font: 400 16px/24px var(--font-sans);
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color var(--component-motion-fast), border-color var(--component-motion-fast);
+  flex: 1 1 0;
+}
+.capability-action:hover:not(:disabled) { background: var(--component-button-bg-hover); }
+.capability-action:focus-visible { outline: 2px solid var(--component-focus-ring); outline-offset: 2px; }
+.capability-card-scp .capability-action { gap: 6px; }
+:root[data-theme="dark"] .capability-link-button img { filter: brightness(0) invert(1); }
 .foundation-section .capability-grid li {
   display: flex;
   min-height: 0;
@@ -2132,13 +2206,6 @@ html[data-download-os="linux"] .hero-stage { top: 480px; }
   text-align: justify;
 }
 
-@media (min-width: 1200px) {
-  .foundation-section .capability-grid article {
-    height: auto;
-    min-height: 580px;
-  }
-}
-
 @media (max-width: 1199px) {
   .foundation-section,
   .foundation-content { min-height: 0; }
@@ -2159,6 +2226,7 @@ html[data-download-os="linux"] .hero-stage { top: 480px; }
     min-height: 0;
   }
   .capability-card-heading { min-height: 0; }
+  .capability-card-fill .capability-highlights > li { flex: 0 0 auto; }
 }
 
 @media (min-width: 768px) and (max-width: 1199px) {
@@ -2183,6 +2251,7 @@ html[data-download-os="linux"] .hero-stage { top: 480px; }
   .foundation-section .capability-grid article { padding: 24px 20px; }
   .foundation-section .capability-grid h3 { font-size: 32px; line-height: 40px; }
   .foundation-section .capability-grid li { padding-right: 16px; }
+  .capability-card-actions { flex-direction: column; }
 }
 
 /* 学科纵深：同步 973:14104 的桌面卡片、跳转卡和三条居中连接线。 */

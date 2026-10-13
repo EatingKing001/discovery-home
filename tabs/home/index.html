@@ -20,10 +20,10 @@
   <script src="../../shared/js/theme.js?v=20260831-theme1"></script>
   <link rel="stylesheet" href="../../shared/css/tokens.css?v=20260904-dark-dot1">
   <link rel="stylesheet" href="../../shared/css/base.css?v=20260824-home76">
-  <link rel="stylesheet" href="../../shared/css/shell.css?v=20260920-nav-action1">
+  <link rel="stylesheet" href="../../shared/css/shell.css?v=20261010-scplab-style1">
   <link rel="stylesheet" href="../../shared/css/styles.css?v=20260918-linux-cta1">
   <link rel="stylesheet" href="../../shared/css/design-system-overrides.css?v=20260912-download-icon1">
-    <link rel="stylesheet" href="home.css?v=20260929-discipline-cards6">
+    <link rel="stylesheet" href="home.css?v=20261012-cap-h2">
 <link rel="stylesheet" href="../../product/cooperation-cta-hide.css?v=20260826-biz1">
 <script src="../../product/vendor/migo-analytics.bundle.js?v=20260831-analytics1" defer></script>
 <script src="../../product/site-links.js?v=20260921-chat2" defer></script>
@@ -32,7 +32,7 @@
 <script src="data/research-cases.data.js?v=20260907-research-cases1" defer></script>
 <script src="data/cooperation-cases.data.js?v=20260920-coop18" defer></script>
   <script src="data/partner-logos.data.js?v=20260904-partner-dark3" defer></script>
-  <script src="home.js?v=20260930-merge-ui" defer></script>
+  <script src="home.js?v=20261013-chat-cta1" defer></script>
 <script src="../../product/protocol-links.js?v=20260826-biz1" defer></script>
 <script src="../../product/downloads.js?v=20260918-linux-cta1" defer></script>
 <script src="../../product/cooperation-submit.js?v=20260826-biz1" defer></script>
@@ -531,20 +531,37 @@ branch_df &lt;- tribble(
       <div class="home-rail foundation-content">
         <header class="section-heading">
           <h2 id="home-research-foundation-title">科研基座</h2>
-          <p>Intern-S2 主导科学推理与任务执行，World Model 驱动实验状态理解与结果推演，<br>SCP 统筹资源连接、流程编排与协作治理</p>
+          <p>书生-S2 主导科学推理与任务执行，物理世界模型驱动实验状态理解与结果推演，<br>SCP 统筹资源连接、流程编排与协作治理</p>
         </header>
         <div class="capability-grid">
-          <article>
-            <header class="capability-card-heading"><h3>科学多模态大模型<br>Intern-S2</h3><p>千亿级参数科学大模型支撑科研从问答走向复杂信息理解、长程任务组织、工具验证与持续迭代。</p></header>
-            <ul><li><strong>跨模态统一表征</strong><small>统一理解文本、图表、公式、表格与长时序，整合异构科研证据。</small></li><li><strong>长程科学推理</strong><small>拆解目标、规划流程，调用代码、数据库、科学工具与算力执行任务。</small></li><li><strong>强化学习与自我进化</strong><small>通过可验证强化学习、智能体训练与自演化任务生成，持续提升专业适应性。</small></li></ul>
+          <article class="capability-card capability-card-fill">
+            <header class="capability-card-heading"><h3>科学多模态大模型<br>书生-S2</h3><p>千亿级参数科学大模型支撑科研从问答走向复杂信息理解、长程任务组织、工具验证与持续迭代</p></header>
+            <ul class="capability-highlights"><li><strong>跨模态统一表征</strong><small>统一理解文本、图表、公式、表格与长时序等多模态信息，整合异构科研证据，支撑跨模态关联分析与复杂科研推理</small></li><li><strong>长程科学推理</strong><small>拆解科研目标、规划执行流程，灵活调用代码、数据库、科学工具与算力资源，协同执行复杂任务并持续优化流程</small></li><li><strong>强化学习与自我进化</strong><small>通过可验证强化学习、智能体训练与自演化任务生成，持续优化执行与决策能力，提升模型在复杂科研场景中的适应性与自主进化能力</small></li></ul>
+            <footer class="capability-card-actions"><a class="capability-action" data-discovery-link href="https://discovery.intern-ai.org.cn/chat" target="_blank" rel="noopener noreferrer">前往书生·端砚体验</a></footer>
           </article>
-          <article>
-            <header class="capability-card-heading"><h3>世界模型<br>World Model</h3><p>贯通干湿实验，将大语言模型生成的方案转化为真实验证，并基于实验结果持续优化方案。</p></header>
-            <ul><li><strong>统一理解实验状态</strong><small>融合多模态实验信息，判断样品、仪器与环境状态，支撑异常识别和设备协同。</small></li><li><strong>支撑实验推演与自主规划</strong><small>推演动作对实验结果的影响，验证方案、筛选参数、评估风险并规划设备操作。</small></li><li><strong>支撑闭环验证与迭代发现</strong><small>对比预测与真实结果，分析偏差并更新模型，形成闭环，提高结论可信度和发现效率。</small></li></ul>
+          <article class="capability-card capability-card-fill">
+            <header class="capability-card-heading"><h3>物理世界模型<br>书生-W0</h3><p>贯通干湿实验，原生支持湿实验精细操作，能够真正操作粉末、烧杯、试管等仪器</p></header>
+            <ul class="capability-highlights"><li><strong>原生力触感知与预测</strong><small>让接触过程中的反馈与视觉、身体状态共同参与操作判断，降低仪器损伤风险，让实验操作更安全</small></li><li><strong>异步异频信号处理</strong><small>高效处理不同频率的真实信号，让未来预测与动作执行按照各自的计算特点，在不同时间尺度上协同运行</small></li><li><strong>双工协同</strong><small>多模态信号输入与动作输出互不干扰，模型在输出过程中仍能处理新的输入，并据此更新预测、调整后续动作，让机器人做到“一心多用”</small></li></ul>
+            <footer class="capability-card-actions"><a class="capability-action" href="https://internrobotics.github.io/internw0/" target="_blank" rel="noopener noreferrer">了解 书生-W0</a></footer>
           </article>
-          <article>
-            <header class="capability-card-heading"><h3>科学智能上下文协议<br>SCP</h3><p>面向科学智能的万能转换器，连接科研资源、编排实验流程，实现协作共享与全程追溯。</p></header>
-            <ul><li><strong>统一连接与能力发现</strong><small>标准化封装数据、模型、工具与设备，屏蔽接口差异，降低接入和开发成本。</small></li><li><strong>全流程编排与协同执行</strong><small>统一编排任务、工具、多智能体及实验执行，沉淀可复用技能，提升自动化效率。</small></li><li><strong>全链路追溯与可信共享</strong><small>记录实验数据和日志，通过权限管控支持跨机构协作，保障安全共享、可追溯和可复现。</small></li></ul>
+          <article class="capability-card capability-card-scp">
+            <header class="capability-card-heading"><h3>科学智能上下文协议<br>SCP</h3><p>面向科学智能的万能转换器，连接科研资源、编排实验流程，实现协作共享与全程追溯</p></header>
+            <div class="capability-groups">
+              <section class="capability-group">
+                <div class="capability-group-heading">
+                  <h4>SCP · 连接数字世界</h4>
+                  <a class="capability-link-button" href="https://discovery.intern-ai.org.cn/scp?tab=scp" target="_blank" rel="noopener noreferrer">查看全部<img src="assets/icons/capabilities/chevron-right.svg" alt="" width="16" height="16"></a>
+                </div>
+                <ul class="capability-highlights"><li><strong>统一连接与能力编排</strong><small>统一接入资源，协同编排任务与智能体，提升自动化效率</small></li><li><strong>全链路追溯与可信共享</strong><small>记录实验数据与日志，通过权限管控保障跨机构安全共享，支持过程追溯与结果复现</small></li></ul>
+              </section>
+              <section class="capability-group">
+                <h4>SCP-Lab · 连接物理世界</h4>
+                <ul class="capability-highlights"><li><strong>统一接入与协同编排</strong><small>分级接入设施能力，灵活组合操作流程，支持跨设施协作与流程复用</small></li><li><strong>执行反馈与实验追溯</strong><small>关联任务、样品与结果，明确执行状态，支撑过程追溯与后续实验</small></li></ul>
+              </section>
+            </div>
+            <footer class="capability-card-actions">
+              <a class="capability-action" href="https://github.com/InternRobotics/SCP-Lab" target="_blank" rel="noopener noreferrer">GitHub (SCP-Lab)</a>
+            </footer>
           </article>
         </div>
       </div>
@@ -687,6 +704,40 @@ branch_df &lt;- tribble(
       <footer class="tm-footer"><button class="tm-btn tm-btn-ghost" type="button" data-local-dialog-close>取消</button><button class="tm-btn tm-btn-primary" type="submit">提交申请</button></footer>
     </form>
   </dialog>
+  <dialog class="home-local-dialog" id="home-local-scp-lab-dialog" aria-labelledby="home-local-scp-lab-title">
+    <div class="tm-panel scplab-panel" role="dialog" aria-modal="true" aria-labelledby="home-local-scp-lab-title">
+      <header class="scplab-header">
+        <h2 class="scplab-title" id="home-local-scp-lab-title">申请使用 SCP-Lab</h2>
+        <button class="tm-close" type="button" data-local-scp-lab-dialog-close aria-label="关闭申请使用 SCP-Lab 弹窗">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+        </button>
+      </header>
+      <div class="scplab-body">
+        <p class="scplab-hint">SCP-Lab 目前通过邮件申请开通使用。请按下方格式发送邮件至 interndiscovery@pjlab.org.cn，我们会尽快与你联系。</p>
+        <div class="scplab-template">
+          <div class="scplab-template-part">
+            <div class="scplab-part-text"><span class="scplab-part-label">邮箱地址</span><p class="scplab-part-content" data-scp-lab-text>interndiscovery@pjlab.org.cn</p></div>
+            <button class="scplab-copy" type="button" data-scp-lab-copy><img src="../../shared/assets/icons/copy.svg" alt="" width="16" height="16">复制</button>
+          </div>
+          <div class="scplab-template-divider" aria-hidden="true"></div>
+          <div class="scplab-template-part">
+            <div class="scplab-part-text"><span class="scplab-part-label">邮件标题</span><p class="scplab-part-content" data-scp-lab-text>【SCP-Lab 使用申请】姓名 – 组织/单位 – 年月日</p></div>
+            <button class="scplab-copy" type="button" data-scp-lab-copy><img src="../../shared/assets/icons/copy.svg" alt="" width="16" height="16">复制</button>
+          </div>
+          <div class="scplab-template-divider" aria-hidden="true"></div>
+          <div class="scplab-template-part">
+            <div class="scplab-part-text"><span class="scplab-part-label">邮件内容模板</span><pre class="scplab-part-content" data-scp-lab-text>组织/单位：
+联系邮箱：
+手机号：
+用途描述：</pre></div>
+            <button class="scplab-copy" type="button" data-scp-lab-copy><img src="../../shared/assets/icons/copy.svg" alt="" width="16" height="16">复制</button>
+          </div>
+        </div>
+      </div>
+      <footer class="scplab-footer"><button class="tm-btn tm-btn-ghost" type="button" data-local-scp-lab-dialog-close>取消</button></footer>
+    </div>
+  </dialog>
+
   <div class="app-toast success" id="home-local-cooperation-toast" role="status" aria-live="polite" aria-atomic="true"></div>
 </body>
 </html>

@@ -6,7 +6,7 @@
   const menuButton = document.querySelector("[data-site-menu]");
   const dialog = document.getElementById("cooperation-dialog");
   const form = dialog?.querySelector("[data-cooperation-form]");
-  const toast = document.getElementById("shell-toast");
+  const scpLabDialog = document.getElementById("scp-lab-dialog");
   const discoveryBase = window.SiteLinkConfig?.discoveryWebApp || "https://discovery.intern-ai.org.cn/chat";
   const discoveryUrl =
     window.DiscoveryChannelTrack && typeof window.DiscoveryChannelTrack.appendToUrl === "function"
@@ -19,7 +19,7 @@
   let pendingAnchor = null;
   let lastAnchorRequestId = "";
   let lastDialogTrigger = null;
-  let toastTimer = 0;
+  let lastScpLabTrigger = null;
   const successToastIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M8 12.5 L11 15.5 L16 9.5"></path></svg>';
 
   document.querySelectorAll(".site-header-action").forEach((link) => { link.href = discoveryUrl; });
@@ -61,15 +61,44 @@
     });
   }
 
+  const activeShellToasts = [];
+
+  function layoutShellToasts() {
+    let offset = 0;
+    activeShellToasts.forEach((item) => {
+      item._slotOffset = offset;
+      item.style.transform = `translate(-50%, ${offset}px)`;
+      offset += item.offsetHeight + 8;
+    });
+  }
+
+  function dismissShellToast(item) {
+    const index = activeShellToasts.indexOf(item);
+    if (index < 0) return;
+    activeShellToasts.splice(index, 1);
+    window.clearTimeout(item._toastTimer);
+    item.classList.remove("show");
+    item.style.transform = `translate(-50%, ${(item._slotOffset || 0) - 14}px)`;
+    window.setTimeout(() => item.remove(), 240);
+    layoutShellToasts();
+  }
+
+  /* 多条 toast 纵向堆叠：新的出现在最上方，未消失的顺势下移。 */
   function showToast(message) {
-    if (!toast) return;
-    toast.className = "app-toast success";
-    toast.setAttribute("role", "status");
-    toast.innerHTML = `<span class="app-toast-ico">${successToastIcon}</span><span class="app-toast-msg"></span>`;
-    toast.querySelector(".app-toast-msg").textContent = String(message || "");
-    window.clearTimeout(toastTimer);
-    window.requestAnimationFrame(() => toast.classList.add("show"));
-    toastTimer = window.setTimeout(() => toast.classList.remove("show"), 1800);
+    const item = document.createElement("div");
+    item.className = "app-toast success";
+    item.setAttribute("role", "status");
+    item.innerHTML = `<span class="app-toast-ico">${successToastIcon}</span><span class="app-toast-msg"></span>`;
+    item.querySelector(".app-toast-msg").textContent = String(message || "");
+    document.body.appendChild(item);
+    activeShellToasts.unshift(item);
+    item._slotOffset = 0;
+    item.style.transform = "translate(-50%, -14px)";
+    window.requestAnimationFrame(() => {
+      item.classList.add("show");
+      layoutShellToasts();
+    });
+    item._toastTimer = window.setTimeout(() => dismissShellToast(item), 1800);
   }
 
   function setRadio(chip) {
@@ -104,6 +133,61 @@
     if (restoreFocusInHome) postToHome({ type: "home:cooperation-dialog:closed" });
     else if (lastDialogTrigger instanceof HTMLElement) lastDialogTrigger.focus();
     lastDialogTrigger = null;
+  }
+
+  function copyText(text, onDone) {
+    if (navigator.clipboard?.writeText) {
+      navigator.clipboard.writeText(text).then(onDone).catch(() => legacyCopyText(text, onDone));
+    } else {
+      legacyCopyText(text, onDone);
+    }
+  }
+
+  function legacyCopyText(text, onDone) {
+    const helper = document.createElement("textarea");
+    helper.value = text;
+    helper.setAttribute("readonly", "");
+    helper.style.position = "fixed";
+    helper.style.opacity = "0";
+    document.body.appendChild(helper);
+    helper.select();
+    try {
+      document.execCommand("copy");
+      onDone();
+    } catch (error) {
+      console.info("[discovery-home] 复制失败：", error);
+    }
+    helper.remove();
+  }
+
+  function copyScpLabPart(button) {
+    const part = button.closest(".scplab-template-part");
+    const text = part?.querySelector("[data-scp-lab-text]")?.textContent || "";
+    if (!text.trim()) return;
+    const label = part.querySelector(".scplab-part-label")?.textContent.trim() || "内容";
+    copyText(text, () => showToast(`已复制${label}`));
+  }
+
+  function openScpLabDialog(trigger) {
+    if (!scpLabDialog || scpLabDialog.classList.contains("is-open")) return;
+    lastScpLabTrigger = trigger || document.activeElement;
+    scpLabDialog.classList.add("is-open");
+    scpLabDialog.setAttribute("aria-hidden", "false");
+    inertBackground.forEach((element) => { element.inert = true; });
+    document.body.classList.add("has-open-dialog");
+    window.setTimeout(() => scpLabDialog.querySelector("input, textarea, button")?.focus(), 0);
+  }
+
+  function closeScpLabDialog() {
+    if (!scpLabDialog) return;
+    const restoreFocusInHome = lastScpLabTrigger === frame;
+    scpLabDialog.classList.remove("is-open");
+    scpLabDialog.setAttribute("aria-hidden", "true");
+    inertBackground.forEach((element) => { element.inert = false; });
+    document.body.classList.remove("has-open-dialog");
+    if (restoreFocusInHome) postToHome({ type: "home:scplab-dialog:closed" });
+    else if (lastScpLabTrigger instanceof HTMLElement) lastScpLabTrigger.focus();
+    lastScpLabTrigger = null;
   }
 
   function validateForm() {
@@ -163,6 +247,14 @@
       closeDialog();
       return;
     }
+    if (event.target.closest("[data-scp-lab-copy]")) {
+      copyScpLabPart(event.target.closest("[data-scp-lab-copy]"));
+      return;
+    }
+    if (event.target.closest("[data-scp-lab-dialog-close]") || event.target === scpLabDialog) {
+      closeScpLabDialog();
+      return;
+    }
     const chip = event.target.closest('[role="radiogroup"] [role="radio"]');
     if (chip) setRadio(chip);
   });
@@ -191,10 +283,17 @@
   });
 
   document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape" && dialog?.classList.contains("is-open")) {
-      event.preventDefault();
-      closeDialog();
-      return;
+    if (event.key === "Escape") {
+      if (scpLabDialog?.classList.contains("is-open")) {
+        event.preventDefault();
+        closeScpLabDialog();
+        return;
+      }
+      if (dialog?.classList.contains("is-open")) {
+        event.preventDefault();
+        closeDialog();
+        return;
+      }
     }
     const radio = event.target.closest?.('[role="radiogroup"] [role="radio"]');
     if (radio && ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Home", "End"].includes(event.key)) {
@@ -210,8 +309,10 @@
       radios[nextIndex].focus();
       return;
     }
-    if (event.key !== "Tab" || !dialog?.classList.contains("is-open")) return;
-    const focusable = Array.from(dialog.querySelectorAll('button:not([disabled]), input:not([disabled]), textarea:not([disabled])')).filter((item) => item.offsetParent !== null);
+    if (event.key !== "Tab") return;
+    const openOverlay = document.querySelector(".tm-overlay.is-open");
+    if (!openOverlay) return;
+    const focusable = Array.from(openOverlay.querySelectorAll('button:not([disabled]), input:not([disabled]), textarea:not([disabled])')).filter((item) => item.offsetParent !== null);
     if (!focusable.length) return;
     const first = focusable[0];
     const last = focusable.at(-1);
@@ -234,6 +335,10 @@
       const requestId = typeof event.data.requestId === "string" ? event.data.requestId : "";
       openDialog(document.querySelector("[data-home-frame]"));
       postToHome({ type: "home:cooperation-dialog:opened", requestId });
+    } else if (event.data.type === "home:scplab-dialog:open") {
+      const requestId = typeof event.data.requestId === "string" ? event.data.requestId : "";
+      openScpLabDialog(document.querySelector("[data-home-frame]"));
+      postToHome({ type: "home:scplab-dialog:opened", requestId });
     }
   });
 })();
