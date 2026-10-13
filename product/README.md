@@ -18,6 +18,7 @@
 
 | 文件 | 用途 |
 |------|------|
+| `seo-head.html` | SEO 静态模板：中文标题、完整描述、Open Graph / Twitter 分享信息；英文标题存为结构化数据 `alternateName`。设计同步时写回两个入口的 HTML，搜索引擎无需执行 JavaScript 即可读取 |
 | `vendor/migo-analytics.bundle.js` | 已发布 `@migo/analytics` UMD（提交进仓，Docker 无需 npm） |
 | `analytics-bootstrap.js` | 神策初始化 + 身份匿名 + 网页版双事件；iframe 内关闭 auto `$pageview` |
 | `channel-track.js` | 渠道参数捕获（sessionStorage）+ 产品站外链透传；`DiscoveryChannelTrack` |

@@ -28,6 +28,7 @@
 
 ### `product/` 业务文件
 
+- `product/seo-head.html` — SEO 静态模板；同步时覆盖官网入口与 Home 的标题、描述、Open Graph / Twitter 信息及中英文标题结构化数据，避免被设计稿文案覆盖
 - `product/vendor/migo-analytics.bundle.js` — 已发布 `@migo/analytics` UMD（静态部署直接 COPY）
 - `product/analytics-bootstrap.js` — 神策初始化；iframe 关闭 auto `$pageview`
 - `product/channel-track.js` — 渠道参数 sessionStorage + 产品站外链透传（`DiscoveryChannelTrack`）
@@ -87,7 +88,7 @@
 1. robocopy 覆盖 `tabs\home`、`shared`、`design-system`
 2. Copy-Item 覆盖根 `index.html`
 3. **不**覆盖 `product/`、`docs/`、根 `README.md`
-4. 向 `index.html` / `tabs/home/index.html` 注入 product script / stylesheet；移除旧的 `shared/js/site-links.js`、`shared/js/business/*` 引用
+4. 向 `index.html` / `tabs/home/index.html` 写入 `product/seo-head.html` 中的 SEO 信息并注入 product script / stylesheet；移除旧的 `shared/js/site-links.js`、`shared/js/business/*` 引用
 
 预览：
 
@@ -98,6 +99,8 @@ npx http-server -p 8023 -c-1
 请勿用默认开启 `cleanUrls` 的 `serve`。
 
 ## 同步后检查清单
+
+确认两个入口的 `product:seo` 区块均与 `product/seo-head.html` 一致；当前页面使用中文标题，英文标题作为 `alternateName` 保留，不触发页面语言切换。
 
 1. **业务 script 是否仍指向 `product/`**，且位于设计 `shell.js` / `home.js` 的合理位置（site-links → channel-track → analytics-bootstrap → base-path → shell，业务薄层在后）。
 2. **钩子是否改名**：`[data-cooperation-form]`、`[data-local-cooperation-form]`、`.footer-policy-link`、文案「平台服务协议」「个人信息保护政策」、下载卡 `article.download-card[data-download-platform="mac"]` / `[data-download-platform="win"]`、`.is-coming`（Linux 仍敬请期待）。钩子变了就改 `product/`，不要改设计仓逻辑硬塞业务。若同步把 Windows 卡盖回 `is-coming`，需在正式仓改回 `is-hoverable`。
