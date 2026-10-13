@@ -28,7 +28,7 @@
 
 ### `product/` 业务文件
 
-- `product/seo-head.html` — SEO 静态模板；同步时覆盖官网入口与 Home 的标题、描述、Open Graph / Twitter 信息及中英文标题结构化数据，避免被设计稿文案覆盖
+- `product/seo-head.html` — SEO 静态模板；同步时覆盖官网入口与 Home 的标题、描述及中英文标题结构化数据，避免被设计稿文案覆盖
 - `product/vendor/migo-analytics.bundle.js` — 已发布 `@migo/analytics` UMD（静态部署直接 COPY）
 - `product/analytics-bootstrap.js` — 神策初始化；iframe 关闭 auto `$pageview`
 - `product/channel-track.js` — 渠道参数 sessionStorage + 产品站外链透传（`DiscoveryChannelTrack`）
