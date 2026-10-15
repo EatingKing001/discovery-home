@@ -130,8 +130,29 @@ function Ensure-AttrOnMatch {
   return @{ Html = $Html.Substring(0, $m.Index) + $inserted + $Html.Substring($m.Index + $m.Length); Injected = @("$Label → $AttrName=`"$AttrValue`"") }
 }
 
+function Patch-SeoMetadata([string]$Html) {
+  $headMatch = [regex]::Match($Html, '(?is)<head\b[^>]*>.*?</head>')
+  if (-not $headMatch.Success) { throw "缺少 <head>，无法写入 SEO 信息" }
+
+  $head = $headMatch.Value
+  $patterns = @(
+    '(?is)[ \t]*<!-- product:seo:start -->.*?<!-- product:seo:end -->[ \t]*\r?\n?',
+    '(?is)[ \t]*<title\b[^>]*>.*?</title>[ \t]*\r?\n?',
+    '(?is)[ \t]*<meta\b(?=[^>]*\b(?:name|property)\s*=\s*["''](?:description|og:(?:type|locale|title|description)|twitter:(?:card|title|description))["''])[^>]*>[ \t]*\r?\n?'
+  )
+  foreach ($pattern in $patterns) {
+    $head = [regex]::Replace($head, $pattern, "")
+  }
+
+  $seo = (Read-Utf8 (Join-Path $PSScriptRoot "seo-head.html")).TrimEnd()
+  $seo = [regex]::Replace($seo, '\r?\n', (Get-Newline $Html))
+  $next = Insert-BeforeMatch $head $seo '(?m)^[ \t]*<link\b'
+  if ($null -eq $next) { $next = Insert-BeforeMatch $head $seo '</head>' }
+  return $Html.Substring(0, $headMatch.Index) + $next + $Html.Substring($headMatch.Index + $headMatch.Length)
+}
+
 function Patch-IndexHtml([string]$Path) {
-  $html = Remove-OldBizScripts (Read-Utf8 $Path)
+  $html = Patch-SeoMetadata (Remove-OldBizScripts (Read-Utf8 $Path))
   $injected = @()
   $basePatch = Patch-BaseHref $html "index.html"
   $html = $basePatch.Html
@@ -206,7 +227,7 @@ function Patch-IndexHtml([string]$Path) {
 }
 
 function Patch-HomeHtml([string]$Path) {
-  $html = Remove-OldBizScripts (Read-Utf8 $Path)
+  $html = Patch-SeoMetadata (Remove-OldBizScripts (Read-Utf8 $Path))
   $injected = @()
   $before = $html
   $html = Remove-BaseHref $html
@@ -347,6 +368,7 @@ if (Test-Path -LiteralPath $homeHtml) {
 Write-Host ""
 Write-Host "已同步设计文件（tabs/home、shared、design-system、index.html）。"
 Write-Host "未覆盖：product/、docs/、README.md"
+Write-Host "已从 product/seo-head.html 更新官网入口与 Home 的 SEO 信息。"
 if ($allInjected.Count -gt 0) {
   Write-Host "已注入 product 资源："
   $allInjected | ForEach-Object { Write-Host "  - $_" }
