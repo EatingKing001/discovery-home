@@ -315,6 +315,11 @@
       menu.setAttribute("aria-label", open ? "关闭导航菜单" : "打开导航菜单");
       return;
     }
+    const mvspSubmit = event.target.closest("[data-mvsp-drawer-submit]");
+    if (mvspSubmit) {
+      openDialog(mvspSubmit);
+      return;
+    }
     if (event.target.closest("[data-dialog-close]") || event.target === dialog) {
       closeDialog();
       return;

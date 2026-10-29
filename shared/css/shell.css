@@ -84,6 +84,8 @@
   transition: opacity var(--component-motion-fast), transform var(--component-motion-fast), visibility var(--component-motion-fast);
 }
 .site-nav-item.is-open .site-nav-dropdown { opacity: 1; visibility: visible; pointer-events: auto; transform: translate(-50%, 0); }
+.site-nav-card,
+.site-nav-resource-option { text-decoration: none; }
 .site-nav-dropdown-product { width: min(720px, calc(100vw - 32px)); }
 .site-nav-dropdown-service { width: min(440px, calc(100vw - 32px)); }
 .site-nav-dropdown-resource { position: absolute; top: calc(100% + 14px); left: 0; width: min(320px, calc(100vw - 32px)); padding: 8px; transform: translateY(-6px); }
